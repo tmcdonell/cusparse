@@ -22,6 +22,7 @@
 
 module Foreign.CUDA.BLAS.Sparse.Level1 (
 
+  IndexBase(..),
   saxpyi,
   daxpyi,
   caxpyi,

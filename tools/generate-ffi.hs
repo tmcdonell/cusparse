@@ -23,7 +23,8 @@ main = do
                 , printf "<http://docs.nvidia.com/cuda/cusparse/index.html#cusparse-level-%d-function-reference>" l
                 , ""
                 ]
-      l1exps  = []
+      l1exps  = [ "IndexBase(..)"
+                ]
       l2exps  = [ "Operation(..)"
                 , "Fill(..)"
                 , "Diagonal(..)"
