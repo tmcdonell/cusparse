@@ -26,16 +26,22 @@ module Foreign.CUDA.BLAS.Sparse.Context (
 -- Friends
 import Foreign.CUDA.BLAS.Sparse.Error
 import Foreign.CUDA.BLAS.Sparse.Internal.C2HS
-import Foreign.CUDA.BLAS.Sparse.Internal.Types
 
 -- System
 import Foreign
 import Foreign.C
-import Control.Monad                            ( liftM )
+import Control.Monad                                      ( liftM )
 
 #include "cbits/stubs.h"
 {# context lib="cusparse" #}
 
+
+-- | An opaque handle to the cuSPARSE library context, which is passed to all
+-- library function calls.
+--
+-- <http://docs.nvidia.com/cuda/cusparse/index.html#cusparsehandlet>
+--
+newtype Handle = Handle { useHandle :: {# type cusparseHandle_t #}}
 
 -- | This function initializes the cuSPARSE library and creates a handle on the
 -- cuSPARSE context. It must be called before any other cuSPARSE API function is
@@ -62,6 +68,16 @@ create = resultIfOk =<< cusparseCreate
 {-# INLINEABLE destroy #-}
 {# fun unsafe cusparseDestroy as destroy
   { useHandle `Handle' } -> `()' checkStatus* #}
+
+
+-- | For functions which take scalar value arguments, determines whether those
+-- values are passed by reference on the host or device.
+--
+-- <http://docs.nvidia.com/cuda/cusparse/index.html#cusparsepointermode_t>
+--
+{# enum cusparsePointerMode_t as PointerMode
+  { underscoreToCase }
+  with prefix="CUSPARSE_POINTER_MODE" deriving (Eq, Show) #}
 
 
 -- | Set the pointer mode used by cuSPARSE library functions.
