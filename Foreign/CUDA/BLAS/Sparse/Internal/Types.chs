@@ -13,9 +13,9 @@
 
 module Foreign.CUDA.BLAS.Sparse.Internal.Types (
 
-  module Foreign.CUDA.BLAS.Sparse.Internal.Types,
-
   module Foreign.CUDA.BLAS.Sparse.Context,
+  module Foreign.CUDA.BLAS.Sparse.Internal.Types,
+  module Foreign.CUDA.BLAS.Sparse.Matrix.Analysis,
   module Foreign.CUDA.BLAS.Sparse.Matrix.Descriptor,
   module Foreign.CUDA.BLAS.Sparse.Matrix.Hybrid,
 
@@ -23,6 +23,7 @@ module Foreign.CUDA.BLAS.Sparse.Internal.Types (
 
 -- friends
 import Foreign.CUDA.BLAS.Sparse.Context                   ( Handle(..) )
+import Foreign.CUDA.BLAS.Sparse.Matrix.Analysis           ( Info(..), Info_bsrsm2(..), Info_csrgemm2(..) )
 import Foreign.CUDA.BLAS.Sparse.Matrix.Descriptor         ( MatrixDescriptor(..), Diagonal(..), Fill(..), IndexBase(..), MatrixType(..) )
 import Foreign.CUDA.BLAS.Sparse.Matrix.Hybrid             ( Hybrid(..) )
 
@@ -84,4 +85,13 @@ data Type
 {# enum cusparseAlgMode_t as Algorithm
   { underscoreToCase }
   with prefix="CUSPARSE" deriving (Eq, Show) #}
+
+
+-- | Indicates whether level information is used by some solver algorithms.
+--
+-- <http://docs.nvidia.com/cuda/cusparse/index.html#cusparsesolvepolicy_t>
+--
+{# enum cusparseSolvePolicy_t as Policy
+  { underscoreToCase }
+  with prefix="CUSPARSE_SOLVE_POLICY" deriving (Eq, Show) #}
 

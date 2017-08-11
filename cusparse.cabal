@@ -47,8 +47,9 @@ library
       Foreign.CUDA.BLAS.Sparse.Error
       Foreign.CUDA.BLAS.Sparse.Level1
       -- Foreign.CUDA.BLAS.Sparse.Level2
-      -- Foreign.CUDA.BLAS.Sparse.Level3
+      Foreign.CUDA.BLAS.Sparse.Level3
       Foreign.CUDA.BLAS.Sparse.Stream
+      Foreign.CUDA.BLAS.Sparse.Matrix.Analysis
       Foreign.CUDA.BLAS.Sparse.Matrix.Descriptor
       Foreign.CUDA.BLAS.Sparse.Matrix.Hybrid
 

@@ -26,22 +26,25 @@ main = do
       l1exps  = [ "IndexBase(..)"
                 ]
       l2exps  = [ "Operation(..)"
-                , "Fill(..)"
-                , "Diagonal(..)"
-                ]
-      l3exps  = l2exps ++
-                [ "Side(..)"
+                , "Direction(..)"
+                , "IndexBase(..)"
+                , "MatrixDescriptor"
                 , "Type(..)"
-                , "GemmAlgorithm(..)"
+                , "Algorithm(..)"
+                ]
+      l3exps  = [ "Operation(..)"
+                , "MatrixDescriptor"
+                , "Policy(..)"
+                , "Info(..)"
+                , "Info_bsrsm2(..)"
+                , "Info_csrgemm2(..)"
                 ]
   --
   mkC2HS "Level1" (docs 1) l1exps [(Nothing,   funsL1)]
-  -- mkC2HS "Level2" (docs 2) l2exps [(Nothing,   funsL2)]
-  -- mkC2HS "Level3" (docs 3) l3exps [(Nothing,   funsL3)
-  --                                 ,(Just 7000, funsL3_cuda70)
-  --                                 ,(Just 7500, funsL3_cuda75)
-  --                                 ,(Just 8000, funsL3_cuda80)
+  -- mkC2HS "Level2" (docs 2) l2exps [(Nothing,   funsL2)
+  --                                 ,(Just 8000, funsL2_cuda80)
   --                                 ]
+  mkC2HS "Level3" (docs 3) l3exps [(Nothing,   funsL3)]
 
 
 mkC2HS :: String -> [String] -> [String] -> [(Maybe Int, [FunGroup])] -> IO ()
@@ -164,9 +167,11 @@ data Safety
 -- | Represents a C type.
 --
 data Type
-  = THandle
+  = TVoid
+  | THandle
   | TStatus
-  | TVoid
+  | TMatDescr
+  | TInfo String
   | TPtr (Maybe AddrSpace) Type
   | TInt (Maybe Int)  -- ^ signed integer, with optional precision
   | THalf             -- ^ 16-bit floating-point type
@@ -218,9 +223,6 @@ data Fun
 --
 fun :: String -> [Type] -> Fun
 fun name types = Fun name "" types ""
-
-ext :: String -> [Type] -> Fun
-ext name types = Fun name "" types ""
 
 -- | Represents a marshallable C type for c2hs.
 --
@@ -302,6 +304,8 @@ convType t = case t of
                                           _      -> s
   THandle           -> HType "useHandle" "Handle" ""
   TStatus           -> HType "" "()" "checkStatus*"
+  TMatDescr         -> HType "useMatDescr" "MatrixDescriptor" ""
+  TInfo n           -> HType ("useInfo" <> n) ("Info" <> n) ""
   _                 -> error $ "unmarshallable type: " <> show t
   where
     simple s    = HType "" s ""
@@ -360,8 +364,29 @@ diag = TEnum "Diagonal"
 dtype :: Type
 dtype = TEnum "Type"
 
+dir :: Type
+dir = TEnum "Direction"
+
+alg :: Type
+alg = TEnum "Algorithm"
+
 idxBase :: Type
 idxBase = TEnum "IndexBase"
+
+policy :: Type
+policy = TEnum "Policy"
+
+info :: Type
+info = TInfo ""
+
+info_bsrsm2 :: Type
+info_bsrsm2 = TInfo "_bsrsm2"
+
+info_csrgemm2 :: Type
+info_csrgemm2 = TInfo "_csrgemm2"
+
+matdescr :: Type
+matdescr = TMatDescr
 
 funInsts :: Safety -> [FunGroup] -> [CFun]
 funInsts safety funs = mangleFun safety <$> concatFunInstances funs
@@ -426,69 +451,26 @@ funsL2 =
 --
 funsL3 :: [FunGroup]
 funsL3 =
-  [ gpA $ \ a   -> fun "?gemm"          [ transpose, transpose, int, int, int, ptr a, dptr a, int, dptr a, int, ptr a, dptr a, int ]
-  , gpA $ \ a   -> ext "?gemmBatched"   [ transpose, transpose, int, int, int, ptr a, dptr (dptr a), int, dptr (dptr a), int, ptr a, dptr (dptr a), int, int ]
-  , gpA $ \ a   -> fun "?symm"          [ side, uplo, int, int, ptr a, dptr a, int, dptr a, int, ptr a, dptr a, int ]
-  , gpA $ \ a   -> fun "?syrk"          [ uplo, transpose, int, int, ptr a, dptr a, int, ptr a, dptr a, int ]
-  , gpA $ \ a   -> fun "?syr2k"         [ uplo, transpose, int, int, ptr a, dptr a, int, dptr a, int, ptr a, dptr a, int ]
-  , gpA $ \ a   -> ext "?syrkx"         [ uplo, transpose, int, int, ptr a, dptr a, int, dptr a, int, ptr a, dptr a, int ]
-  , gpA $ \ a   -> fun "?trmm"          [ side, uplo, transpose, diag, int, int, ptr a, dptr a, int, dptr a, int, dptr a, int ]
-  , gpA $ \ a   -> fun "?trsm"          [ side, uplo, transpose, diag, int, int, ptr a, dptr a, int, dptr a, int ]
-  , gpA $ \ a   -> ext "?trsmBatched"   [ side, uplo, transpose, diag, int, int, ptr a, dptr (dptr a), int, dptr (dptr a), int, int ]
-  , gpC $ \ a   -> fun "?hemm"          [ side, uplo, int, int, ptr a, dptr a, int, dptr a, int, ptr a, dptr a, int ]
-  , gpQ $ \ a   -> fun "?herk"          [ uplo, transpose, int, int, ptr a, dptr (complex a), int, ptr a, dptr (complex a), int ]
-  , gpQ $ \ a   -> fun "?her2k"         [ uplo, transpose, int, int, ptr (complex a), dptr (complex a), int, dptr (complex a), int, ptr a, dptr (complex a), int ]
-  , gpQ $ \ a   -> ext "?herkx"         [ uplo, transpose, int, int, ptr a, dptr a, int, dptr a, int, ptr a, dptr a, int ]
+  [ gpA $ \ a   -> fun "?csrmm"             [ transpose, int, int, int, int, ptr a, matdescr, dptr a, dptr int, dptr int, dptr a, int, ptr a, dptr a, int ]
+  , gpA $ \ a   -> fun "?csrmm2"            [ transpose, transpose, int, int, int, int, ptr a, matdescr, dptr a, dptr int, dptr int, dptr a, int, ptr a, dptr a, int ]
+  , gpA $ \ a   -> fun "?csrsm_analysis"    [ transpose, int, int, matdescr, dptr a, dptr int, dptr int, info ]
+  , gpA $ \ a   -> fun "?csrsm_solve"       [ transpose, int, int, ptr a, matdescr, dptr a, dptr int, dptr int, info, dptr a, int, dptr a, int ]
+  , gpA $ \ a   -> fun "?bsrmm"             [ dir, transpose, transpose, int, int, int, int, ptr a, matdescr, dptr a, dptr int, dptr int, int, dptr a, int, ptr a, dptr a, int ]
+  , gpA $ \ a   -> fun "?bsrsm2_bufferSize" [ dir, transpose, transpose, int, int, int, matdescr, dptr a, dptr int, dptr int, int, info_bsrsm2, ptr int ]
+  , gpA $ \ a   -> fun "?bsrsm2_analysis"   [ dir, transpose, transpose, int, int, int, matdescr, dptr a, dptr int, dptr int, int, info_bsrsm2, policy, ptr void ]
+  , gpA $ \ a   -> fun "?bsrsm2_solve"      [ dir, transpose, transpose, int, int, int, ptr a, matdescr, dptr a, dptr int, dptr int, int, info_bsrsm2, dptr a, int, dptr a, int, policy, ptr void ]
+  , gp  $          fun "xbsrsm2_zeroPivot"  [ info_bsrsm2, ptr int ]
 
   -- BLAS-like extensions
-  , gpA $ \ a   -> ext "?geam"          [ transpose, transpose, int, int, ptr a, dptr a, int, ptr a, dptr a, int, dptr a, int ]
-  , gpA $ \ a   -> ext "?dgmm"          [ side, int, int, dptr a, int, dptr a, int, dptr a, int ]
-  , gpA $ \ a   -> ext "?getrfBatched"  [ int, dptr (dptr a), int, ptr int32, ptr int32, int ]
-  , gpA $ \ a   -> ext "?getriBatched"  [ int, dptr (dptr a), int, dptr int32, dptr (dptr a), int, dptr int32, int ]
-  , gpA $ \ a   -> ext "?matinvBatched" [ int, dptr (dptr a), int, dptr (dptr a), int, dptr int32, int ]
-  , gpA $ \ a   -> ext "?geqrfBatched"  [ int, int, dptr (dptr a), int, dptr (dptr a), hptr int32, int ]
-  , gpA $ \ a   -> ext "?gelsBatched"   [ transpose, int, int, int, dptr (dptr a), int, dptr (dptr a), int, hptr int32, dptr int32, int ]
-  , gpA $ \ a   -> ext "?tpttr"         [ uplo, int, dptr a, dptr a, int ]
-  , gpA $ \ a   -> ext "?trttp"         [ uplo, int, dptr a, int, dptr a ]
+  , gp  $          fun "xcsrgeamNnz"              [ int, int, matdescr, int, dptr int, dptr int, matdescr, int, dptr int, dptr int, matdescr, dptr int, ptr int ]
+  , gpA $ \ a   -> fun "?csrgeam"                 [ int, int, ptr a, matdescr, int, dptr a, dptr int, dptr int, ptr a, matdescr, int, dptr a, dptr int, dptr int, matdescr, dptr a, dptr int, dptr int ]
+  , gp  $          fun "xcsrgemmNnz"              [ transpose, transpose, int, int, int, matdescr, int, dptr int, dptr int, matdescr, int, dptr int, dptr int, matdescr, dptr int, ptr int ]
+  , gpA $ \ a   -> fun "?csrgemm"                 [ transpose, transpose, int, int, int, matdescr, int, dptr a, dptr int, dptr int, matdescr, int, dptr a, dptr int, dptr int, matdescr, dptr a, dptr int, dptr int ]
+  , gpA $ \ a   -> fun "?csrgemm2_bufferSizeExt"  [ int, int, int, ptr a, matdescr, int, dptr int, dptr int, matdescr, int, dptr int, dptr int, ptr a, matdescr, int, dptr int, dptr int, info_csrgemm2, ptr int64 ]
+  , gp  $          fun "xcsrgemm2Nnz"             [ int, int, int, matdescr, int, dptr int, dptr int, matdescr, int, dptr int, dptr int, matdescr, int, dptr int, dptr int, matdescr, dptr int, ptr int, info_csrgemm2, dptr void ]
+  , gpA $ \ a   -> fun "?csrgemm2"                [ int, int, int, ptr a, matdescr, int, dptr a, dptr int, dptr int, matdescr, int, dptr a, dptr int, dptr int, ptr a, matdescr, int, dptr a, dptr int, dptr int, matdescr, dptr a, dptr int, dptr int, info_csrgemm2, dptr void ]
   ]
 
--- Level 3 operations introduced in CUDA-7.0
---
-funsL3_cuda70 :: [FunGroup]
-funsL3_cuda70 =
-  [ gpA $ \ a   -> ext "?getrsBatched"  [ transpose, int, int, dptr (dptr a), int, dptr int32, dptr (dptr a), int, hptr int32, int ]
-  ]
-
--- Level 3 operations introduced in CUDA-7.5
---
-funsL3_cuda75 :: [FunGroup]
-funsL3_cuda75 =
-  [ gp  $          ext "hgemm"      [ transpose, transpose, int, int, int, ptr half, dptr half, int, dptr half, int, ptr half, dptr half, int ]
-  , gp  $          ext "sgemmEx"    [ transpose, transpose, int, int, int, ptr float, dptr void, dtype, int, dptr void, dtype, int, ptr float, dptr void, dtype, int ]
-  ]
-
--- Level 3 operations introduced in CUDA-8
---
-funsL3_cuda80 :: [FunGroup]
-funsL3_cuda80 =
-  [ gpC $ \ a   -> ext "?gemm3m"    [ transpose, transpose, int, int, int, ptr a, dptr a, int, dptr a, int, ptr a, dptr a, int ]
-  , gpH $ \ a   -> ext "?gemmStridedBatched"
-                                    [ transpose, transpose, int, int, int, ptr a, dptr a, int, int64, dptr a, int, int64, ptr a, dptr a, int, int64, int ]
-  , gp  $          ext "cgemm3mStridedBatched"
-                                    [ transpose, transpose, int, int, int, ptr (complex float), dptr (complex float), int, int64, dptr (complex float), int, int64, ptr (complex float), dptr (complex float), int, int64, int ]
-  , gp  $          ext "cgemmEx"    [ transpose, transpose, int, int, int, ptr (complex float), dptr void, dtype, int, dptr void, dtype, int, ptr (complex float), dptr void, dtype, int ]
-  , gp  $          ext "gemmEx"     [ transpose, transpose, int, int, int, ptr void, dptr void, dtype, int, dptr void, dtype, int, ptr void, dptr void, dtype, int, dtype, TEnum "GemmAlgorithm" ]
-  , gp  $          ext "csyrkEx"    [ uplo, transpose, int, int, ptr float, dptr void, dtype, int, ptr float, dptr (complex float), dtype, int ]
-  , gp  $          ext "csyrk3mEx"  [ uplo, transpose, int, int, ptr float, dptr void, dtype, int, ptr float, dptr (complex float), dtype, int ]
-  , gp  $          ext "cherkEx"    [ uplo, transpose, int, int, ptr float, dptr void, dtype, int, ptr float, dptr (complex float), dtype, int ]
-  , gp  $          ext "cherk3mEx"  [ uplo, transpose, int, int, ptr float, dptr void, dtype, int, ptr float, dptr (complex float), dtype, int ]
-  , gp  $          ext "nrm2Ex"     [ int, dptr void, dtype, int, ptr void, dtype, dtype ]
-  , gp  $          ext "axpyEx"     [ int, ptr void, dtype, dptr void, dtype, int, dptr void, dtype, int, dtype ]
-  , gp  $          ext "dotEx"      [ int, dptr void, dtype, int, dptr void, dtype, int, ptr void, dtype, dtype ]
-  , gp  $          ext "dotcEx"     [ int, dptr void, dtype, int, dptr void, dtype, int, ptr void, dtype, dtype ]
-  , gp  $          ext "scalEx"     [ int, ptr void, dtype, dptr void, dtype, int, dtype ]
-  ]
---}
 
 data FunGroup
   = FunGroup
