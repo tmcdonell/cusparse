@@ -52,6 +52,7 @@ mkC2HS mdl docs exps funs =
       name    = [ "Foreign", "CUDA", "BLAS", "Sparse", mdl ]
       path    = intercalate "/" name ++ ".chs"
       imps    = [ "Data.Complex"
+                , "Numeric.Half"
                 , "Foreign"
                 , "Foreign.C"
                 , "Foreign.Storable.Complex ()"

@@ -51,6 +51,7 @@ module Foreign.CUDA.BLAS.Sparse.Level1 (
 ) where
 
 import Data.Complex
+import Numeric.Half
 import Foreign
 import Foreign.C
 import Foreign.Storable.Complex ()

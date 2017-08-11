@@ -65,10 +65,18 @@ newtype Handle = Handle { useHandle :: {# type cusparseHandle_t #}}
 -- values are passed by reference on the host or device.
 --
 -- <http://docs.nvidia.com/cuda/cusparse/index.html#cusparsepointermode_t>
+-- | Used to specify the type of data underlying a @void*@ pointer. For example,
+-- it is used in the routine <http://docs.nvidia.com/cuda/cusparse/index.html#cusparse-csrmvEx csrmvEx>.
 --
 {# enum cusparsePointerMode_t as PointerMode
+#if CUDA_VERSION < 8000
+data Type
+#else
+{# enum cudaDataType_t as Type
   { underscoreToCase }
   with prefix="CUSPARSE_POINTER_MODE" deriving (Eq, Show) #}
+  with prefix="CUDA" deriving (Eq, Show) #}
+#endif
 
 
 -- Matrix formats
