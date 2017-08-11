@@ -39,7 +39,7 @@ module Foreign.CUDA.BLAS.Sparse (
 
   -- * Operations
   module Foreign.CUDA.BLAS.Sparse.Level1,
-  -- module Foreign.CUDA.BLAS.Sparse.Level2,
+  module Foreign.CUDA.BLAS.Sparse.Level2,
   module Foreign.CUDA.BLAS.Sparse.Level3,
 
 ) where
@@ -49,6 +49,6 @@ import Foreign.CUDA.BLAS.Sparse.Error           hiding ( resultIfOk, nothingIfOk
 import Foreign.CUDA.BLAS.Sparse.Stream
 
 import Foreign.CUDA.BLAS.Sparse.Level1
--- import Foreign.CUDA.BLAS.Sparse.Level2
+import Foreign.CUDA.BLAS.Sparse.Level2
 import Foreign.CUDA.BLAS.Sparse.Level3
 

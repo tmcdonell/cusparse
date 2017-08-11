@@ -31,19 +31,24 @@ main = do
                 , "MatrixDescriptor"
                 , "Type(..)"
                 , "Algorithm(..)"
+                , "Policy(..)"
+                , "Hybrid(..)"
+                , "Info"
+                , "Info_bsrsv2"
+                , "Info_csrsv2"
                 ]
       l3exps  = [ "Operation(..)"
                 , "MatrixDescriptor"
                 , "Policy(..)"
                 , "Info(..)"
-                , "Info_bsrsm2(..)"
-                , "Info_csrgemm2(..)"
+                , "Info_bsrsm2"
+                , "Info_csrgemm2"
                 ]
   --
   mkC2HS "Level1" (docs 1) l1exps [(Nothing,   funsL1)]
-  -- mkC2HS "Level2" (docs 2) l2exps [(Nothing,   funsL2)
-  --                                 ,(Just 8000, funsL2_cuda80)
-  --                                 ]
+  mkC2HS "Level2" (docs 2) l2exps [(Nothing,   funsL2)
+                                  ,(Just 8000, funsL2_cuda80)
+                                  ]
   mkC2HS "Level3" (docs 3) l3exps [(Nothing,   funsL3)]
 
 
@@ -170,8 +175,7 @@ data Type
   = TVoid
   | THandle
   | TStatus
-  | TMatDescr
-  | TInfo String
+  | TData String String String
   | TPtr (Maybe AddrSpace) Type
   | TInt (Maybe Int)  -- ^ signed integer, with optional precision
   | THalf             -- ^ 16-bit floating-point type
@@ -304,8 +308,7 @@ convType t = case t of
                                           _      -> s
   THandle           -> HType "useHandle" "Handle" ""
   TStatus           -> HType "" "()" "checkStatus*"
-  TMatDescr         -> HType "useMatDescr" "MatrixDescriptor" ""
-  TInfo n           -> HType ("useInfo" <> n) ("Info" <> n) ""
+  TData i t o       -> HType i t o
   _                 -> error $ "unmarshallable type: " <> show t
   where
     simple s    = HType "" s ""
@@ -377,16 +380,28 @@ policy :: Type
 policy = TEnum "Policy"
 
 info :: Type
-info = TInfo ""
+info = TData "useInfo" "Info" ""
+
+mkInfo :: String -> Type
+mkInfo t = TData ("useInfo_" <> t) ("Info_" <> t) ""
+
+info_bsrsv2 :: Type
+info_bsrsv2 = mkInfo "bsrsv2"
 
 info_bsrsm2 :: Type
-info_bsrsm2 = TInfo "_bsrsm2"
+info_bsrsm2 = mkInfo "bsrsm2"
+
+info_csrsv2 :: Type
+info_csrsv2 = mkInfo "csrsv2"
 
 info_csrgemm2 :: Type
-info_csrgemm2 = TInfo "_csrgemm2"
+info_csrgemm2 = mkInfo "csrgemm2"
 
 matdescr :: Type
-matdescr = TMatDescr
+matdescr = TData "useMatDescr" "MatrixDescriptor" ""
+
+hyb :: Type
+hyb = TData "useHYB" "Hybrid" ""
 
 funInsts :: Safety -> [FunGroup] -> [CFun]
 funInsts safety funs = mangleFun safety <$> concatFunInstances funs
@@ -409,38 +424,41 @@ funsL1 =
   , gpA $ \ a   -> fun "?sctr"  [ int, dptr a, dptr int, dptr a, idxBase ]
   ]
 
-{--
 -- Level 2 (matrix-vector) operations.
 --
 -- <http://docs.nvidia.com/cuda/cusparse/index.html#cusparse-level-2-function-reference>
 --
 funsL2 :: [FunGroup]
 funsL2 =
-  [ gpA $ \ a   -> fun "?gbmv"  [ transpose, int, int, int, int, ptr a, dptr a, int, dptr a, int, ptr a, dptr a, int ]
-  , gpA $ \ a   -> fun "?gemv"  [ transpose, int, int, ptr a, dptr a, int, dptr a, int, ptr a, dptr a, int ]
-  , gpR $ \ a   -> fun "?ger"   [ int, int, ptr a, dptr a, int, dptr a, int, dptr a, int ]
-  , gpC $ \ a   -> fun "?gerc"  [ int, int, ptr a, dptr a, int, dptr a, int, dptr a, int ]
-  , gpC $ \ a   -> fun "?geru"  [ int, int, ptr a, dptr a, int, dptr a, int, dptr a, int ]
-  , gpR $ \ a   -> fun "?sbmv"  [ uplo, int, int, ptr a, dptr a, int, dptr a, int, ptr a, dptr a, int ]
-  , gpR $ \ a   -> fun "?spmv"  [ uplo, int, ptr a, dptr a, dptr a, int, ptr a, dptr a, int ]
-  , gpR $ \ a   -> fun "?spr"   [ uplo, int, ptr a, dptr a, int, dptr a ]
-  , gpR $ \ a   -> fun "?spr2"  [ uplo, int, ptr a, dptr a, int, dptr a, int, dptr a ]
-  , gpA $ \ a   -> fun "?symv"  [ uplo, int, ptr a, dptr a, int, dptr a, int, ptr a, dptr a, int ]
-  , gpA $ \ a   -> fun "?syr"   [ uplo, int, ptr a, dptr a, int, dptr a, int ]
-  , gpA $ \ a   -> fun "?syr2"  [ uplo, int, ptr a, dptr a, int, dptr a, int, dptr a, int ]
-  , gpA $ \ a   -> fun "?tbmv"  [ uplo, transpose, diag, int, int, dptr a, int, dptr a, int ]
-  , gpA $ \ a   -> fun "?tbsv"  [ uplo, transpose, diag, int, int, dptr a, int, dptr a, int ]
-  , gpA $ \ a   -> fun "?tpmv"  [ uplo, transpose, diag, int, dptr a, dptr a, int ]
-  , gpA $ \ a   -> fun "?tpsv"  [ uplo, transpose, diag, int, dptr a, dptr a, int ]
-  , gpA $ \ a   -> fun "?trmv"  [ uplo, transpose, diag, int, dptr a, int, dptr a, int ]
-  , gpA $ \ a   -> fun "?trsv"  [ uplo, transpose, diag, int, dptr a, int, dptr a, int ]
-  , gpC $ \ a   -> fun "?hemv"  [ uplo, int, ptr a, dptr a, int, dptr a, int, ptr a, dptr a, int ]
-  , gpC $ \ a   -> fun "?hbmv"  [ uplo, int, int, ptr a, dptr a, int, dptr a, int, ptr a, dptr a, int ]
-  , gpC $ \ a   -> fun "?hpmv"  [ uplo, int, ptr a, dptr a, dptr a, int, ptr a, dptr a, int ]
-  , gpQ $ \ a   -> fun "?her"   [ uplo, int, ptr a, dptr (complex a), int, dptr (complex a), int ]
-  , gpC $ \ a   -> fun "?her2"  [ uplo, int, ptr a, dptr a, int, dptr a, int, dptr a, int ]
-  , gpQ $ \ a   -> fun "?hpr"   [ uplo, int, ptr a, dptr (complex a), int, dptr (complex a) ]
-  , gpC $ \ a   -> fun "?hpr2"  [ uplo, int, ptr a, dptr a, int, dptr a, int, dptr a ]
+  [ gpA $ \ a   -> fun "?bsrmv"             [ dir, transpose, int, int, int, ptr a, matdescr, dptr a, dptr int, dptr int, int, dptr a, ptr a, dptr a ]
+  , gpA $ \ a   -> fun "?bsrxmv"            [ dir, transpose, int, int, int, int, ptr a, matdescr, dptr a, dptr int, dptr int, dptr int, dptr int, int, dptr a, ptr a, dptr a ]
+  , gpA $ \ a   -> fun "?csrmv"             [ transpose, int, int, int, ptr a, matdescr, dptr a, dptr int, dptr int, dptr a, ptr a, dptr a ]
+  , gpA $ \ a   -> fun "?gemvi"             [ transpose, int, int, ptr a, dptr a, int, int, dptr a, dptr int, ptr a, dptr a, idxBase, dptr void ]
+  , gpA $ \ a   -> fun "?gemvi_bufferSize"  [ transpose, int, int, int, ptr int ]
+  , gpA $ \ a   -> fun "?bsrsv2_bufferSize" [ dir, transpose, int, int, matdescr, dptr a, dptr int, dptr int, int, info_bsrsv2, ptr int ]
+  , gpA $ \ a   -> fun "?bsrsv2_analysis"   [ dir, transpose, int, int, matdescr, dptr a, dptr int, dptr int, int, info_bsrsv2, policy, dptr void ]
+  , gpA $ \ a   -> fun "?bsrsv2_solve"      [ dir, transpose, int, int, ptr a, matdescr, dptr a, dptr int, dptr int, int, info_bsrsv2, dptr a, dptr a, policy, dptr void ]
+  , gp  $          fun "xbsrsv2_zeroPivot"  [ info_bsrsv2, ptr int ]
+  , gpA $ \ a   -> fun "?csrsv_analysis"    [ transpose, int, int, matdescr, dptr a, dptr int, dptr int, info ]
+  , gpA $ \ a   -> fun "?csrsv_solve"       [ transpose, int, ptr a, matdescr, dptr a, dptr int, dptr int, info, dptr a, dptr a ]
+  , gpA $ \ a   -> fun "?csrsv2_bufferSize" [ transpose, int, int, matdescr, dptr a, dptr int, dptr int, info_csrsv2, ptr int ]
+  , gpA $ \ a   -> fun "?csrsv2_analysis"   [ transpose, int, int, matdescr, dptr a, dptr int, dptr int, info_csrsv2, policy, dptr void ]
+  , gpA $ \ a   -> fun "?csrsv2_solve"      [ transpose, int, int, ptr a, matdescr, dptr a, dptr int, dptr int, info_csrsv2, dptr a, dptr a, policy, dptr void ]
+  , gp  $          fun "xcsrsv2_zeroPivot"  [ info_csrsv2, ptr int ]
+  , gpA $ \ a   -> fun "?hybmv"             [ transpose, ptr a, matdescr, hyb, dptr a, ptr a, dptr a ]
+  , gpA $ \ a   -> fun "?hybsv_analysis"    [ transpose, matdescr, hyb, info ]
+  , gpA $ \ a   -> fun "?hybsv_solve"       [ transpose, ptr a, matdescr, hyb, info, dptr a, dptr a ]
+  ]
+
+-- Level 2 operations introduced in CUDA-8
+--
+funsL2_cuda80 :: [FunGroup]
+funsL2_cuda80 =
+  [ gp  $          fun "csrmvEx"            [ alg, transpose, int, int, int, ptr void, dtype, matdescr, dptr void, dtype, dptr int, dptr int, dptr void, dtype, ptr void, dtype, dptr void, dtype, dtype, dptr void ]
+  , gp  $          fun "csrmvEx_bufferSize" [ alg, transpose, int, int, int, ptr void, dtype, matdescr, dptr void, dtype, dptr int, dptr int, dptr void, dtype, ptr void, dtype, dptr void, dtype, dtype, ptr int64 ]
+  , gpA $ \ a   -> fun "?csrmv_mp"          [ transpose, int, int, int, ptr a, matdescr, dptr a, dptr int, dptr int, dptr a, ptr a, dptr a ]
+  , gp  $          fun "csrsv_analysisEx"   [ transpose, int, int, matdescr, dptr void, dtype, dptr int, dptr int, info, dtype ]
+  , gp  $          fun "csrsv_solveEx"      [ transpose, int, ptr void, dtype, matdescr, dptr void, dtype, dptr int, dptr int, info, dptr void, dtype, dptr void, dtype, dtype ]
   ]
 
 -- Level 3 (matrix-vector) operations (and extensions)

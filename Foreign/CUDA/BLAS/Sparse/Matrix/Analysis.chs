@@ -55,6 +55,48 @@ createInfo = resultIfOk =<< cusparseCreateSolveAnalysisInfo
   { useInfo `Info' } -> `()' checkStatus* #}
 
 
+-- | <http://docs.nvidia.com/cuda/cusparse/index.html#csrsv2infot>
+--
+newtype Info_csrsv2 = Info_csrsv2 { useInfo_csrsv2 :: {# type csrsv2Info_t #}}
+
+{-# INLINEABLE createInfo_csrsv2 #-}
+createInfo_csrsv2 :: IO Info_csrsv2
+createInfo_csrsv2 = resultIfOk =<< cusparseCreateCsrsv2Info
+  where
+    {# fun unsafe cusparseCreateCsrsv2Info
+      { alloca- `Info_csrsv2' peekI* } -> `Status' cToEnum #}
+      where
+        peekI = liftM Info_csrsv2 . peek
+
+{-# INLINEABLE destroyInfo_csrsv2 #-}
+{# fun unsafe cusparseDestroyCsrsv2Info as destroyInfo_csrsv2
+  { useInfo_csrsv2 `Info_csrsv2' } -> `()' checkStatus* #}
+
+
+-- | <http://docs.nvidia.com/cuda/cusparse/index.html#csric02infot>
+--
+
+-- | <http://docs.nvidia.com/cuda/cusparse/index.html#csrilu02infot>
+--
+
+-- | <http://docs.nvidia.com/cuda/cusparse/index.html#bsrsv2infot>
+--
+newtype Info_bsrsv2 = Info_bsrsv2 { useInfo_bsrsv2 :: {# type bsrsv2Info_t #}}
+
+{-# INLINEABLE createInfo_bsrsv2 #-}
+createInfo_bsrsv2 :: IO Info_bsrsv2
+createInfo_bsrsv2 = resultIfOk =<< cusparseCreateBsrsv2Info
+  where
+    {# fun unsafe cusparseCreateBsrsv2Info
+      { alloca- `Info_bsrsv2' peekI* } -> `Status' cToEnum #}
+      where
+        peekI = liftM Info_bsrsv2 . peek
+
+{-# INLINEABLE destroyInfo_bsrsv2 #-}
+{# fun unsafe cusparseDestroyBsrsv2Info as destroyInfo_bsrsv2
+  { useInfo_bsrsv2 `Info_bsrsv2' } -> `()' checkStatus* #}
+
+
 -- | <http://docs.nvidia.com/cuda/cusparse/index.html#bsrsvminfot>
 --
 newtype Info_bsrsm2 = Info_bsrsm2 { useInfo_bsrsm2 :: {# type bsrsm2Info_t #}}
@@ -73,8 +115,13 @@ createInfo_bsrsm2 = resultIfOk =<< cusparseCreateBsrsm2Info
   { useInfo_bsrsm2 `Info_bsrsm2' } -> `()' checkStatus* #}
 
 
--- | <http://docs.nvidia.com/cuda/cusparse/index.html#csrgemm2infot>
+-- | <http://docs.nvidia.com/cuda/cusparse/index.html#bsric02infot>
 --
+
+-- | <http://docs.nvidia.com/cuda/cusparse/index.html#bsrilu02infot>
+--
+
+-- | <http://docs.nvidia.com/cuda/cusparse/index.html#csrgemm2infot>
 --
 newtype Info_csrgemm2 = Info_csrgemm2 { useInfo_csrgemm2 :: {# type csrgemm2Info_t #}}
 

@@ -23,7 +23,7 @@ module Foreign.CUDA.BLAS.Sparse.Internal.Types (
 
 -- friends
 import Foreign.CUDA.BLAS.Sparse.Context                   ( Handle(..) )
-import Foreign.CUDA.BLAS.Sparse.Matrix.Analysis           ( Info(..), Info_bsrsm2(..), Info_csrgemm2(..) )
+import Foreign.CUDA.BLAS.Sparse.Matrix.Analysis           ( Info(..), Info_bsrsv2(..), Info_bsrsm2(..), Info_csrsv2(..), Info_csrgemm2(..) )
 import Foreign.CUDA.BLAS.Sparse.Matrix.Descriptor         ( MatrixDescriptor(..), Diagonal(..), Fill(..), IndexBase(..), MatrixType(..) )
 import Foreign.CUDA.BLAS.Sparse.Matrix.Hybrid             ( Hybrid(..) )
 
