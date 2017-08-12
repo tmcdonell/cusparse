@@ -233,6 +233,7 @@ useHostP = useHostPtr . castHostPtr
 
 {-# INLINEABLE zcsrgemm #-}
 {# fun unsafe cusparseZcsrgemm as zcsrgemm { useHandle `Handle', cFromEnum `Operation', cFromEnum `Operation', `Int', `Int', `Int', useMatDescr `MatrixDescriptor', `Int', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr Int', useDevP `DevicePtr Int', useMatDescr `MatrixDescriptor', `Int', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr Int', useDevP `DevicePtr Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr Int', useDevP `DevicePtr Int' } -> `()' checkStatus* #}
+#if CUDA_VERSION >= 7000
 
 {-# INLINEABLE scsrgemm2_bufferSizeExt #-}
 {# fun unsafe cusparseScsrgemm2_bufferSizeExt as scsrgemm2_bufferSizeExt { useHandle `Handle', `Int', `Int', `Int', castPtr `Ptr Float', useMatDescr `MatrixDescriptor', `Int', useDevP `DevicePtr Int', useDevP `DevicePtr Int', useMatDescr `MatrixDescriptor', `Int', useDevP `DevicePtr Int', useDevP `DevicePtr Int', castPtr `Ptr Float', useMatDescr `MatrixDescriptor', `Int', useDevP `DevicePtr Int', useDevP `DevicePtr Int', useInfo_csrgemm2 `Info_csrgemm2', castPtr `Ptr Int64' } -> `()' checkStatus* #}
@@ -260,3 +261,32 @@ useHostP = useHostPtr . castHostPtr
 
 {-# INLINEABLE zcsrgemm2 #-}
 {# fun unsafe cusparseZcsrgemm2 as zcsrgemm2 { useHandle `Handle', `Int', `Int', `Int', castPtr `Ptr (Complex Double)', useMatDescr `MatrixDescriptor', `Int', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr Int', useDevP `DevicePtr Int', useMatDescr `MatrixDescriptor', `Int', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr Int', useDevP `DevicePtr Int', castPtr `Ptr (Complex Double)', useMatDescr `MatrixDescriptor', `Int', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr Int', useDevP `DevicePtr Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr Int', useDevP `DevicePtr Int', useInfo_csrgemm2 `Info_csrgemm2', useDevP `DevicePtr ()' } -> `()' checkStatus* #}
+#else
+
+scsrgemm2_bufferSizeExt :: Handle -> Int -> Int -> Int -> Ptr Float -> MatrixDescriptor -> Int -> DevicePtr Int -> DevicePtr Int -> MatrixDescriptor -> Int -> DevicePtr Int -> DevicePtr Int -> Ptr Float -> MatrixDescriptor -> Int -> DevicePtr Int -> DevicePtr Int -> Info_csrgemm2 -> Ptr Int64 -> IO ()
+scsrgemm2_bufferSizeExt _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'scsrgemm2_bufferSizeExt' requires at least cuda-7.0"
+
+dcsrgemm2_bufferSizeExt :: Handle -> Int -> Int -> Int -> Ptr Double -> MatrixDescriptor -> Int -> DevicePtr Int -> DevicePtr Int -> MatrixDescriptor -> Int -> DevicePtr Int -> DevicePtr Int -> Ptr Double -> MatrixDescriptor -> Int -> DevicePtr Int -> DevicePtr Int -> Info_csrgemm2 -> Ptr Int64 -> IO ()
+dcsrgemm2_bufferSizeExt _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'dcsrgemm2_bufferSizeExt' requires at least cuda-7.0"
+
+ccsrgemm2_bufferSizeExt :: Handle -> Int -> Int -> Int -> Ptr (Complex Float) -> MatrixDescriptor -> Int -> DevicePtr Int -> DevicePtr Int -> MatrixDescriptor -> Int -> DevicePtr Int -> DevicePtr Int -> Ptr (Complex Float) -> MatrixDescriptor -> Int -> DevicePtr Int -> DevicePtr Int -> Info_csrgemm2 -> Ptr Int64 -> IO ()
+ccsrgemm2_bufferSizeExt _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'ccsrgemm2_bufferSizeExt' requires at least cuda-7.0"
+
+zcsrgemm2_bufferSizeExt :: Handle -> Int -> Int -> Int -> Ptr (Complex Double) -> MatrixDescriptor -> Int -> DevicePtr Int -> DevicePtr Int -> MatrixDescriptor -> Int -> DevicePtr Int -> DevicePtr Int -> Ptr (Complex Double) -> MatrixDescriptor -> Int -> DevicePtr Int -> DevicePtr Int -> Info_csrgemm2 -> Ptr Int64 -> IO ()
+zcsrgemm2_bufferSizeExt _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'zcsrgemm2_bufferSizeExt' requires at least cuda-7.0"
+
+xcsrgemm2Nnz :: Handle -> Int -> Int -> Int -> MatrixDescriptor -> Int -> DevicePtr Int -> DevicePtr Int -> MatrixDescriptor -> Int -> DevicePtr Int -> DevicePtr Int -> MatrixDescriptor -> Int -> DevicePtr Int -> DevicePtr Int -> MatrixDescriptor -> DevicePtr Int -> Ptr Int -> Info_csrgemm2 -> DevicePtr () -> IO ()
+xcsrgemm2Nnz _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'xcsrgemm2Nnz' requires at least cuda-7.0"
+
+scsrgemm2 :: Handle -> Int -> Int -> Int -> Ptr Float -> MatrixDescriptor -> Int -> DevicePtr Float -> DevicePtr Int -> DevicePtr Int -> MatrixDescriptor -> Int -> DevicePtr Float -> DevicePtr Int -> DevicePtr Int -> Ptr Float -> MatrixDescriptor -> Int -> DevicePtr Float -> DevicePtr Int -> DevicePtr Int -> MatrixDescriptor -> DevicePtr Float -> DevicePtr Int -> DevicePtr Int -> Info_csrgemm2 -> DevicePtr () -> IO ()
+scsrgemm2 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'scsrgemm2' requires at least cuda-7.0"
+
+dcsrgemm2 :: Handle -> Int -> Int -> Int -> Ptr Double -> MatrixDescriptor -> Int -> DevicePtr Double -> DevicePtr Int -> DevicePtr Int -> MatrixDescriptor -> Int -> DevicePtr Double -> DevicePtr Int -> DevicePtr Int -> Ptr Double -> MatrixDescriptor -> Int -> DevicePtr Double -> DevicePtr Int -> DevicePtr Int -> MatrixDescriptor -> DevicePtr Double -> DevicePtr Int -> DevicePtr Int -> Info_csrgemm2 -> DevicePtr () -> IO ()
+dcsrgemm2 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'dcsrgemm2' requires at least cuda-7.0"
+
+ccsrgemm2 :: Handle -> Int -> Int -> Int -> Ptr (Complex Float) -> MatrixDescriptor -> Int -> DevicePtr (Complex Float) -> DevicePtr Int -> DevicePtr Int -> MatrixDescriptor -> Int -> DevicePtr (Complex Float) -> DevicePtr Int -> DevicePtr Int -> Ptr (Complex Float) -> MatrixDescriptor -> Int -> DevicePtr (Complex Float) -> DevicePtr Int -> DevicePtr Int -> MatrixDescriptor -> DevicePtr (Complex Float) -> DevicePtr Int -> DevicePtr Int -> Info_csrgemm2 -> DevicePtr () -> IO ()
+ccsrgemm2 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'ccsrgemm2' requires at least cuda-7.0"
+
+zcsrgemm2 :: Handle -> Int -> Int -> Int -> Ptr (Complex Double) -> MatrixDescriptor -> Int -> DevicePtr (Complex Double) -> DevicePtr Int -> DevicePtr Int -> MatrixDescriptor -> Int -> DevicePtr (Complex Double) -> DevicePtr Int -> DevicePtr Int -> Ptr (Complex Double) -> MatrixDescriptor -> Int -> DevicePtr (Complex Double) -> DevicePtr Int -> DevicePtr Int -> MatrixDescriptor -> DevicePtr (Complex Double) -> DevicePtr Int -> DevicePtr Int -> Info_csrgemm2 -> DevicePtr () -> IO ()
+zcsrgemm2 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'zcsrgemm2' requires at least cuda-7.0"
+#endif

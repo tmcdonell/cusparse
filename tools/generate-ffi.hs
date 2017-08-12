@@ -50,7 +50,9 @@ main = do
                                   ,(Just 7500, funsL2_cuda75)
                                   ,(Just 8000, funsL2_cuda80)
                                   ]
-  mkC2HS "Level3" (docs 3) l3exps [(Nothing,   funsL3)]
+  mkC2HS "Level3" (docs 3) l3exps [(Nothing,   funsL3)
+                                  ,(Just 7000, funsL3_cuda70)
+                                  ]
 
 
 mkC2HS :: String -> [String] -> [String] -> [(Maybe Int, [FunGroup])] -> IO ()
@@ -491,7 +493,11 @@ funsL3 =
   , gpA $ \ a   -> fun "?csrgeam"                 [ int, int, ptr a, matdescr, int, dptr a, dptr int, dptr int, ptr a, matdescr, int, dptr a, dptr int, dptr int, matdescr, dptr a, dptr int, dptr int ]
   , gp  $          fun "xcsrgemmNnz"              [ transpose, transpose, int, int, int, matdescr, int, dptr int, dptr int, matdescr, int, dptr int, dptr int, matdescr, dptr int, ptr int ]
   , gpA $ \ a   -> fun "?csrgemm"                 [ transpose, transpose, int, int, int, matdescr, int, dptr a, dptr int, dptr int, matdescr, int, dptr a, dptr int, dptr int, matdescr, dptr a, dptr int, dptr int ]
-  , gpA $ \ a   -> fun "?csrgemm2_bufferSizeExt"  [ int, int, int, ptr a, matdescr, int, dptr int, dptr int, matdescr, int, dptr int, dptr int, ptr a, matdescr, int, dptr int, dptr int, info_csrgemm2, ptr int64 ]
+  ]
+
+funsL3_cuda70 :: [FunGroup]
+funsL3_cuda70 =
+  [ gpA $ \ a   -> fun "?csrgemm2_bufferSizeExt"  [ int, int, int, ptr a, matdescr, int, dptr int, dptr int, matdescr, int, dptr int, dptr int, ptr a, matdescr, int, dptr int, dptr int, info_csrgemm2, ptr int64 ]
   , gp  $          fun "xcsrgemm2Nnz"             [ int, int, int, matdescr, int, dptr int, dptr int, matdescr, int, dptr int, dptr int, matdescr, int, dptr int, dptr int, matdescr, dptr int, ptr int, info_csrgemm2, dptr void ]
   , gpA $ \ a   -> fun "?csrgemm2"                [ int, int, int, ptr a, matdescr, int, dptr a, dptr int, dptr int, matdescr, int, dptr a, dptr int, dptr int, ptr a, matdescr, int, dptr a, dptr int, dptr int, matdescr, dptr a, dptr int, dptr int, info_csrgemm2, dptr void ]
   ]
