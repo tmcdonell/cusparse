@@ -147,7 +147,7 @@ createInfo_csrgemm2 :: IO Info_csrgemm2
 createInfo_csrgemm2 = cusparseError "'createInfo_csrgemm2' requires at least cuda-7.0"
 
 destroyInfo_csrgemm2 :: Info_csrgemm2 -> IO ()
-destroyInfo_csrgemm2 = cusparseError "'destroyInfo_csrgemm2' requires at least cuda-7.0"
+destroyInfo_csrgemm2 _ = cusparseError "'destroyInfo_csrgemm2' requires at least cuda-7.0"
 
 #endif
 
