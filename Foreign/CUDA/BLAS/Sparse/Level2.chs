@@ -45,14 +45,6 @@ module Foreign.CUDA.BLAS.Sparse.Level2 (
   dcsrmv,
   ccsrmv,
   zcsrmv,
-  sgemvi,
-  dgemvi,
-  cgemvi,
-  zgemvi,
-  sgemvi_bufferSize,
-  dgemvi_bufferSize,
-  cgemvi_bufferSize,
-  zgemvi_bufferSize,
   sbsrsv2_bufferSize,
   dbsrsv2_bufferSize,
   cbsrsv2_bufferSize,
@@ -99,6 +91,14 @@ module Foreign.CUDA.BLAS.Sparse.Level2 (
   dhybsv_solve,
   chybsv_solve,
   zhybsv_solve,
+  sgemvi,
+  dgemvi,
+  cgemvi,
+  zgemvi,
+  sgemvi_bufferSize,
+  dgemvi_bufferSize,
+  cgemvi_bufferSize,
+  zgemvi_bufferSize,
   csrmvEx,
   csrmvEx_bufferSize,
   scsrmv_mp,
@@ -167,30 +167,6 @@ useHostP = useHostPtr . castHostPtr
 
 {-# INLINEABLE zcsrmv #-}
 {# fun unsafe cusparseZcsrmv as zcsrmv { useHandle `Handle', cFromEnum `Operation', `Int', `Int', `Int', castPtr `Ptr (Complex Double)', useMatDescr `MatrixDescriptor', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr Int', useDevP `DevicePtr Int', useDevP `DevicePtr (Complex Double)', castPtr `Ptr (Complex Double)', useDevP `DevicePtr (Complex Double)' } -> `()' checkStatus* #}
-
-{-# INLINEABLE sgemvi #-}
-{# fun unsafe cusparseSgemvi as sgemvi { useHandle `Handle', cFromEnum `Operation', `Int', `Int', castPtr `Ptr Float', useDevP `DevicePtr Float', `Int', `Int', useDevP `DevicePtr Float', useDevP `DevicePtr Int', castPtr `Ptr Float', useDevP `DevicePtr Float', cFromEnum `IndexBase', useDevP `DevicePtr ()' } -> `()' checkStatus* #}
-
-{-# INLINEABLE dgemvi #-}
-{# fun unsafe cusparseDgemvi as dgemvi { useHandle `Handle', cFromEnum `Operation', `Int', `Int', castPtr `Ptr Double', useDevP `DevicePtr Double', `Int', `Int', useDevP `DevicePtr Double', useDevP `DevicePtr Int', castPtr `Ptr Double', useDevP `DevicePtr Double', cFromEnum `IndexBase', useDevP `DevicePtr ()' } -> `()' checkStatus* #}
-
-{-# INLINEABLE cgemvi #-}
-{# fun unsafe cusparseCgemvi as cgemvi { useHandle `Handle', cFromEnum `Operation', `Int', `Int', castPtr `Ptr (Complex Float)', useDevP `DevicePtr (Complex Float)', `Int', `Int', useDevP `DevicePtr (Complex Float)', useDevP `DevicePtr Int', castPtr `Ptr (Complex Float)', useDevP `DevicePtr (Complex Float)', cFromEnum `IndexBase', useDevP `DevicePtr ()' } -> `()' checkStatus* #}
-
-{-# INLINEABLE zgemvi #-}
-{# fun unsafe cusparseZgemvi as zgemvi { useHandle `Handle', cFromEnum `Operation', `Int', `Int', castPtr `Ptr (Complex Double)', useDevP `DevicePtr (Complex Double)', `Int', `Int', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr Int', castPtr `Ptr (Complex Double)', useDevP `DevicePtr (Complex Double)', cFromEnum `IndexBase', useDevP `DevicePtr ()' } -> `()' checkStatus* #}
-
-{-# INLINEABLE sgemvi_bufferSize #-}
-{# fun unsafe cusparseSgemvi_bufferSize as sgemvi_bufferSize { useHandle `Handle', cFromEnum `Operation', `Int', `Int', `Int', castPtr `Ptr Int' } -> `()' checkStatus* #}
-
-{-# INLINEABLE dgemvi_bufferSize #-}
-{# fun unsafe cusparseDgemvi_bufferSize as dgemvi_bufferSize { useHandle `Handle', cFromEnum `Operation', `Int', `Int', `Int', castPtr `Ptr Int' } -> `()' checkStatus* #}
-
-{-# INLINEABLE cgemvi_bufferSize #-}
-{# fun unsafe cusparseCgemvi_bufferSize as cgemvi_bufferSize { useHandle `Handle', cFromEnum `Operation', `Int', `Int', `Int', castPtr `Ptr Int' } -> `()' checkStatus* #}
-
-{-# INLINEABLE zgemvi_bufferSize #-}
-{# fun unsafe cusparseZgemvi_bufferSize as zgemvi_bufferSize { useHandle `Handle', cFromEnum `Operation', `Int', `Int', `Int', castPtr `Ptr Int' } -> `()' checkStatus* #}
 
 {-# INLINEABLE sbsrsv2_bufferSize #-}
 {# fun unsafe cusparseSbsrsv2_bufferSize as sbsrsv2_bufferSize { useHandle `Handle', cFromEnum `Direction', cFromEnum `Operation', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Float', useDevP `DevicePtr Int', useDevP `DevicePtr Int', `Int', useInfo_bsrsv2 `Info_bsrsv2', castPtr `Ptr Int' } -> `()' checkStatus* #}
@@ -329,6 +305,57 @@ useHostP = useHostPtr . castHostPtr
 
 {-# INLINEABLE zhybsv_solve #-}
 {# fun unsafe cusparseZhybsv_solve as zhybsv_solve { useHandle `Handle', cFromEnum `Operation', castPtr `Ptr (Complex Double)', useMatDescr `MatrixDescriptor', useHYB `Hybrid', useInfo `Info', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr (Complex Double)' } -> `()' checkStatus* #}
+#if CUDA_VERSION >= 7500
+
+{-# INLINEABLE sgemvi #-}
+{# fun unsafe cusparseSgemvi as sgemvi { useHandle `Handle', cFromEnum `Operation', `Int', `Int', castPtr `Ptr Float', useDevP `DevicePtr Float', `Int', `Int', useDevP `DevicePtr Float', useDevP `DevicePtr Int', castPtr `Ptr Float', useDevP `DevicePtr Float', cFromEnum `IndexBase', useDevP `DevicePtr ()' } -> `()' checkStatus* #}
+
+{-# INLINEABLE dgemvi #-}
+{# fun unsafe cusparseDgemvi as dgemvi { useHandle `Handle', cFromEnum `Operation', `Int', `Int', castPtr `Ptr Double', useDevP `DevicePtr Double', `Int', `Int', useDevP `DevicePtr Double', useDevP `DevicePtr Int', castPtr `Ptr Double', useDevP `DevicePtr Double', cFromEnum `IndexBase', useDevP `DevicePtr ()' } -> `()' checkStatus* #}
+
+{-# INLINEABLE cgemvi #-}
+{# fun unsafe cusparseCgemvi as cgemvi { useHandle `Handle', cFromEnum `Operation', `Int', `Int', castPtr `Ptr (Complex Float)', useDevP `DevicePtr (Complex Float)', `Int', `Int', useDevP `DevicePtr (Complex Float)', useDevP `DevicePtr Int', castPtr `Ptr (Complex Float)', useDevP `DevicePtr (Complex Float)', cFromEnum `IndexBase', useDevP `DevicePtr ()' } -> `()' checkStatus* #}
+
+{-# INLINEABLE zgemvi #-}
+{# fun unsafe cusparseZgemvi as zgemvi { useHandle `Handle', cFromEnum `Operation', `Int', `Int', castPtr `Ptr (Complex Double)', useDevP `DevicePtr (Complex Double)', `Int', `Int', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr Int', castPtr `Ptr (Complex Double)', useDevP `DevicePtr (Complex Double)', cFromEnum `IndexBase', useDevP `DevicePtr ()' } -> `()' checkStatus* #}
+
+{-# INLINEABLE sgemvi_bufferSize #-}
+{# fun unsafe cusparseSgemvi_bufferSize as sgemvi_bufferSize { useHandle `Handle', cFromEnum `Operation', `Int', `Int', `Int', castPtr `Ptr Int' } -> `()' checkStatus* #}
+
+{-# INLINEABLE dgemvi_bufferSize #-}
+{# fun unsafe cusparseDgemvi_bufferSize as dgemvi_bufferSize { useHandle `Handle', cFromEnum `Operation', `Int', `Int', `Int', castPtr `Ptr Int' } -> `()' checkStatus* #}
+
+{-# INLINEABLE cgemvi_bufferSize #-}
+{# fun unsafe cusparseCgemvi_bufferSize as cgemvi_bufferSize { useHandle `Handle', cFromEnum `Operation', `Int', `Int', `Int', castPtr `Ptr Int' } -> `()' checkStatus* #}
+
+{-# INLINEABLE zgemvi_bufferSize #-}
+{# fun unsafe cusparseZgemvi_bufferSize as zgemvi_bufferSize { useHandle `Handle', cFromEnum `Operation', `Int', `Int', `Int', castPtr `Ptr Int' } -> `()' checkStatus* #}
+#else
+
+sgemvi :: Handle -> Operation -> Int -> Int -> Ptr Float -> DevicePtr Float -> Int -> Int -> DevicePtr Float -> DevicePtr Int -> Ptr Float -> DevicePtr Float -> IndexBase -> DevicePtr () -> IO ()
+sgemvi _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cublasError "'sgemvi' requires at least cuda-7.5"
+
+dgemvi :: Handle -> Operation -> Int -> Int -> Ptr Double -> DevicePtr Double -> Int -> Int -> DevicePtr Double -> DevicePtr Int -> Ptr Double -> DevicePtr Double -> IndexBase -> DevicePtr () -> IO ()
+dgemvi _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cublasError "'dgemvi' requires at least cuda-7.5"
+
+cgemvi :: Handle -> Operation -> Int -> Int -> Ptr (Complex Float) -> DevicePtr (Complex Float) -> Int -> Int -> DevicePtr (Complex Float) -> DevicePtr Int -> Ptr (Complex Float) -> DevicePtr (Complex Float) -> IndexBase -> DevicePtr () -> IO ()
+cgemvi _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cublasError "'cgemvi' requires at least cuda-7.5"
+
+zgemvi :: Handle -> Operation -> Int -> Int -> Ptr (Complex Double) -> DevicePtr (Complex Double) -> Int -> Int -> DevicePtr (Complex Double) -> DevicePtr Int -> Ptr (Complex Double) -> DevicePtr (Complex Double) -> IndexBase -> DevicePtr () -> IO ()
+zgemvi _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cublasError "'zgemvi' requires at least cuda-7.5"
+
+sgemvi_bufferSize :: Handle -> Operation -> Int -> Int -> Int -> Ptr Int -> IO ()
+sgemvi_bufferSize _ _ _ _ _ _ = cublasError "'sgemvi_bufferSize' requires at least cuda-7.5"
+
+dgemvi_bufferSize :: Handle -> Operation -> Int -> Int -> Int -> Ptr Int -> IO ()
+dgemvi_bufferSize _ _ _ _ _ _ = cublasError "'dgemvi_bufferSize' requires at least cuda-7.5"
+
+cgemvi_bufferSize :: Handle -> Operation -> Int -> Int -> Int -> Ptr Int -> IO ()
+cgemvi_bufferSize _ _ _ _ _ _ = cublasError "'cgemvi_bufferSize' requires at least cuda-7.5"
+
+zgemvi_bufferSize :: Handle -> Operation -> Int -> Int -> Int -> Ptr Int -> IO ()
+zgemvi_bufferSize _ _ _ _ _ _ = cublasError "'zgemvi_bufferSize' requires at least cuda-7.5"
+#endif
 #if CUDA_VERSION >= 8000
 
 {-# INLINEABLE csrmvEx #-}

@@ -47,6 +47,7 @@ main = do
   --
   mkC2HS "Level1" (docs 1) l1exps [(Nothing,   funsL1)]
   mkC2HS "Level2" (docs 2) l2exps [(Nothing,   funsL2)
+                                  ,(Just 7500, funsL2_cuda75)
                                   ,(Just 8000, funsL2_cuda80)
                                   ]
   mkC2HS "Level3" (docs 3) l3exps [(Nothing,   funsL3)]
@@ -433,8 +434,6 @@ funsL2 =
   [ gpA $ \ a   -> fun "?bsrmv"             [ dir, transpose, int, int, int, ptr a, matdescr, dptr a, dptr int, dptr int, int, dptr a, ptr a, dptr a ]
   , gpA $ \ a   -> fun "?bsrxmv"            [ dir, transpose, int, int, int, int, ptr a, matdescr, dptr a, dptr int, dptr int, dptr int, dptr int, int, dptr a, ptr a, dptr a ]
   , gpA $ \ a   -> fun "?csrmv"             [ transpose, int, int, int, ptr a, matdescr, dptr a, dptr int, dptr int, dptr a, ptr a, dptr a ]
-  , gpA $ \ a   -> fun "?gemvi"             [ transpose, int, int, ptr a, dptr a, int, int, dptr a, dptr int, ptr a, dptr a, idxBase, dptr void ]
-  , gpA $ \ a   -> fun "?gemvi_bufferSize"  [ transpose, int, int, int, ptr int ]
   , gpA $ \ a   -> fun "?bsrsv2_bufferSize" [ dir, transpose, int, int, matdescr, dptr a, dptr int, dptr int, int, info_bsrsv2, ptr int ]
   , gpA $ \ a   -> fun "?bsrsv2_analysis"   [ dir, transpose, int, int, matdescr, dptr a, dptr int, dptr int, int, info_bsrsv2, policy, dptr void ]
   , gpA $ \ a   -> fun "?bsrsv2_solve"      [ dir, transpose, int, int, ptr a, matdescr, dptr a, dptr int, dptr int, int, info_bsrsv2, dptr a, dptr a, policy, dptr void ]
@@ -450,7 +449,15 @@ funsL2 =
   , gpA $ \ a   -> fun "?hybsv_solve"       [ transpose, ptr a, matdescr, hyb, info, dptr a, dptr a ]
   ]
 
--- Level 2 operations introduced in CUDA-8
+-- Level 2 operations introduced in CUDA-7.5
+--
+funsL2_cuda75 :: [FunGroup]
+funsL2_cuda75 =
+  [ gpA $ \ a   -> fun "?gemvi"             [ transpose, int, int, ptr a, dptr a, int, int, dptr a, dptr int, ptr a, dptr a, idxBase, dptr void ]
+  , gpA $ \ a   -> fun "?gemvi_bufferSize"  [ transpose, int, int, int, ptr int ]
+  ]
+
+-- Level 2 operations introduced in CUDA-8.0
 --
 funsL2_cuda80 :: [FunGroup]
 funsL2_cuda80 =
