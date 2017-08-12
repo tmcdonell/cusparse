@@ -123,6 +123,7 @@ createInfo_bsrsm2 = resultIfOk =<< cusparseCreateBsrsm2Info
 
 -- | <http://docs.nvidia.com/cuda/cusparse/index.html#csrgemm2infot>
 --
+#if CUDA_VERSION >= 7000
 newtype Info_csrgemm2 = Info_csrgemm2 { useInfo_csrgemm2 :: {# type csrgemm2Info_t #}}
 
 {-# INLINEABLE createInfo_csrgemm2 #-}
@@ -137,4 +138,15 @@ createInfo_csrgemm2 = resultIfOk =<< cusparseCreateCsrgemm2Info
 {-# INLINEABLE destroyInfo_csrgemm2 #-}
 {# fun unsafe cusparseDestroyCsrgemm2Info as destroyInfo_csrgemm2
   { useInfo_csrgemm2 `Info_csrgemm2' } -> `()' checkStatus* #}
+
+#else
+data Info_csrgemm2
+
+createInfo_csrgemm2 :: IO Info_csrgemm2
+createInfo_csrgemm2 = cusparseError "'createInfo_csrgemm2' requires at least cuda-7.0"
+
+destroyInfo_csrgemm2 :: Info_csrgemm2 -> IO ()
+destroyInfo_csrgemm2 = cusparseError "'destroyInfo_csrgemm2' requires at least cuda-7.0"
+
+#endif
 
