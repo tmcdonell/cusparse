@@ -333,28 +333,28 @@ useHostP = useHostPtr . castHostPtr
 #else
 
 sgemvi :: Handle -> Operation -> Int -> Int -> Ptr Float -> DevicePtr Float -> Int -> Int -> DevicePtr Float -> DevicePtr Int -> Ptr Float -> DevicePtr Float -> IndexBase -> DevicePtr () -> IO ()
-sgemvi _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cublasError "'sgemvi' requires at least cuda-7.5"
+sgemvi _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'sgemvi' requires at least cuda-7.5"
 
 dgemvi :: Handle -> Operation -> Int -> Int -> Ptr Double -> DevicePtr Double -> Int -> Int -> DevicePtr Double -> DevicePtr Int -> Ptr Double -> DevicePtr Double -> IndexBase -> DevicePtr () -> IO ()
-dgemvi _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cublasError "'dgemvi' requires at least cuda-7.5"
+dgemvi _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'dgemvi' requires at least cuda-7.5"
 
 cgemvi :: Handle -> Operation -> Int -> Int -> Ptr (Complex Float) -> DevicePtr (Complex Float) -> Int -> Int -> DevicePtr (Complex Float) -> DevicePtr Int -> Ptr (Complex Float) -> DevicePtr (Complex Float) -> IndexBase -> DevicePtr () -> IO ()
-cgemvi _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cublasError "'cgemvi' requires at least cuda-7.5"
+cgemvi _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'cgemvi' requires at least cuda-7.5"
 
 zgemvi :: Handle -> Operation -> Int -> Int -> Ptr (Complex Double) -> DevicePtr (Complex Double) -> Int -> Int -> DevicePtr (Complex Double) -> DevicePtr Int -> Ptr (Complex Double) -> DevicePtr (Complex Double) -> IndexBase -> DevicePtr () -> IO ()
-zgemvi _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cublasError "'zgemvi' requires at least cuda-7.5"
+zgemvi _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'zgemvi' requires at least cuda-7.5"
 
 sgemvi_bufferSize :: Handle -> Operation -> Int -> Int -> Int -> Ptr Int -> IO ()
-sgemvi_bufferSize _ _ _ _ _ _ = cublasError "'sgemvi_bufferSize' requires at least cuda-7.5"
+sgemvi_bufferSize _ _ _ _ _ _ = cusparseError "'sgemvi_bufferSize' requires at least cuda-7.5"
 
 dgemvi_bufferSize :: Handle -> Operation -> Int -> Int -> Int -> Ptr Int -> IO ()
-dgemvi_bufferSize _ _ _ _ _ _ = cublasError "'dgemvi_bufferSize' requires at least cuda-7.5"
+dgemvi_bufferSize _ _ _ _ _ _ = cusparseError "'dgemvi_bufferSize' requires at least cuda-7.5"
 
 cgemvi_bufferSize :: Handle -> Operation -> Int -> Int -> Int -> Ptr Int -> IO ()
-cgemvi_bufferSize _ _ _ _ _ _ = cublasError "'cgemvi_bufferSize' requires at least cuda-7.5"
+cgemvi_bufferSize _ _ _ _ _ _ = cusparseError "'cgemvi_bufferSize' requires at least cuda-7.5"
 
 zgemvi_bufferSize :: Handle -> Operation -> Int -> Int -> Int -> Ptr Int -> IO ()
-zgemvi_bufferSize _ _ _ _ _ _ = cublasError "'zgemvi_bufferSize' requires at least cuda-7.5"
+zgemvi_bufferSize _ _ _ _ _ _ = cusparseError "'zgemvi_bufferSize' requires at least cuda-7.5"
 #endif
 #if CUDA_VERSION >= 8000
 
@@ -384,26 +384,26 @@ zgemvi_bufferSize _ _ _ _ _ _ = cublasError "'zgemvi_bufferSize' requires at lea
 #else
 
 csrmvEx :: Handle -> Algorithm -> Operation -> Int -> Int -> Int -> Ptr () -> Type -> MatrixDescriptor -> DevicePtr () -> Type -> DevicePtr Int -> DevicePtr Int -> DevicePtr () -> Type -> Ptr () -> Type -> DevicePtr () -> Type -> Type -> DevicePtr () -> IO ()
-csrmvEx _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cublasError "'csrmvEx' requires at least cuda-8.0"
+csrmvEx _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'csrmvEx' requires at least cuda-8.0"
 
 csrmvEx_bufferSize :: Handle -> Algorithm -> Operation -> Int -> Int -> Int -> Ptr () -> Type -> MatrixDescriptor -> DevicePtr () -> Type -> DevicePtr Int -> DevicePtr Int -> DevicePtr () -> Type -> Ptr () -> Type -> DevicePtr () -> Type -> Type -> Ptr Int64 -> IO ()
-csrmvEx_bufferSize _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cublasError "'csrmvEx_bufferSize' requires at least cuda-8.0"
+csrmvEx_bufferSize _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'csrmvEx_bufferSize' requires at least cuda-8.0"
 
 scsrmv_mp :: Handle -> Operation -> Int -> Int -> Int -> Ptr Float -> MatrixDescriptor -> DevicePtr Float -> DevicePtr Int -> DevicePtr Int -> DevicePtr Float -> Ptr Float -> DevicePtr Float -> IO ()
-scsrmv_mp _ _ _ _ _ _ _ _ _ _ _ _ _ = cublasError "'scsrmv_mp' requires at least cuda-8.0"
+scsrmv_mp _ _ _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'scsrmv_mp' requires at least cuda-8.0"
 
 dcsrmv_mp :: Handle -> Operation -> Int -> Int -> Int -> Ptr Double -> MatrixDescriptor -> DevicePtr Double -> DevicePtr Int -> DevicePtr Int -> DevicePtr Double -> Ptr Double -> DevicePtr Double -> IO ()
-dcsrmv_mp _ _ _ _ _ _ _ _ _ _ _ _ _ = cublasError "'dcsrmv_mp' requires at least cuda-8.0"
+dcsrmv_mp _ _ _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'dcsrmv_mp' requires at least cuda-8.0"
 
 ccsrmv_mp :: Handle -> Operation -> Int -> Int -> Int -> Ptr (Complex Float) -> MatrixDescriptor -> DevicePtr (Complex Float) -> DevicePtr Int -> DevicePtr Int -> DevicePtr (Complex Float) -> Ptr (Complex Float) -> DevicePtr (Complex Float) -> IO ()
-ccsrmv_mp _ _ _ _ _ _ _ _ _ _ _ _ _ = cublasError "'ccsrmv_mp' requires at least cuda-8.0"
+ccsrmv_mp _ _ _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'ccsrmv_mp' requires at least cuda-8.0"
 
 zcsrmv_mp :: Handle -> Operation -> Int -> Int -> Int -> Ptr (Complex Double) -> MatrixDescriptor -> DevicePtr (Complex Double) -> DevicePtr Int -> DevicePtr Int -> DevicePtr (Complex Double) -> Ptr (Complex Double) -> DevicePtr (Complex Double) -> IO ()
-zcsrmv_mp _ _ _ _ _ _ _ _ _ _ _ _ _ = cublasError "'zcsrmv_mp' requires at least cuda-8.0"
+zcsrmv_mp _ _ _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'zcsrmv_mp' requires at least cuda-8.0"
 
 csrsv_analysisEx :: Handle -> Operation -> Int -> Int -> MatrixDescriptor -> DevicePtr () -> Type -> DevicePtr Int -> DevicePtr Int -> Info -> Type -> IO ()
-csrsv_analysisEx _ _ _ _ _ _ _ _ _ _ _ = cublasError "'csrsv_analysisEx' requires at least cuda-8.0"
+csrsv_analysisEx _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'csrsv_analysisEx' requires at least cuda-8.0"
 
 csrsv_solveEx :: Handle -> Operation -> Int -> Ptr () -> Type -> MatrixDescriptor -> DevicePtr () -> Type -> DevicePtr Int -> DevicePtr Int -> Info -> DevicePtr () -> Type -> DevicePtr () -> Type -> Type -> IO ()
-csrsv_solveEx _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cublasError "'csrsv_solveEx' requires at least cuda-8.0"
+csrsv_solveEx _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'csrsv_solveEx' requires at least cuda-8.0"
 #endif

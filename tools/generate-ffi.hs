@@ -156,7 +156,7 @@ mkDummyFun minv (CFun _ name _ params ret doc) =
   intercalate "\n"
     [ if null doc then "" else "-- | " <> doc
     , printf "%s :: %s -> IO %s" name params' ret'
-    , printf "%s %s = cublasError \"'%s' requires at least cuda-%3.1f\"" name ignore name minv
+    , printf "%s %s = cusparseError \"'%s' requires at least cuda-%3.1f\"" name ignore name minv
     ]
   where
     params' = intercalate " -> " $ map (hsType . convType) params

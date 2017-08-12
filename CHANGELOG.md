@@ -1,6 +1,6 @@
-# Revision history for cublas
+# Revision history for cusparse
 
-## 0.3.0.0 -- YYYY-mm-dd
+## 0.1.0.0 -- YYYY-mm-dd
 
-* First version; replaces [bmsherman/cublas](https://github.com/bmsherman/cublas). Released on an unsuspecting world.
+* First version; split off from [bmsherman/cublas](https://github.com/bmsherman/cublas). Released on an unsuspecting world.
 
