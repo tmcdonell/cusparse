@@ -82,10 +82,13 @@ data Type
 -- | Specify the algorithm to use, for example used in the routine
 -- <http://docs.nvidia.com/cuda/cusparse/index.html#cusparse-csrmvEx csrmvEx>.
 --
+#if CUDA_VERSION < 8000
+data Algorithm
+#else
 {# enum cusparseAlgMode_t as Algorithm
   { underscoreToCase }
   with prefix="CUSPARSE" deriving (Eq, Show) #}
-
+#endif
 
 -- | Indicates whether level information is used by some solver algorithms.
 --
