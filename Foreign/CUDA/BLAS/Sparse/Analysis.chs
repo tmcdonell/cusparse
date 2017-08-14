@@ -2,7 +2,7 @@
 {-# LANGUAGE EmptyDataDecls           #-}
 {-# LANGUAGE ForeignFunctionInterface #-}
 -- |
--- Module      : Foreign.CUDA.BLAS.Sparse.Matrix.Analysis
+-- Module      : Foreign.CUDA.BLAS.Sparse.Analysis
 -- Copyright   : [2017] Trevor L. McDonell
 -- License     : BSD3
 --
@@ -11,7 +11,7 @@
 -- Portability : non-portable (GHC extensions)
 --
 
-module Foreign.CUDA.BLAS.Sparse.Matrix.Analysis
+module Foreign.CUDA.BLAS.Sparse.Analysis
   where
 
 -- Friends
