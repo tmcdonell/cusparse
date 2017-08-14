@@ -12,13 +12,11 @@
 
 module Foreign.CUDA.BLAS.Sparse.Matrix.Hybrid (
 
-  -- * Hybrid matrices
   Hybrid(..),
   HybridPartition(..),
 
-  -- ** Creation
-  create,
-  destroy,
+  createHYB,
+  destroyHYB,
 
 ) where
 
@@ -55,9 +53,9 @@ newtype Hybrid = Hybrid { useHYB :: {# type cusparseHybMat_t #}}
 --
 -- <http://docs.nvidia.com/cuda/cusparse/index.html#cusparsecreatehybmat>
 --
-{-# INLINEABLE create #-}
-create :: IO Hybrid
-create = resultIfOk =<< cusparseCreateHybMat
+{-# INLINEABLE createHYB #-}
+createHYB :: IO Hybrid
+createHYB = resultIfOk =<< cusparseCreateHybMat
   where
     {# fun unsafe cusparseCreateHybMat
       { alloca- `Hybrid' peekHYB* } -> `Status' cToEnum #}
@@ -69,7 +67,7 @@ create = resultIfOk =<< cusparseCreateHybMat
 --
 -- <http://docs.nvidia.com/cuda/cusparse/index.html#cusparsedestroyhybmat>
 --
-{-# INLINEABLE destroy #-}
-{# fun unsafe cusparseDestroyHybMat as destroy
+{-# INLINEABLE destroyHYB #-}
+{# fun unsafe cusparseDestroyHybMat as destroyHYB
   { useHYB `Hybrid' } -> `()' checkStatus* #}
 

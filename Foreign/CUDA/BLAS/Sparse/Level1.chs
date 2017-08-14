@@ -56,9 +56,13 @@ import Foreign
 import Foreign.C
 import Foreign.Storable.Complex ()
 import Foreign.CUDA.Ptr
+import Foreign.CUDA.BLAS.Sparse.Analysis
+import Foreign.CUDA.BLAS.Sparse.Context
 import Foreign.CUDA.BLAS.Sparse.Error
 import Foreign.CUDA.BLAS.Sparse.Internal.C2HS
 import Foreign.CUDA.BLAS.Sparse.Internal.Types
+import Foreign.CUDA.BLAS.Sparse.Matrix.Descriptor
+import Foreign.CUDA.BLAS.Sparse.Matrix.Hybrid
 
 #include "cbits/stubs.h"
 {# context lib="cusparse" #}

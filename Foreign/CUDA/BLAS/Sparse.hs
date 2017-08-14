@@ -34,8 +34,11 @@ module Foreign.CUDA.BLAS.Sparse (
 
   -- * Control
   module Foreign.CUDA.BLAS.Sparse.Context,
-  module Foreign.CUDA.BLAS.Sparse.Stream,
+  module Foreign.CUDA.BLAS.Sparse.Analysis,
   module Foreign.CUDA.BLAS.Sparse.Error,
+  module Foreign.CUDA.BLAS.Sparse.Matrix.Descriptor,
+  module Foreign.CUDA.BLAS.Sparse.Matrix.Hybrid,
+  module Foreign.CUDA.BLAS.Sparse.Stream,
 
   -- * Operations
   module Foreign.CUDA.BLAS.Sparse.Level1,
@@ -44,8 +47,11 @@ module Foreign.CUDA.BLAS.Sparse (
 
 ) where
 
-import Foreign.CUDA.BLAS.Sparse.Context         hiding ( useHandle )
-import Foreign.CUDA.BLAS.Sparse.Error           hiding ( resultIfOk, nothingIfOk )
+import Foreign.CUDA.BLAS.Sparse.Analysis                  hiding ( useInfo, useInfo_bsrsv2, useInfo_csrsv2, useInfo_bsrsm2, useInfo_csrgemm2 )
+import Foreign.CUDA.BLAS.Sparse.Context                   hiding ( useHandle )
+import Foreign.CUDA.BLAS.Sparse.Error                     hiding ( resultIfOk, nothingIfOk )
+import Foreign.CUDA.BLAS.Sparse.Matrix.Descriptor         hiding ( useMatDescr )
+import Foreign.CUDA.BLAS.Sparse.Matrix.Hybrid             hiding ( useHYB )
 import Foreign.CUDA.BLAS.Sparse.Stream
 
 import Foreign.CUDA.BLAS.Sparse.Level1

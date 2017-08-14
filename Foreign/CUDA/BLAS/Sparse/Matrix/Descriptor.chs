@@ -12,24 +12,22 @@
 
 module Foreign.CUDA.BLAS.Sparse.Matrix.Descriptor (
 
-  -- * Matrix descriptor
   MatrixDescriptor(..),
   MatrixType(..),
   IndexBase(..),
   Diagonal(..),
   Fill(..),
 
-  -- ** Creation
-  create,
-  destroy,
+  createMatDescr,
+  destroyMatDescr,
 
-  -- ** Querying properties
+  -- Querying properties
   getDiagonal,
   getFillMode,
   getIndexBase,
   getMatrixType,
 
-  -- ** Setting properties
+  -- Setting properties
   setDiagonal,
   setFillMode,
   setIndexBase,
@@ -97,9 +95,9 @@ newtype MatrixDescriptor = MatrixDescriptor { useMatDescr :: {# type cusparseMat
 --
 -- <http://docs.nvidia.com/cuda/cusparse/index.html#cusparsecreatematdescr>
 --
-{-# INLINEABLE create #-}
-create :: IO MatrixDescriptor
-create = resultIfOk =<< cusparseCreateMatDescr
+{-# INLINEABLE createMatDescr #-}
+createMatDescr :: IO MatrixDescriptor
+createMatDescr = resultIfOk =<< cusparseCreateMatDescr
   where
     {# fun unsafe cusparseCreateMatDescr
       { alloca- `MatrixDescriptor' peekMD* } -> `Status' cToEnum #}
@@ -110,8 +108,8 @@ create = resultIfOk =<< cusparseCreateMatDescr
 --
 -- <http://docs.nvidia.com/cuda/cusparse/index.html#cusparsedestroymatdescr>
 --
-{-# INLINEABLE destroy #-}
-{# fun unsafe cusparseDestroyMatDescr as destroy
+{-# INLINEABLE destroyMatDescr #-}
+{# fun unsafe cusparseDestroyMatDescr as destroyMatDescr
   { useMatDescr `MatrixDescriptor' } -> `()' checkStatus* #}
 
 

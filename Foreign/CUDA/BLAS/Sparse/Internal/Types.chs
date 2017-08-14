@@ -11,22 +11,8 @@
 -- Portability : non-portable (GHC extensions)
 --
 
-module Foreign.CUDA.BLAS.Sparse.Internal.Types (
-
-  module Foreign.CUDA.BLAS.Sparse.Internal.Types,
-
-  module Foreign.CUDA.BLAS.Sparse.Analysis,
-  module Foreign.CUDA.BLAS.Sparse.Context,
-  module Foreign.CUDA.BLAS.Sparse.Matrix.Descriptor,
-  module Foreign.CUDA.BLAS.Sparse.Matrix.Hybrid,
-
-) where
-
--- friends
-import Foreign.CUDA.BLAS.Sparse.Context                   ( Handle(..) )
-import Foreign.CUDA.BLAS.Sparse.Analysis                  ( Info(..), Info_bsrsv2(..), Info_bsrsm2(..), Info_csrsv2(..), Info_csrgemm2(..) )
-import Foreign.CUDA.BLAS.Sparse.Matrix.Descriptor         ( MatrixDescriptor(..), Diagonal(..), Fill(..), IndexBase(..), MatrixType(..) )
-import Foreign.CUDA.BLAS.Sparse.Matrix.Hybrid             ( Hybrid(..) )
+module Foreign.CUDA.BLAS.Sparse.Internal.Types
+  where
 
 -- other
 import Prelude                                            hiding ( Either(..) )

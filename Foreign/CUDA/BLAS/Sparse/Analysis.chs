@@ -11,8 +11,15 @@
 -- Portability : non-portable (GHC extensions)
 --
 
-module Foreign.CUDA.BLAS.Sparse.Analysis
-  where
+module Foreign.CUDA.BLAS.Sparse.Analysis (
+
+  Info(..), createInfo, destroyInfo,
+  Info_csrsv2(..), createInfo_csrsv2, destroyInfo_csrsv2,
+  Info_bsrsv2(..), createInfo_bsrsv2, destroyInfo_bsrsv2,
+  Info_bsrsm2(..), createInfo_bsrsm2, destroyInfo_bsrsm2,
+  Info_csrgemm2(..), createInfo_csrgemm2, destroyInfo_csrgemm2,
+
+) where
 
 -- Friends
 import Foreign.CUDA.BLAS.Sparse.Error

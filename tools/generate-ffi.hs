@@ -1,4 +1,6 @@
 #!/usr/bin/env runhaskell
+{-# LANGUAGE LambdaCase #-}
+{-# OPTIONS_GHC -fno-warn-unused-top-binds #-}
 -- vim: filetype=haskell
 --
 -- Generate c2hs FFI binding hooks
@@ -27,20 +29,19 @@ main = do
                 ]
       l2exps  = [ "Operation(..)"
                 , "Direction(..)"
-                , "IndexBase(..)"
-                , "MatrixDescriptor"
                 , "Type(..)"
                 , "Algorithm(..)"
                 , "Policy(..)"
-                , "Hybrid(..)"
+                , "MatrixDescriptor"
+                , "Hybrid"
                 , "Info"
                 , "Info_bsrsv2"
                 , "Info_csrsv2"
                 ]
       l3exps  = [ "Operation(..)"
-                , "MatrixDescriptor"
                 , "Policy(..)"
-                , "Info(..)"
+                , "MatrixDescriptor"
+                , "Info"
                 , "Info_bsrsm2"
                 , "Info_csrgemm2"
                 ]
@@ -68,9 +69,13 @@ mkC2HS mdl docs exps funs =
                 , "Foreign.C"
                 , "Foreign.Storable.Complex ()"
                 , "Foreign.CUDA.Ptr"
+                , "Foreign.CUDA.BLAS.Sparse.Analysis"
+                , "Foreign.CUDA.BLAS.Sparse.Context"
                 , "Foreign.CUDA.BLAS.Sparse.Error"
                 , "Foreign.CUDA.BLAS.Sparse.Internal.C2HS"
                 , "Foreign.CUDA.BLAS.Sparse.Internal.Types"
+                , "Foreign.CUDA.BLAS.Sparse.Matrix.Descriptor"
+                , "Foreign.CUDA.BLAS.Sparse.Matrix.Hybrid"
                 ]
       body    = "{-# INLINE useDevP #-}"
               : "useDevP :: DevicePtr a -> Ptr b"
@@ -295,24 +300,24 @@ decorate _                  = error "decorate: bad args"
 -- instances are identical so it should work fine
 --
 convType :: Type -> HType
-convType t = case t of
+convType = \case
   TVoid             -> simple "()"
   TInt ms           -> simple (maybe "Int" (printf "Int%d") ms)
-  TEnum t'          -> enum t'
+  TEnum t           -> enum t
   THalf             -> floating "Half"
   TFloat            -> floating "Float"
   TDouble           -> floating "Double"
   TComplex TFloat   -> simple "(Complex Float)"
   TComplex TDouble  -> simple "(Complex Double)"
-  TPtr as t'        -> pointer as
-                     $ case convType t' of
-                         HType _ s _ -> case t' of
+  TPtr as t         -> pointer as
+                     $ case convType t of
+                         HType _ s _ -> case t of
                                           TPtr{} -> printf "(%s)" s
                                           _      -> s
   THandle           -> HType "useHandle" "Handle" ""
   TStatus           -> HType "" "()" "checkStatus*"
-  TData i t o       -> HType i t o
-  _                 -> error $ "unmarshallable type: " <> show t
+  TData i b o       -> HType i b o
+  t                 -> error $ "unmarshallable type: " <> show t
   where
     simple s    = HType "" s ""
     enum s      = HType "cFromEnum" s "cToEnum"
@@ -447,7 +452,7 @@ funsL2 =
   , gpA $ \ a   -> fun "?csrsv2_solve"      [ transpose, int, int, ptr a, matdescr, dptr a, dptr int, dptr int, info_csrsv2, dptr a, dptr a, policy, dptr void ]
   , gp  $          fun "xcsrsv2_zeroPivot"  [ info_csrsv2, ptr int ]
   , gpA $ \ a   -> fun "?hybmv"             [ transpose, ptr a, matdescr, hyb, dptr a, ptr a, dptr a ]
-  , gpA $ \ a   -> fun "?hybsv_analysis"    [ transpose, matdescr, hyb, info ]
+  , gpA $ \ _   -> fun "?hybsv_analysis"    [ transpose, matdescr, hyb, info ]
   , gpA $ \ a   -> fun "?hybsv_solve"       [ transpose, ptr a, matdescr, hyb, info, dptr a, dptr a ]
   ]
 
@@ -456,7 +461,7 @@ funsL2 =
 funsL2_cuda75 :: [FunGroup]
 funsL2_cuda75 =
   [ gpA $ \ a   -> fun "?gemvi"             [ transpose, int, int, ptr a, dptr a, int, int, dptr a, dptr int, ptr a, dptr a, idxBase, dptr void ]
-  , gpA $ \ a   -> fun "?gemvi_bufferSize"  [ transpose, int, int, int, ptr int ]
+  , gpA $ \ _   -> fun "?gemvi_bufferSize"  [ transpose, int, int, int, ptr int ]
   ]
 
 -- Level 2 operations introduced in CUDA-8.0
