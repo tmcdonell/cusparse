@@ -13,6 +13,9 @@ module Foreign.CUDA.BLAS.Sparse.Internal.C2HS (
   -- * Conversion between C and Haskell types
   cIntConv, cFloatConv, cToBool, cFromBool, cToEnum, cFromEnum,
 
+  -- * Composite marshalling functions
+  withComplex,
+
   -- * Utilities
   checkStatus
 
@@ -22,8 +25,10 @@ module Foreign.CUDA.BLAS.Sparse.Internal.C2HS (
 import Foreign.CUDA.BLAS.Sparse.Error
 
 -- System
+import Data.Complex
 import Foreign
 import Foreign.C
+import Foreign.Storable.Complex ()
 
 
 -- Conversions -----------------------------------------------------------------
@@ -73,6 +78,12 @@ cToEnum  = toEnum . cIntConv
 {-# INLINE cFromEnum #-}
 cFromEnum :: (Enum e, Integral i) => e -> i
 cFromEnum  = cIntConv . fromEnum
+
+-- | Marshalling of complex numbers
+--
+{-# INLINE withComplex #-}
+withComplex :: Storable a => Complex a -> (Ptr () -> IO b) -> IO b
+withComplex c f = with c (f . castPtr)
 
 
 -- | Throw an error if given error code is not CUSPARSE_STATUS_SUCCESS

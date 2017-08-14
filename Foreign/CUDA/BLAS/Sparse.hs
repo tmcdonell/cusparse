@@ -46,6 +46,7 @@ module Foreign.CUDA.BLAS.Sparse (
   module Foreign.CUDA.BLAS.Sparse.Level3,
   module Foreign.CUDA.BLAS.Sparse.Precondition,
   module Foreign.CUDA.BLAS.Sparse.Reorder,
+  module Foreign.CUDA.BLAS.Sparse.Convert,
 
 ) where
 
@@ -61,4 +62,5 @@ import Foreign.CUDA.BLAS.Sparse.Level2
 import Foreign.CUDA.BLAS.Sparse.Level3
 import Foreign.CUDA.BLAS.Sparse.Precondition
 import Foreign.CUDA.BLAS.Sparse.Reorder
+import Foreign.CUDA.BLAS.Sparse.Convert
 

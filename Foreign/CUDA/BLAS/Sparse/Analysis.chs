@@ -23,6 +23,7 @@ module Foreign.CUDA.BLAS.Sparse.Analysis (
   Info_bsrilu02(..), createInfo_bsrilu02, destroyInfo_bsrilu02,
   Info_csrgemm2(..), createInfo_csrgemm2, destroyInfo_csrgemm2,
   Info_colour(..), createInfo_colour, destroyInfo_colour,
+  Info_csru2csr(..), createInfo_csru2csr, destroyInfo_csru2csr,
 
 ) where
 
@@ -240,4 +241,22 @@ createInfo_colour = resultIfOk =<< cusparseCreateColorInfo
 {-# INLINEABLE destroyInfo_colour #-}
 {# fun unsafe cusparseDestroyColorInfo as destroyInfo_colour
   { useInfo_colour `Info_colour' } -> `()' checkStatus* #}
+
+
+-- /undocumented/
+--
+newtype Info_csru2csr = Info_csru2csr { useInfo_csru2csr :: {# type csru2csrInfo_t #}}
+
+{-# INLINEABLE createInfo_csru2csr #-}
+createInfo_csru2csr :: IO Info_csru2csr
+createInfo_csru2csr = resultIfOk =<< cusparseCreateCsru2csrInfo
+  where
+    {# fun unsafe cusparseCreateCsru2csrInfo
+      { alloca- `Info_csru2csr' peekI* } -> `Status' cToEnum #}
+      where
+        peekI = liftM Info_csru2csr . peek
+
+{-# INLINEABLE destroyInfo_csru2csr #-}
+{# fun unsafe cusparseDestroyCsru2csrInfo as destroyInfo_csru2csr
+  { useInfo_csru2csr `Info_csru2csr' } -> `()' checkStatus* #}
 

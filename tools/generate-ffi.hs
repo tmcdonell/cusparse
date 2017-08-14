@@ -66,6 +66,12 @@ main = do
                 ]
       roexps  = [ "Info_colour"
                 ]
+      cvtexps = [ "Direction(..)"
+                , "Action(..)"
+                , "Hybrid"
+                , "HybridPartition(..)"
+                , "Info_csru2csr"
+                ]
   --
   mkC2HS "Level1" (docsL 1) l1exps
     [(Nothing,   funsL1)]
@@ -87,7 +93,12 @@ main = do
     ]
 
   mkC2HS "Reorder" (docs "reorderings") roexps
-    [(Nothing, funsReorder)
+    [(Nothing,   funsReorder)
+    ]
+
+  mkC2HS "Convert" (docs "format-conversion") cvtexps
+    [(Nothing,   funsConvert)
+    ,(Just 8000, funsConvert_cuda80)
     ]
 
 
@@ -342,8 +353,8 @@ convType = \case
   THalf             -> floating "Half"
   TFloat            -> floating "Float"
   TDouble           -> floating "Double"
-  TComplex TFloat   -> simple "(Complex Float)"
-  TComplex TDouble  -> simple "(Complex Double)"
+  TComplex TFloat   -> complex "(Complex Float)"
+  TComplex TDouble  -> complex "(Complex Double)"
   TPtr as t         -> pointer as
                      $ case convType t of
                          HType _ s _ -> case t of
@@ -357,6 +368,7 @@ convType = \case
     simple s    = HType "" s ""
     enum s      = HType "cFromEnum" s "cToEnum"
     floating s  = HType ("C" <> s) s ("fromC" <> s)
+    complex s   = HType "withComplex*" s ""
     --
     pointer Nothing s       = HType "castPtr"  ("Ptr " <> s) ""
     pointer (Just Host) s   = HType "useHostP" ("HostPtr " <> s) ""
@@ -413,6 +425,9 @@ dtype = TEnum "Type"
 dir :: Type
 dir = TEnum "Direction"
 
+action :: Type
+action = TEnum "Action"
+
 alg :: Type
 alg = TEnum "Algorithm"
 
@@ -455,11 +470,17 @@ info_csrgemm2 = mkInfo "csrgemm2"
 info_colour :: Type
 info_colour = mkInfo "colour"
 
+info_csru2csr :: Type
+info_csru2csr = mkInfo "csru2csr"
+
 matdescr :: Type
 matdescr = TData "useMatDescr" "MatrixDescriptor" ""
 
 hyb :: Type
 hyb = TData "useHYB" "Hybrid" ""
+
+partition :: Type
+partition = TEnum "HybridPartition"
 
 funInsts :: Safety -> [FunGroup] -> [CFun]
 funInsts safety funs = mangleFun safety <$> concatFunInstances funs
@@ -594,11 +615,67 @@ funsPrecond_cuda80 =
   [ gp  $          fun "csrilu0Ex"              [ transpose, int, matdescr, dptr void, dtype, dptr int, dptr int, info, dtype ]
   ]
 
+
+-- Reorder sparse matrix elements
+--
+-- <http://docs.nvidia.com/cuda/cusparse/index.html#cusparse-reorderings-reference>
+--
 funsReorder :: [FunGroup]
 funsReorder =
   [ gpA $ \ a   -> fun "?csrcolor"  [ int, int, matdescr, dptr a, dptr int, dptr int, dptr a, dptr int, dptr int, dptr int, info_colour ]
   ]
 
+
+-- Convert between different sparse and dense representations
+--
+-- <http://docs.nvidia.com/cuda/cusparse/index.html#cusparse-format-conversion-reference>
+--
+funsConvert :: [FunGroup]
+funsConvert =
+  [ gpA $ \ a   -> fun "?bsr2csr"                   [ dir, int, int, matdescr, dptr a, dptr int, dptr int, int, matdescr, dptr a, dptr int, dptr int ]
+  , gpA $ \ a   -> fun "?gebsr2gebsc_bufferSize"    [ int, int, int, dptr a, dptr int, dptr int, int, int, ptr int ]
+  , gpA $ \ a   -> fun "?gebsr2gebsc"               [ int, int, int, dptr a, dptr int, dptr int, int, int, dptr a, dptr int, dptr int, action, idxBase, dptr void ]
+  , gpA $ \ a   -> fun "?gebsr2gebsr_bufferSize"    [ dir, int, int, int, matdescr, dptr a, dptr int, dptr int, int, int, int, int, ptr int ]
+  , gpA $ \ a   -> fun "?gebsr2gebsr"               [ dir, int, int, int, matdescr, dptr a, dptr int, dptr int, int, int, matdescr, dptr a, dptr int, dptr int, int, int, dptr void ]
+  , gp  $          fun "xgebsr2gebsrNnz"            [ dir, int, int, int, matdescr, dptr int, dptr int, int, int, matdescr, dptr int, int, int, ptr int, dptr void ]
+  , gpA $ \ a   -> fun "?gebsr2csr"                 [ dir, int, int, matdescr, dptr a, dptr int, dptr int, int, int, matdescr, dptr a, dptr int, dptr int ]
+  , gpA $ \ a   -> fun "?csr2gebsr_bufferSize"      [ dir, int, int, matdescr, dptr a, dptr int, dptr int, int, int, ptr int ]
+  , gpA $ \ a   -> fun "?csr2gebsr"                 [ dir, int, int, matdescr, dptr a, dptr int, dptr int, matdescr, dptr a, dptr int, dptr int, int, int, dptr void ]
+  , gp  $          fun "xcsr2gebsrNnz"              [ dir, int, int, matdescr, dptr int, dptr int, matdescr, dptr int, int, int, ptr int, dptr void ]
+  , gp  $          fun "xcoo2csr"                   [ dptr int, int, int, dptr int, idxBase ]
+  , gpA $ \ a   -> fun "?csc2dense"                 [ int, int, matdescr, dptr a, dptr int, dptr int, dptr a, int ]
+  , gpA $ \ a   -> fun "?csc2hyb"                   [ int, int, matdescr, dptr a, dptr int, dptr int, hyb, int, partition ]
+  , gpA $ \ a   -> fun "?csr2bsr"                   [ dir, int, int, matdescr, dptr a, dptr int, dptr int, int, matdescr, dptr a, dptr int, dptr int ]
+  , gp  $          fun "xcsr2bsrNnz"                [ dir, int, int, matdescr, dptr int, dptr int, int, matdescr, dptr int, ptr int ]
+  , gp  $          fun "xcsr2coo"                   [ dptr int, int, int, dptr int, idxBase ]
+  , gpA $ \ a   -> fun "?csr2csc"                   [ int, int, int, dptr a, dptr int, dptr int, dptr a, dptr int, dptr int, action, idxBase ]
+  , gpA $ \ a   -> fun "?csr2dense"                 [ int, int, matdescr, dptr a, dptr int, dptr int, dptr a, int ]
+  , gpA $ \ a   -> fun "?csr2csr_compress"          [ int, int, matdescr, dptr a, dptr int, dptr int, int, dptr int, dptr a, dptr int, dptr int, a ]
+  , gpA $ \ a   -> fun "?csr2hyb"                   [ int, int, matdescr, dptr a, dptr int, dptr int, hyb, int, partition ]
+  , gpA $ \ a   -> fun "?dense2csc"                 [ int, int, matdescr, dptr a, int, dptr int, dptr a, dptr int, dptr int ]
+  , gpA $ \ a   -> fun "?dense2csr"                 [ int, int, matdescr, dptr a, int, dptr int, dptr a, dptr int, dptr int ]
+  , gpA $ \ a   -> fun "?dense2hyb"                 [ int, int, matdescr, dptr a, int, dptr int, hyb, int, partition ]
+  , gpA $ \ a   -> fun "?hyb2csc"                   [ matdescr, hyb, dptr a, dptr int, dptr int ]
+  , gpA $ \ a   -> fun "?hyb2csr"                   [ matdescr, hyb, dptr a, dptr int, dptr int ]
+  , gpA $ \ a   -> fun "?hyb2dense"                 [ matdescr, hyb, dptr a, int ]
+  , gpA $ \ a   -> fun "?nnz"                       [ dir, int, int, matdescr, dptr a, int, dptr int, ptr int ]
+  , gp  $          fun "createIdentityPermutation"  [ int, dptr int ]
+  , gp  $          fun "xcoosort_bufferSizeExt"     [ int, int, int, dptr int, dptr int, ptr int64 ]
+  , gp  $          fun "xcoosortByRow"              [ int, int, int, dptr int, dptr int, dptr int, dptr void ]
+  , gp  $          fun "xcoosortByColumn"           [ int, int, int, dptr int, dptr int, dptr int, dptr void ]
+  , gp  $          fun "xcsrsort_bufferSizeExt"     [ int, int, int, dptr int, dptr int, ptr int64 ]
+  , gp  $          fun "xcsrsort"                   [ int, int, int, matdescr, dptr int, dptr int, dptr int, dptr void ]
+  , gp  $          fun "xcscsort_bufferSizeExt"     [ int, int, int, dptr int, dptr int, ptr int64 ]
+  , gp  $          fun "xcscsort"                   [ int, int, int, matdescr, dptr int, dptr int, dptr int, dptr void ]
+  , gpA $ \ a   -> fun "?csru2csr_bufferSizeExt"    [ int, int, int, dptr a, dptr int, dptr int, info_csru2csr, ptr int64 ]
+  , gpA $ \ a   -> fun "?csru2csr"                  [ int, int, int, matdescr, dptr a, dptr int, dptr int, info_csru2csr, dptr void ]
+  , gpA $ \ a   -> fun "?csr2csru"                  [ int, int, int, matdescr, dptr a, dptr int, dptr int, info_csru2csr, dptr void ]
+  ]
+
+funsConvert_cuda80 :: [FunGroup]
+funsConvert_cuda80 =
+  [ gp  $          fun "csr2cscEx"                [ int, int, int, dptr void, dtype, dptr int, dptr int, dptr void, dtype, dptr int, dptr int, action, idxBase, dtype ]
+  ]
 
 data FunGroup
   = FunGroup

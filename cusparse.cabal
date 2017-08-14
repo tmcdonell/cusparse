@@ -45,6 +45,7 @@ library
       Foreign.CUDA.BLAS.Sparse
       Foreign.CUDA.BLAS.Sparse.Analysis
       Foreign.CUDA.BLAS.Sparse.Context
+      Foreign.CUDA.BLAS.Sparse.Convert
       Foreign.CUDA.BLAS.Sparse.Error
       Foreign.CUDA.BLAS.Sparse.Level1
       Foreign.CUDA.BLAS.Sparse.Level2
