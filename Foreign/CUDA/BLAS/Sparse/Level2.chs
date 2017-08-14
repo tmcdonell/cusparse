@@ -136,142 +136,142 @@ useHostP = useHostPtr . castHostPtr
 
 
 {-# INLINEABLE sbsrmv #-}
-{# fun unsafe cusparseSbsrmv as sbsrmv { useHandle `Handle', cFromEnum `Direction', cFromEnum `Operation', `Int', `Int', `Int', castPtr `Ptr Float', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Float', useDevP `DevicePtr Int', useDevP `DevicePtr Int', `Int', useDevP `DevicePtr Float', castPtr `Ptr Float', useDevP `DevicePtr Float' } -> `()' checkStatus* #}
+{# fun unsafe cusparseSbsrmv as sbsrmv { useHandle `Handle', cFromEnum `Direction', cFromEnum `Operation', `Int', `Int', `Int', castPtr `Ptr Float', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Float', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', `Int', useDevP `DevicePtr Float', castPtr `Ptr Float', useDevP `DevicePtr Float' } -> `()' checkStatus* #}
 
 {-# INLINEABLE dbsrmv #-}
-{# fun unsafe cusparseDbsrmv as dbsrmv { useHandle `Handle', cFromEnum `Direction', cFromEnum `Operation', `Int', `Int', `Int', castPtr `Ptr Double', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Double', useDevP `DevicePtr Int', useDevP `DevicePtr Int', `Int', useDevP `DevicePtr Double', castPtr `Ptr Double', useDevP `DevicePtr Double' } -> `()' checkStatus* #}
+{# fun unsafe cusparseDbsrmv as dbsrmv { useHandle `Handle', cFromEnum `Direction', cFromEnum `Operation', `Int', `Int', `Int', castPtr `Ptr Double', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Double', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', `Int', useDevP `DevicePtr Double', castPtr `Ptr Double', useDevP `DevicePtr Double' } -> `()' checkStatus* #}
 
 {-# INLINEABLE cbsrmv #-}
-{# fun unsafe cusparseCbsrmv as cbsrmv { useHandle `Handle', cFromEnum `Direction', cFromEnum `Operation', `Int', `Int', `Int', castPtr `Ptr (Complex Float)', useMatDescr `MatrixDescriptor', useDevP `DevicePtr (Complex Float)', useDevP `DevicePtr Int', useDevP `DevicePtr Int', `Int', useDevP `DevicePtr (Complex Float)', castPtr `Ptr (Complex Float)', useDevP `DevicePtr (Complex Float)' } -> `()' checkStatus* #}
+{# fun unsafe cusparseCbsrmv as cbsrmv { useHandle `Handle', cFromEnum `Direction', cFromEnum `Operation', `Int', `Int', `Int', castPtr `Ptr (Complex Float)', useMatDescr `MatrixDescriptor', useDevP `DevicePtr (Complex Float)', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', `Int', useDevP `DevicePtr (Complex Float)', castPtr `Ptr (Complex Float)', useDevP `DevicePtr (Complex Float)' } -> `()' checkStatus* #}
 
 {-# INLINEABLE zbsrmv #-}
-{# fun unsafe cusparseZbsrmv as zbsrmv { useHandle `Handle', cFromEnum `Direction', cFromEnum `Operation', `Int', `Int', `Int', castPtr `Ptr (Complex Double)', useMatDescr `MatrixDescriptor', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr Int', useDevP `DevicePtr Int', `Int', useDevP `DevicePtr (Complex Double)', castPtr `Ptr (Complex Double)', useDevP `DevicePtr (Complex Double)' } -> `()' checkStatus* #}
+{# fun unsafe cusparseZbsrmv as zbsrmv { useHandle `Handle', cFromEnum `Direction', cFromEnum `Operation', `Int', `Int', `Int', castPtr `Ptr (Complex Double)', useMatDescr `MatrixDescriptor', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', `Int', useDevP `DevicePtr (Complex Double)', castPtr `Ptr (Complex Double)', useDevP `DevicePtr (Complex Double)' } -> `()' checkStatus* #}
 
 {-# INLINEABLE sbsrxmv #-}
-{# fun unsafe cusparseSbsrxmv as sbsrxmv { useHandle `Handle', cFromEnum `Direction', cFromEnum `Operation', `Int', `Int', `Int', `Int', castPtr `Ptr Float', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Float', useDevP `DevicePtr Int', useDevP `DevicePtr Int', useDevP `DevicePtr Int', useDevP `DevicePtr Int', `Int', useDevP `DevicePtr Float', castPtr `Ptr Float', useDevP `DevicePtr Float' } -> `()' checkStatus* #}
+{# fun unsafe cusparseSbsrxmv as sbsrxmv { useHandle `Handle', cFromEnum `Direction', cFromEnum `Operation', `Int', `Int', `Int', `Int', castPtr `Ptr Float', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Float', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', `Int', useDevP `DevicePtr Float', castPtr `Ptr Float', useDevP `DevicePtr Float' } -> `()' checkStatus* #}
 
 {-# INLINEABLE dbsrxmv #-}
-{# fun unsafe cusparseDbsrxmv as dbsrxmv { useHandle `Handle', cFromEnum `Direction', cFromEnum `Operation', `Int', `Int', `Int', `Int', castPtr `Ptr Double', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Double', useDevP `DevicePtr Int', useDevP `DevicePtr Int', useDevP `DevicePtr Int', useDevP `DevicePtr Int', `Int', useDevP `DevicePtr Double', castPtr `Ptr Double', useDevP `DevicePtr Double' } -> `()' checkStatus* #}
+{# fun unsafe cusparseDbsrxmv as dbsrxmv { useHandle `Handle', cFromEnum `Direction', cFromEnum `Operation', `Int', `Int', `Int', `Int', castPtr `Ptr Double', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Double', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', `Int', useDevP `DevicePtr Double', castPtr `Ptr Double', useDevP `DevicePtr Double' } -> `()' checkStatus* #}
 
 {-# INLINEABLE cbsrxmv #-}
-{# fun unsafe cusparseCbsrxmv as cbsrxmv { useHandle `Handle', cFromEnum `Direction', cFromEnum `Operation', `Int', `Int', `Int', `Int', castPtr `Ptr (Complex Float)', useMatDescr `MatrixDescriptor', useDevP `DevicePtr (Complex Float)', useDevP `DevicePtr Int', useDevP `DevicePtr Int', useDevP `DevicePtr Int', useDevP `DevicePtr Int', `Int', useDevP `DevicePtr (Complex Float)', castPtr `Ptr (Complex Float)', useDevP `DevicePtr (Complex Float)' } -> `()' checkStatus* #}
+{# fun unsafe cusparseCbsrxmv as cbsrxmv { useHandle `Handle', cFromEnum `Direction', cFromEnum `Operation', `Int', `Int', `Int', `Int', castPtr `Ptr (Complex Float)', useMatDescr `MatrixDescriptor', useDevP `DevicePtr (Complex Float)', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', `Int', useDevP `DevicePtr (Complex Float)', castPtr `Ptr (Complex Float)', useDevP `DevicePtr (Complex Float)' } -> `()' checkStatus* #}
 
 {-# INLINEABLE zbsrxmv #-}
-{# fun unsafe cusparseZbsrxmv as zbsrxmv { useHandle `Handle', cFromEnum `Direction', cFromEnum `Operation', `Int', `Int', `Int', `Int', castPtr `Ptr (Complex Double)', useMatDescr `MatrixDescriptor', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr Int', useDevP `DevicePtr Int', useDevP `DevicePtr Int', useDevP `DevicePtr Int', `Int', useDevP `DevicePtr (Complex Double)', castPtr `Ptr (Complex Double)', useDevP `DevicePtr (Complex Double)' } -> `()' checkStatus* #}
+{# fun unsafe cusparseZbsrxmv as zbsrxmv { useHandle `Handle', cFromEnum `Direction', cFromEnum `Operation', `Int', `Int', `Int', `Int', castPtr `Ptr (Complex Double)', useMatDescr `MatrixDescriptor', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', `Int', useDevP `DevicePtr (Complex Double)', castPtr `Ptr (Complex Double)', useDevP `DevicePtr (Complex Double)' } -> `()' checkStatus* #}
 
 {-# INLINEABLE scsrmv #-}
-{# fun unsafe cusparseScsrmv as scsrmv { useHandle `Handle', cFromEnum `Operation', `Int', `Int', `Int', castPtr `Ptr Float', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Float', useDevP `DevicePtr Int', useDevP `DevicePtr Int', useDevP `DevicePtr Float', castPtr `Ptr Float', useDevP `DevicePtr Float' } -> `()' checkStatus* #}
+{# fun unsafe cusparseScsrmv as scsrmv { useHandle `Handle', cFromEnum `Operation', `Int', `Int', `Int', castPtr `Ptr Float', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Float', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useDevP `DevicePtr Float', castPtr `Ptr Float', useDevP `DevicePtr Float' } -> `()' checkStatus* #}
 
 {-# INLINEABLE dcsrmv #-}
-{# fun unsafe cusparseDcsrmv as dcsrmv { useHandle `Handle', cFromEnum `Operation', `Int', `Int', `Int', castPtr `Ptr Double', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Double', useDevP `DevicePtr Int', useDevP `DevicePtr Int', useDevP `DevicePtr Double', castPtr `Ptr Double', useDevP `DevicePtr Double' } -> `()' checkStatus* #}
+{# fun unsafe cusparseDcsrmv as dcsrmv { useHandle `Handle', cFromEnum `Operation', `Int', `Int', `Int', castPtr `Ptr Double', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Double', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useDevP `DevicePtr Double', castPtr `Ptr Double', useDevP `DevicePtr Double' } -> `()' checkStatus* #}
 
 {-# INLINEABLE ccsrmv #-}
-{# fun unsafe cusparseCcsrmv as ccsrmv { useHandle `Handle', cFromEnum `Operation', `Int', `Int', `Int', castPtr `Ptr (Complex Float)', useMatDescr `MatrixDescriptor', useDevP `DevicePtr (Complex Float)', useDevP `DevicePtr Int', useDevP `DevicePtr Int', useDevP `DevicePtr (Complex Float)', castPtr `Ptr (Complex Float)', useDevP `DevicePtr (Complex Float)' } -> `()' checkStatus* #}
+{# fun unsafe cusparseCcsrmv as ccsrmv { useHandle `Handle', cFromEnum `Operation', `Int', `Int', `Int', castPtr `Ptr (Complex Float)', useMatDescr `MatrixDescriptor', useDevP `DevicePtr (Complex Float)', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useDevP `DevicePtr (Complex Float)', castPtr `Ptr (Complex Float)', useDevP `DevicePtr (Complex Float)' } -> `()' checkStatus* #}
 
 {-# INLINEABLE zcsrmv #-}
-{# fun unsafe cusparseZcsrmv as zcsrmv { useHandle `Handle', cFromEnum `Operation', `Int', `Int', `Int', castPtr `Ptr (Complex Double)', useMatDescr `MatrixDescriptor', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr Int', useDevP `DevicePtr Int', useDevP `DevicePtr (Complex Double)', castPtr `Ptr (Complex Double)', useDevP `DevicePtr (Complex Double)' } -> `()' checkStatus* #}
+{# fun unsafe cusparseZcsrmv as zcsrmv { useHandle `Handle', cFromEnum `Operation', `Int', `Int', `Int', castPtr `Ptr (Complex Double)', useMatDescr `MatrixDescriptor', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useDevP `DevicePtr (Complex Double)', castPtr `Ptr (Complex Double)', useDevP `DevicePtr (Complex Double)' } -> `()' checkStatus* #}
 
 {-# INLINEABLE sbsrsv2_bufferSize #-}
-{# fun unsafe cusparseSbsrsv2_bufferSize as sbsrsv2_bufferSize { useHandle `Handle', cFromEnum `Direction', cFromEnum `Operation', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Float', useDevP `DevicePtr Int', useDevP `DevicePtr Int', `Int', useInfo_bsrsv2 `Info_bsrsv2', castPtr `Ptr Int' } -> `()' checkStatus* #}
+{# fun unsafe cusparseSbsrsv2_bufferSize as sbsrsv2_bufferSize { useHandle `Handle', cFromEnum `Direction', cFromEnum `Operation', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Float', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', `Int', useInfo_bsrsv2 `Info_bsrsv2', castPtr `Ptr Int32' } -> `()' checkStatus* #}
 
 {-# INLINEABLE dbsrsv2_bufferSize #-}
-{# fun unsafe cusparseDbsrsv2_bufferSize as dbsrsv2_bufferSize { useHandle `Handle', cFromEnum `Direction', cFromEnum `Operation', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Double', useDevP `DevicePtr Int', useDevP `DevicePtr Int', `Int', useInfo_bsrsv2 `Info_bsrsv2', castPtr `Ptr Int' } -> `()' checkStatus* #}
+{# fun unsafe cusparseDbsrsv2_bufferSize as dbsrsv2_bufferSize { useHandle `Handle', cFromEnum `Direction', cFromEnum `Operation', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Double', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', `Int', useInfo_bsrsv2 `Info_bsrsv2', castPtr `Ptr Int32' } -> `()' checkStatus* #}
 
 {-# INLINEABLE cbsrsv2_bufferSize #-}
-{# fun unsafe cusparseCbsrsv2_bufferSize as cbsrsv2_bufferSize { useHandle `Handle', cFromEnum `Direction', cFromEnum `Operation', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr (Complex Float)', useDevP `DevicePtr Int', useDevP `DevicePtr Int', `Int', useInfo_bsrsv2 `Info_bsrsv2', castPtr `Ptr Int' } -> `()' checkStatus* #}
+{# fun unsafe cusparseCbsrsv2_bufferSize as cbsrsv2_bufferSize { useHandle `Handle', cFromEnum `Direction', cFromEnum `Operation', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr (Complex Float)', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', `Int', useInfo_bsrsv2 `Info_bsrsv2', castPtr `Ptr Int32' } -> `()' checkStatus* #}
 
 {-# INLINEABLE zbsrsv2_bufferSize #-}
-{# fun unsafe cusparseZbsrsv2_bufferSize as zbsrsv2_bufferSize { useHandle `Handle', cFromEnum `Direction', cFromEnum `Operation', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr Int', useDevP `DevicePtr Int', `Int', useInfo_bsrsv2 `Info_bsrsv2', castPtr `Ptr Int' } -> `()' checkStatus* #}
+{# fun unsafe cusparseZbsrsv2_bufferSize as zbsrsv2_bufferSize { useHandle `Handle', cFromEnum `Direction', cFromEnum `Operation', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', `Int', useInfo_bsrsv2 `Info_bsrsv2', castPtr `Ptr Int32' } -> `()' checkStatus* #}
 
 {-# INLINEABLE sbsrsv2_analysis #-}
-{# fun unsafe cusparseSbsrsv2_analysis as sbsrsv2_analysis { useHandle `Handle', cFromEnum `Direction', cFromEnum `Operation', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Float', useDevP `DevicePtr Int', useDevP `DevicePtr Int', `Int', useInfo_bsrsv2 `Info_bsrsv2', cFromEnum `Policy', useDevP `DevicePtr ()' } -> `()' checkStatus* #}
+{# fun unsafe cusparseSbsrsv2_analysis as sbsrsv2_analysis { useHandle `Handle', cFromEnum `Direction', cFromEnum `Operation', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Float', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', `Int', useInfo_bsrsv2 `Info_bsrsv2', cFromEnum `Policy', useDevP `DevicePtr ()' } -> `()' checkStatus* #}
 
 {-# INLINEABLE dbsrsv2_analysis #-}
-{# fun unsafe cusparseDbsrsv2_analysis as dbsrsv2_analysis { useHandle `Handle', cFromEnum `Direction', cFromEnum `Operation', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Double', useDevP `DevicePtr Int', useDevP `DevicePtr Int', `Int', useInfo_bsrsv2 `Info_bsrsv2', cFromEnum `Policy', useDevP `DevicePtr ()' } -> `()' checkStatus* #}
+{# fun unsafe cusparseDbsrsv2_analysis as dbsrsv2_analysis { useHandle `Handle', cFromEnum `Direction', cFromEnum `Operation', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Double', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', `Int', useInfo_bsrsv2 `Info_bsrsv2', cFromEnum `Policy', useDevP `DevicePtr ()' } -> `()' checkStatus* #}
 
 {-# INLINEABLE cbsrsv2_analysis #-}
-{# fun unsafe cusparseCbsrsv2_analysis as cbsrsv2_analysis { useHandle `Handle', cFromEnum `Direction', cFromEnum `Operation', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr (Complex Float)', useDevP `DevicePtr Int', useDevP `DevicePtr Int', `Int', useInfo_bsrsv2 `Info_bsrsv2', cFromEnum `Policy', useDevP `DevicePtr ()' } -> `()' checkStatus* #}
+{# fun unsafe cusparseCbsrsv2_analysis as cbsrsv2_analysis { useHandle `Handle', cFromEnum `Direction', cFromEnum `Operation', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr (Complex Float)', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', `Int', useInfo_bsrsv2 `Info_bsrsv2', cFromEnum `Policy', useDevP `DevicePtr ()' } -> `()' checkStatus* #}
 
 {-# INLINEABLE zbsrsv2_analysis #-}
-{# fun unsafe cusparseZbsrsv2_analysis as zbsrsv2_analysis { useHandle `Handle', cFromEnum `Direction', cFromEnum `Operation', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr Int', useDevP `DevicePtr Int', `Int', useInfo_bsrsv2 `Info_bsrsv2', cFromEnum `Policy', useDevP `DevicePtr ()' } -> `()' checkStatus* #}
+{# fun unsafe cusparseZbsrsv2_analysis as zbsrsv2_analysis { useHandle `Handle', cFromEnum `Direction', cFromEnum `Operation', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', `Int', useInfo_bsrsv2 `Info_bsrsv2', cFromEnum `Policy', useDevP `DevicePtr ()' } -> `()' checkStatus* #}
 
 {-# INLINEABLE sbsrsv2_solve #-}
-{# fun unsafe cusparseSbsrsv2_solve as sbsrsv2_solve { useHandle `Handle', cFromEnum `Direction', cFromEnum `Operation', `Int', `Int', castPtr `Ptr Float', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Float', useDevP `DevicePtr Int', useDevP `DevicePtr Int', `Int', useInfo_bsrsv2 `Info_bsrsv2', useDevP `DevicePtr Float', useDevP `DevicePtr Float', cFromEnum `Policy', useDevP `DevicePtr ()' } -> `()' checkStatus* #}
+{# fun unsafe cusparseSbsrsv2_solve as sbsrsv2_solve { useHandle `Handle', cFromEnum `Direction', cFromEnum `Operation', `Int', `Int', castPtr `Ptr Float', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Float', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', `Int', useInfo_bsrsv2 `Info_bsrsv2', useDevP `DevicePtr Float', useDevP `DevicePtr Float', cFromEnum `Policy', useDevP `DevicePtr ()' } -> `()' checkStatus* #}
 
 {-# INLINEABLE dbsrsv2_solve #-}
-{# fun unsafe cusparseDbsrsv2_solve as dbsrsv2_solve { useHandle `Handle', cFromEnum `Direction', cFromEnum `Operation', `Int', `Int', castPtr `Ptr Double', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Double', useDevP `DevicePtr Int', useDevP `DevicePtr Int', `Int', useInfo_bsrsv2 `Info_bsrsv2', useDevP `DevicePtr Double', useDevP `DevicePtr Double', cFromEnum `Policy', useDevP `DevicePtr ()' } -> `()' checkStatus* #}
+{# fun unsafe cusparseDbsrsv2_solve as dbsrsv2_solve { useHandle `Handle', cFromEnum `Direction', cFromEnum `Operation', `Int', `Int', castPtr `Ptr Double', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Double', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', `Int', useInfo_bsrsv2 `Info_bsrsv2', useDevP `DevicePtr Double', useDevP `DevicePtr Double', cFromEnum `Policy', useDevP `DevicePtr ()' } -> `()' checkStatus* #}
 
 {-# INLINEABLE cbsrsv2_solve #-}
-{# fun unsafe cusparseCbsrsv2_solve as cbsrsv2_solve { useHandle `Handle', cFromEnum `Direction', cFromEnum `Operation', `Int', `Int', castPtr `Ptr (Complex Float)', useMatDescr `MatrixDescriptor', useDevP `DevicePtr (Complex Float)', useDevP `DevicePtr Int', useDevP `DevicePtr Int', `Int', useInfo_bsrsv2 `Info_bsrsv2', useDevP `DevicePtr (Complex Float)', useDevP `DevicePtr (Complex Float)', cFromEnum `Policy', useDevP `DevicePtr ()' } -> `()' checkStatus* #}
+{# fun unsafe cusparseCbsrsv2_solve as cbsrsv2_solve { useHandle `Handle', cFromEnum `Direction', cFromEnum `Operation', `Int', `Int', castPtr `Ptr (Complex Float)', useMatDescr `MatrixDescriptor', useDevP `DevicePtr (Complex Float)', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', `Int', useInfo_bsrsv2 `Info_bsrsv2', useDevP `DevicePtr (Complex Float)', useDevP `DevicePtr (Complex Float)', cFromEnum `Policy', useDevP `DevicePtr ()' } -> `()' checkStatus* #}
 
 {-# INLINEABLE zbsrsv2_solve #-}
-{# fun unsafe cusparseZbsrsv2_solve as zbsrsv2_solve { useHandle `Handle', cFromEnum `Direction', cFromEnum `Operation', `Int', `Int', castPtr `Ptr (Complex Double)', useMatDescr `MatrixDescriptor', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr Int', useDevP `DevicePtr Int', `Int', useInfo_bsrsv2 `Info_bsrsv2', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr (Complex Double)', cFromEnum `Policy', useDevP `DevicePtr ()' } -> `()' checkStatus* #}
+{# fun unsafe cusparseZbsrsv2_solve as zbsrsv2_solve { useHandle `Handle', cFromEnum `Direction', cFromEnum `Operation', `Int', `Int', castPtr `Ptr (Complex Double)', useMatDescr `MatrixDescriptor', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', `Int', useInfo_bsrsv2 `Info_bsrsv2', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr (Complex Double)', cFromEnum `Policy', useDevP `DevicePtr ()' } -> `()' checkStatus* #}
 
 {-# INLINEABLE xbsrsv2_zeroPivot #-}
-{# fun unsafe cusparseXbsrsv2_zeroPivot as xbsrsv2_zeroPivot { useHandle `Handle', useInfo_bsrsv2 `Info_bsrsv2', castPtr `Ptr Int' } -> `()' checkStatus* #}
+{# fun unsafe cusparseXbsrsv2_zeroPivot as xbsrsv2_zeroPivot { useHandle `Handle', useInfo_bsrsv2 `Info_bsrsv2', castPtr `Ptr Int32' } -> `()' checkStatus* #}
 
 {-# INLINEABLE scsrsv_analysis #-}
-{# fun unsafe cusparseScsrsv_analysis as scsrsv_analysis { useHandle `Handle', cFromEnum `Operation', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Float', useDevP `DevicePtr Int', useDevP `DevicePtr Int', useInfo `Info' } -> `()' checkStatus* #}
+{# fun unsafe cusparseScsrsv_analysis as scsrsv_analysis { useHandle `Handle', cFromEnum `Operation', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Float', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useInfo `Info' } -> `()' checkStatus* #}
 
 {-# INLINEABLE dcsrsv_analysis #-}
-{# fun unsafe cusparseDcsrsv_analysis as dcsrsv_analysis { useHandle `Handle', cFromEnum `Operation', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Double', useDevP `DevicePtr Int', useDevP `DevicePtr Int', useInfo `Info' } -> `()' checkStatus* #}
+{# fun unsafe cusparseDcsrsv_analysis as dcsrsv_analysis { useHandle `Handle', cFromEnum `Operation', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Double', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useInfo `Info' } -> `()' checkStatus* #}
 
 {-# INLINEABLE ccsrsv_analysis #-}
-{# fun unsafe cusparseCcsrsv_analysis as ccsrsv_analysis { useHandle `Handle', cFromEnum `Operation', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr (Complex Float)', useDevP `DevicePtr Int', useDevP `DevicePtr Int', useInfo `Info' } -> `()' checkStatus* #}
+{# fun unsafe cusparseCcsrsv_analysis as ccsrsv_analysis { useHandle `Handle', cFromEnum `Operation', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr (Complex Float)', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useInfo `Info' } -> `()' checkStatus* #}
 
 {-# INLINEABLE zcsrsv_analysis #-}
-{# fun unsafe cusparseZcsrsv_analysis as zcsrsv_analysis { useHandle `Handle', cFromEnum `Operation', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr Int', useDevP `DevicePtr Int', useInfo `Info' } -> `()' checkStatus* #}
+{# fun unsafe cusparseZcsrsv_analysis as zcsrsv_analysis { useHandle `Handle', cFromEnum `Operation', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useInfo `Info' } -> `()' checkStatus* #}
 
 {-# INLINEABLE scsrsv_solve #-}
-{# fun unsafe cusparseScsrsv_solve as scsrsv_solve { useHandle `Handle', cFromEnum `Operation', `Int', castPtr `Ptr Float', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Float', useDevP `DevicePtr Int', useDevP `DevicePtr Int', useInfo `Info', useDevP `DevicePtr Float', useDevP `DevicePtr Float' } -> `()' checkStatus* #}
+{# fun unsafe cusparseScsrsv_solve as scsrsv_solve { useHandle `Handle', cFromEnum `Operation', `Int', castPtr `Ptr Float', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Float', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useInfo `Info', useDevP `DevicePtr Float', useDevP `DevicePtr Float' } -> `()' checkStatus* #}
 
 {-# INLINEABLE dcsrsv_solve #-}
-{# fun unsafe cusparseDcsrsv_solve as dcsrsv_solve { useHandle `Handle', cFromEnum `Operation', `Int', castPtr `Ptr Double', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Double', useDevP `DevicePtr Int', useDevP `DevicePtr Int', useInfo `Info', useDevP `DevicePtr Double', useDevP `DevicePtr Double' } -> `()' checkStatus* #}
+{# fun unsafe cusparseDcsrsv_solve as dcsrsv_solve { useHandle `Handle', cFromEnum `Operation', `Int', castPtr `Ptr Double', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Double', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useInfo `Info', useDevP `DevicePtr Double', useDevP `DevicePtr Double' } -> `()' checkStatus* #}
 
 {-# INLINEABLE ccsrsv_solve #-}
-{# fun unsafe cusparseCcsrsv_solve as ccsrsv_solve { useHandle `Handle', cFromEnum `Operation', `Int', castPtr `Ptr (Complex Float)', useMatDescr `MatrixDescriptor', useDevP `DevicePtr (Complex Float)', useDevP `DevicePtr Int', useDevP `DevicePtr Int', useInfo `Info', useDevP `DevicePtr (Complex Float)', useDevP `DevicePtr (Complex Float)' } -> `()' checkStatus* #}
+{# fun unsafe cusparseCcsrsv_solve as ccsrsv_solve { useHandle `Handle', cFromEnum `Operation', `Int', castPtr `Ptr (Complex Float)', useMatDescr `MatrixDescriptor', useDevP `DevicePtr (Complex Float)', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useInfo `Info', useDevP `DevicePtr (Complex Float)', useDevP `DevicePtr (Complex Float)' } -> `()' checkStatus* #}
 
 {-# INLINEABLE zcsrsv_solve #-}
-{# fun unsafe cusparseZcsrsv_solve as zcsrsv_solve { useHandle `Handle', cFromEnum `Operation', `Int', castPtr `Ptr (Complex Double)', useMatDescr `MatrixDescriptor', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr Int', useDevP `DevicePtr Int', useInfo `Info', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr (Complex Double)' } -> `()' checkStatus* #}
+{# fun unsafe cusparseZcsrsv_solve as zcsrsv_solve { useHandle `Handle', cFromEnum `Operation', `Int', castPtr `Ptr (Complex Double)', useMatDescr `MatrixDescriptor', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useInfo `Info', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr (Complex Double)' } -> `()' checkStatus* #}
 
 {-# INLINEABLE scsrsv2_bufferSize #-}
-{# fun unsafe cusparseScsrsv2_bufferSize as scsrsv2_bufferSize { useHandle `Handle', cFromEnum `Operation', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Float', useDevP `DevicePtr Int', useDevP `DevicePtr Int', useInfo_csrsv2 `Info_csrsv2', castPtr `Ptr Int' } -> `()' checkStatus* #}
+{# fun unsafe cusparseScsrsv2_bufferSize as scsrsv2_bufferSize { useHandle `Handle', cFromEnum `Operation', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Float', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useInfo_csrsv2 `Info_csrsv2', castPtr `Ptr Int32' } -> `()' checkStatus* #}
 
 {-# INLINEABLE dcsrsv2_bufferSize #-}
-{# fun unsafe cusparseDcsrsv2_bufferSize as dcsrsv2_bufferSize { useHandle `Handle', cFromEnum `Operation', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Double', useDevP `DevicePtr Int', useDevP `DevicePtr Int', useInfo_csrsv2 `Info_csrsv2', castPtr `Ptr Int' } -> `()' checkStatus* #}
+{# fun unsafe cusparseDcsrsv2_bufferSize as dcsrsv2_bufferSize { useHandle `Handle', cFromEnum `Operation', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Double', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useInfo_csrsv2 `Info_csrsv2', castPtr `Ptr Int32' } -> `()' checkStatus* #}
 
 {-# INLINEABLE ccsrsv2_bufferSize #-}
-{# fun unsafe cusparseCcsrsv2_bufferSize as ccsrsv2_bufferSize { useHandle `Handle', cFromEnum `Operation', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr (Complex Float)', useDevP `DevicePtr Int', useDevP `DevicePtr Int', useInfo_csrsv2 `Info_csrsv2', castPtr `Ptr Int' } -> `()' checkStatus* #}
+{# fun unsafe cusparseCcsrsv2_bufferSize as ccsrsv2_bufferSize { useHandle `Handle', cFromEnum `Operation', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr (Complex Float)', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useInfo_csrsv2 `Info_csrsv2', castPtr `Ptr Int32' } -> `()' checkStatus* #}
 
 {-# INLINEABLE zcsrsv2_bufferSize #-}
-{# fun unsafe cusparseZcsrsv2_bufferSize as zcsrsv2_bufferSize { useHandle `Handle', cFromEnum `Operation', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr Int', useDevP `DevicePtr Int', useInfo_csrsv2 `Info_csrsv2', castPtr `Ptr Int' } -> `()' checkStatus* #}
+{# fun unsafe cusparseZcsrsv2_bufferSize as zcsrsv2_bufferSize { useHandle `Handle', cFromEnum `Operation', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useInfo_csrsv2 `Info_csrsv2', castPtr `Ptr Int32' } -> `()' checkStatus* #}
 
 {-# INLINEABLE scsrsv2_analysis #-}
-{# fun unsafe cusparseScsrsv2_analysis as scsrsv2_analysis { useHandle `Handle', cFromEnum `Operation', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Float', useDevP `DevicePtr Int', useDevP `DevicePtr Int', useInfo_csrsv2 `Info_csrsv2', cFromEnum `Policy', useDevP `DevicePtr ()' } -> `()' checkStatus* #}
+{# fun unsafe cusparseScsrsv2_analysis as scsrsv2_analysis { useHandle `Handle', cFromEnum `Operation', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Float', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useInfo_csrsv2 `Info_csrsv2', cFromEnum `Policy', useDevP `DevicePtr ()' } -> `()' checkStatus* #}
 
 {-# INLINEABLE dcsrsv2_analysis #-}
-{# fun unsafe cusparseDcsrsv2_analysis as dcsrsv2_analysis { useHandle `Handle', cFromEnum `Operation', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Double', useDevP `DevicePtr Int', useDevP `DevicePtr Int', useInfo_csrsv2 `Info_csrsv2', cFromEnum `Policy', useDevP `DevicePtr ()' } -> `()' checkStatus* #}
+{# fun unsafe cusparseDcsrsv2_analysis as dcsrsv2_analysis { useHandle `Handle', cFromEnum `Operation', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Double', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useInfo_csrsv2 `Info_csrsv2', cFromEnum `Policy', useDevP `DevicePtr ()' } -> `()' checkStatus* #}
 
 {-# INLINEABLE ccsrsv2_analysis #-}
-{# fun unsafe cusparseCcsrsv2_analysis as ccsrsv2_analysis { useHandle `Handle', cFromEnum `Operation', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr (Complex Float)', useDevP `DevicePtr Int', useDevP `DevicePtr Int', useInfo_csrsv2 `Info_csrsv2', cFromEnum `Policy', useDevP `DevicePtr ()' } -> `()' checkStatus* #}
+{# fun unsafe cusparseCcsrsv2_analysis as ccsrsv2_analysis { useHandle `Handle', cFromEnum `Operation', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr (Complex Float)', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useInfo_csrsv2 `Info_csrsv2', cFromEnum `Policy', useDevP `DevicePtr ()' } -> `()' checkStatus* #}
 
 {-# INLINEABLE zcsrsv2_analysis #-}
-{# fun unsafe cusparseZcsrsv2_analysis as zcsrsv2_analysis { useHandle `Handle', cFromEnum `Operation', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr Int', useDevP `DevicePtr Int', useInfo_csrsv2 `Info_csrsv2', cFromEnum `Policy', useDevP `DevicePtr ()' } -> `()' checkStatus* #}
+{# fun unsafe cusparseZcsrsv2_analysis as zcsrsv2_analysis { useHandle `Handle', cFromEnum `Operation', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useInfo_csrsv2 `Info_csrsv2', cFromEnum `Policy', useDevP `DevicePtr ()' } -> `()' checkStatus* #}
 
 {-# INLINEABLE scsrsv2_solve #-}
-{# fun unsafe cusparseScsrsv2_solve as scsrsv2_solve { useHandle `Handle', cFromEnum `Operation', `Int', `Int', castPtr `Ptr Float', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Float', useDevP `DevicePtr Int', useDevP `DevicePtr Int', useInfo_csrsv2 `Info_csrsv2', useDevP `DevicePtr Float', useDevP `DevicePtr Float', cFromEnum `Policy', useDevP `DevicePtr ()' } -> `()' checkStatus* #}
+{# fun unsafe cusparseScsrsv2_solve as scsrsv2_solve { useHandle `Handle', cFromEnum `Operation', `Int', `Int', castPtr `Ptr Float', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Float', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useInfo_csrsv2 `Info_csrsv2', useDevP `DevicePtr Float', useDevP `DevicePtr Float', cFromEnum `Policy', useDevP `DevicePtr ()' } -> `()' checkStatus* #}
 
 {-# INLINEABLE dcsrsv2_solve #-}
-{# fun unsafe cusparseDcsrsv2_solve as dcsrsv2_solve { useHandle `Handle', cFromEnum `Operation', `Int', `Int', castPtr `Ptr Double', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Double', useDevP `DevicePtr Int', useDevP `DevicePtr Int', useInfo_csrsv2 `Info_csrsv2', useDevP `DevicePtr Double', useDevP `DevicePtr Double', cFromEnum `Policy', useDevP `DevicePtr ()' } -> `()' checkStatus* #}
+{# fun unsafe cusparseDcsrsv2_solve as dcsrsv2_solve { useHandle `Handle', cFromEnum `Operation', `Int', `Int', castPtr `Ptr Double', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Double', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useInfo_csrsv2 `Info_csrsv2', useDevP `DevicePtr Double', useDevP `DevicePtr Double', cFromEnum `Policy', useDevP `DevicePtr ()' } -> `()' checkStatus* #}
 
 {-# INLINEABLE ccsrsv2_solve #-}
-{# fun unsafe cusparseCcsrsv2_solve as ccsrsv2_solve { useHandle `Handle', cFromEnum `Operation', `Int', `Int', castPtr `Ptr (Complex Float)', useMatDescr `MatrixDescriptor', useDevP `DevicePtr (Complex Float)', useDevP `DevicePtr Int', useDevP `DevicePtr Int', useInfo_csrsv2 `Info_csrsv2', useDevP `DevicePtr (Complex Float)', useDevP `DevicePtr (Complex Float)', cFromEnum `Policy', useDevP `DevicePtr ()' } -> `()' checkStatus* #}
+{# fun unsafe cusparseCcsrsv2_solve as ccsrsv2_solve { useHandle `Handle', cFromEnum `Operation', `Int', `Int', castPtr `Ptr (Complex Float)', useMatDescr `MatrixDescriptor', useDevP `DevicePtr (Complex Float)', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useInfo_csrsv2 `Info_csrsv2', useDevP `DevicePtr (Complex Float)', useDevP `DevicePtr (Complex Float)', cFromEnum `Policy', useDevP `DevicePtr ()' } -> `()' checkStatus* #}
 
 {-# INLINEABLE zcsrsv2_solve #-}
-{# fun unsafe cusparseZcsrsv2_solve as zcsrsv2_solve { useHandle `Handle', cFromEnum `Operation', `Int', `Int', castPtr `Ptr (Complex Double)', useMatDescr `MatrixDescriptor', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr Int', useDevP `DevicePtr Int', useInfo_csrsv2 `Info_csrsv2', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr (Complex Double)', cFromEnum `Policy', useDevP `DevicePtr ()' } -> `()' checkStatus* #}
+{# fun unsafe cusparseZcsrsv2_solve as zcsrsv2_solve { useHandle `Handle', cFromEnum `Operation', `Int', `Int', castPtr `Ptr (Complex Double)', useMatDescr `MatrixDescriptor', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useInfo_csrsv2 `Info_csrsv2', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr (Complex Double)', cFromEnum `Policy', useDevP `DevicePtr ()' } -> `()' checkStatus* #}
 
 {-# INLINEABLE xcsrsv2_zeroPivot #-}
-{# fun unsafe cusparseXcsrsv2_zeroPivot as xcsrsv2_zeroPivot { useHandle `Handle', useInfo_csrsv2 `Info_csrsv2', castPtr `Ptr Int' } -> `()' checkStatus* #}
+{# fun unsafe cusparseXcsrsv2_zeroPivot as xcsrsv2_zeroPivot { useHandle `Handle', useInfo_csrsv2 `Info_csrsv2', castPtr `Ptr Int32' } -> `()' checkStatus* #}
 
 {-# INLINEABLE shybmv #-}
 {# fun unsafe cusparseShybmv as shybmv { useHandle `Handle', cFromEnum `Operation', castPtr `Ptr Float', useMatDescr `MatrixDescriptor', useHYB `Hybrid', useDevP `DevicePtr Float', castPtr `Ptr Float', useDevP `DevicePtr Float' } -> `()' checkStatus* #}
@@ -311,102 +311,102 @@ useHostP = useHostPtr . castHostPtr
 #if CUDA_VERSION >= 7500
 
 {-# INLINEABLE sgemvi #-}
-{# fun unsafe cusparseSgemvi as sgemvi { useHandle `Handle', cFromEnum `Operation', `Int', `Int', castPtr `Ptr Float', useDevP `DevicePtr Float', `Int', `Int', useDevP `DevicePtr Float', useDevP `DevicePtr Int', castPtr `Ptr Float', useDevP `DevicePtr Float', cFromEnum `IndexBase', useDevP `DevicePtr ()' } -> `()' checkStatus* #}
+{# fun unsafe cusparseSgemvi as sgemvi { useHandle `Handle', cFromEnum `Operation', `Int', `Int', castPtr `Ptr Float', useDevP `DevicePtr Float', `Int', `Int', useDevP `DevicePtr Float', useDevP `DevicePtr Int32', castPtr `Ptr Float', useDevP `DevicePtr Float', cFromEnum `IndexBase', useDevP `DevicePtr ()' } -> `()' checkStatus* #}
 
 {-# INLINEABLE dgemvi #-}
-{# fun unsafe cusparseDgemvi as dgemvi { useHandle `Handle', cFromEnum `Operation', `Int', `Int', castPtr `Ptr Double', useDevP `DevicePtr Double', `Int', `Int', useDevP `DevicePtr Double', useDevP `DevicePtr Int', castPtr `Ptr Double', useDevP `DevicePtr Double', cFromEnum `IndexBase', useDevP `DevicePtr ()' } -> `()' checkStatus* #}
+{# fun unsafe cusparseDgemvi as dgemvi { useHandle `Handle', cFromEnum `Operation', `Int', `Int', castPtr `Ptr Double', useDevP `DevicePtr Double', `Int', `Int', useDevP `DevicePtr Double', useDevP `DevicePtr Int32', castPtr `Ptr Double', useDevP `DevicePtr Double', cFromEnum `IndexBase', useDevP `DevicePtr ()' } -> `()' checkStatus* #}
 
 {-# INLINEABLE cgemvi #-}
-{# fun unsafe cusparseCgemvi as cgemvi { useHandle `Handle', cFromEnum `Operation', `Int', `Int', castPtr `Ptr (Complex Float)', useDevP `DevicePtr (Complex Float)', `Int', `Int', useDevP `DevicePtr (Complex Float)', useDevP `DevicePtr Int', castPtr `Ptr (Complex Float)', useDevP `DevicePtr (Complex Float)', cFromEnum `IndexBase', useDevP `DevicePtr ()' } -> `()' checkStatus* #}
+{# fun unsafe cusparseCgemvi as cgemvi { useHandle `Handle', cFromEnum `Operation', `Int', `Int', castPtr `Ptr (Complex Float)', useDevP `DevicePtr (Complex Float)', `Int', `Int', useDevP `DevicePtr (Complex Float)', useDevP `DevicePtr Int32', castPtr `Ptr (Complex Float)', useDevP `DevicePtr (Complex Float)', cFromEnum `IndexBase', useDevP `DevicePtr ()' } -> `()' checkStatus* #}
 
 {-# INLINEABLE zgemvi #-}
-{# fun unsafe cusparseZgemvi as zgemvi { useHandle `Handle', cFromEnum `Operation', `Int', `Int', castPtr `Ptr (Complex Double)', useDevP `DevicePtr (Complex Double)', `Int', `Int', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr Int', castPtr `Ptr (Complex Double)', useDevP `DevicePtr (Complex Double)', cFromEnum `IndexBase', useDevP `DevicePtr ()' } -> `()' checkStatus* #}
+{# fun unsafe cusparseZgemvi as zgemvi { useHandle `Handle', cFromEnum `Operation', `Int', `Int', castPtr `Ptr (Complex Double)', useDevP `DevicePtr (Complex Double)', `Int', `Int', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr Int32', castPtr `Ptr (Complex Double)', useDevP `DevicePtr (Complex Double)', cFromEnum `IndexBase', useDevP `DevicePtr ()' } -> `()' checkStatus* #}
 
 {-# INLINEABLE sgemvi_bufferSize #-}
-{# fun unsafe cusparseSgemvi_bufferSize as sgemvi_bufferSize { useHandle `Handle', cFromEnum `Operation', `Int', `Int', `Int', castPtr `Ptr Int' } -> `()' checkStatus* #}
+{# fun unsafe cusparseSgemvi_bufferSize as sgemvi_bufferSize { useHandle `Handle', cFromEnum `Operation', `Int', `Int', `Int', castPtr `Ptr Int32' } -> `()' checkStatus* #}
 
 {-# INLINEABLE dgemvi_bufferSize #-}
-{# fun unsafe cusparseDgemvi_bufferSize as dgemvi_bufferSize { useHandle `Handle', cFromEnum `Operation', `Int', `Int', `Int', castPtr `Ptr Int' } -> `()' checkStatus* #}
+{# fun unsafe cusparseDgemvi_bufferSize as dgemvi_bufferSize { useHandle `Handle', cFromEnum `Operation', `Int', `Int', `Int', castPtr `Ptr Int32' } -> `()' checkStatus* #}
 
 {-# INLINEABLE cgemvi_bufferSize #-}
-{# fun unsafe cusparseCgemvi_bufferSize as cgemvi_bufferSize { useHandle `Handle', cFromEnum `Operation', `Int', `Int', `Int', castPtr `Ptr Int' } -> `()' checkStatus* #}
+{# fun unsafe cusparseCgemvi_bufferSize as cgemvi_bufferSize { useHandle `Handle', cFromEnum `Operation', `Int', `Int', `Int', castPtr `Ptr Int32' } -> `()' checkStatus* #}
 
 {-# INLINEABLE zgemvi_bufferSize #-}
-{# fun unsafe cusparseZgemvi_bufferSize as zgemvi_bufferSize { useHandle `Handle', cFromEnum `Operation', `Int', `Int', `Int', castPtr `Ptr Int' } -> `()' checkStatus* #}
+{# fun unsafe cusparseZgemvi_bufferSize as zgemvi_bufferSize { useHandle `Handle', cFromEnum `Operation', `Int', `Int', `Int', castPtr `Ptr Int32' } -> `()' checkStatus* #}
 #else
 
-sgemvi :: Handle -> Operation -> Int -> Int -> Ptr Float -> DevicePtr Float -> Int -> Int -> DevicePtr Float -> DevicePtr Int -> Ptr Float -> DevicePtr Float -> IndexBase -> DevicePtr () -> IO ()
+sgemvi :: Handle -> Operation -> Int -> Int -> Ptr Float -> DevicePtr Float -> Int -> Int -> DevicePtr Float -> DevicePtr Int32 -> Ptr Float -> DevicePtr Float -> IndexBase -> DevicePtr () -> IO ()
 sgemvi _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'sgemvi' requires at least cuda-7.5"
 
-dgemvi :: Handle -> Operation -> Int -> Int -> Ptr Double -> DevicePtr Double -> Int -> Int -> DevicePtr Double -> DevicePtr Int -> Ptr Double -> DevicePtr Double -> IndexBase -> DevicePtr () -> IO ()
+dgemvi :: Handle -> Operation -> Int -> Int -> Ptr Double -> DevicePtr Double -> Int -> Int -> DevicePtr Double -> DevicePtr Int32 -> Ptr Double -> DevicePtr Double -> IndexBase -> DevicePtr () -> IO ()
 dgemvi _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'dgemvi' requires at least cuda-7.5"
 
-cgemvi :: Handle -> Operation -> Int -> Int -> Ptr (Complex Float) -> DevicePtr (Complex Float) -> Int -> Int -> DevicePtr (Complex Float) -> DevicePtr Int -> Ptr (Complex Float) -> DevicePtr (Complex Float) -> IndexBase -> DevicePtr () -> IO ()
+cgemvi :: Handle -> Operation -> Int -> Int -> Ptr (Complex Float) -> DevicePtr (Complex Float) -> Int -> Int -> DevicePtr (Complex Float) -> DevicePtr Int32 -> Ptr (Complex Float) -> DevicePtr (Complex Float) -> IndexBase -> DevicePtr () -> IO ()
 cgemvi _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'cgemvi' requires at least cuda-7.5"
 
-zgemvi :: Handle -> Operation -> Int -> Int -> Ptr (Complex Double) -> DevicePtr (Complex Double) -> Int -> Int -> DevicePtr (Complex Double) -> DevicePtr Int -> Ptr (Complex Double) -> DevicePtr (Complex Double) -> IndexBase -> DevicePtr () -> IO ()
+zgemvi :: Handle -> Operation -> Int -> Int -> Ptr (Complex Double) -> DevicePtr (Complex Double) -> Int -> Int -> DevicePtr (Complex Double) -> DevicePtr Int32 -> Ptr (Complex Double) -> DevicePtr (Complex Double) -> IndexBase -> DevicePtr () -> IO ()
 zgemvi _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'zgemvi' requires at least cuda-7.5"
 
-sgemvi_bufferSize :: Handle -> Operation -> Int -> Int -> Int -> Ptr Int -> IO ()
+sgemvi_bufferSize :: Handle -> Operation -> Int -> Int -> Int -> Ptr Int32 -> IO ()
 sgemvi_bufferSize _ _ _ _ _ _ = cusparseError "'sgemvi_bufferSize' requires at least cuda-7.5"
 
-dgemvi_bufferSize :: Handle -> Operation -> Int -> Int -> Int -> Ptr Int -> IO ()
+dgemvi_bufferSize :: Handle -> Operation -> Int -> Int -> Int -> Ptr Int32 -> IO ()
 dgemvi_bufferSize _ _ _ _ _ _ = cusparseError "'dgemvi_bufferSize' requires at least cuda-7.5"
 
-cgemvi_bufferSize :: Handle -> Operation -> Int -> Int -> Int -> Ptr Int -> IO ()
+cgemvi_bufferSize :: Handle -> Operation -> Int -> Int -> Int -> Ptr Int32 -> IO ()
 cgemvi_bufferSize _ _ _ _ _ _ = cusparseError "'cgemvi_bufferSize' requires at least cuda-7.5"
 
-zgemvi_bufferSize :: Handle -> Operation -> Int -> Int -> Int -> Ptr Int -> IO ()
+zgemvi_bufferSize :: Handle -> Operation -> Int -> Int -> Int -> Ptr Int32 -> IO ()
 zgemvi_bufferSize _ _ _ _ _ _ = cusparseError "'zgemvi_bufferSize' requires at least cuda-7.5"
 #endif
 #if CUDA_VERSION >= 8000
 
 {-# INLINEABLE csrmvEx #-}
-{# fun unsafe cusparseCsrmvEx as csrmvEx { useHandle `Handle', cFromEnum `Algorithm', cFromEnum `Operation', `Int', `Int', `Int', castPtr `Ptr ()', cFromEnum `Type', useMatDescr `MatrixDescriptor', useDevP `DevicePtr ()', cFromEnum `Type', useDevP `DevicePtr Int', useDevP `DevicePtr Int', useDevP `DevicePtr ()', cFromEnum `Type', castPtr `Ptr ()', cFromEnum `Type', useDevP `DevicePtr ()', cFromEnum `Type', cFromEnum `Type', useDevP `DevicePtr ()' } -> `()' checkStatus* #}
+{# fun unsafe cusparseCsrmvEx as csrmvEx { useHandle `Handle', cFromEnum `Algorithm', cFromEnum `Operation', `Int', `Int', `Int', castPtr `Ptr ()', cFromEnum `Type', useMatDescr `MatrixDescriptor', useDevP `DevicePtr ()', cFromEnum `Type', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useDevP `DevicePtr ()', cFromEnum `Type', castPtr `Ptr ()', cFromEnum `Type', useDevP `DevicePtr ()', cFromEnum `Type', cFromEnum `Type', useDevP `DevicePtr ()' } -> `()' checkStatus* #}
 
 {-# INLINEABLE csrmvEx_bufferSize #-}
-{# fun unsafe cusparseCsrmvEx_bufferSize as csrmvEx_bufferSize { useHandle `Handle', cFromEnum `Algorithm', cFromEnum `Operation', `Int', `Int', `Int', castPtr `Ptr ()', cFromEnum `Type', useMatDescr `MatrixDescriptor', useDevP `DevicePtr ()', cFromEnum `Type', useDevP `DevicePtr Int', useDevP `DevicePtr Int', useDevP `DevicePtr ()', cFromEnum `Type', castPtr `Ptr ()', cFromEnum `Type', useDevP `DevicePtr ()', cFromEnum `Type', cFromEnum `Type', castPtr `Ptr Int64' } -> `()' checkStatus* #}
+{# fun unsafe cusparseCsrmvEx_bufferSize as csrmvEx_bufferSize { useHandle `Handle', cFromEnum `Algorithm', cFromEnum `Operation', `Int', `Int', `Int', castPtr `Ptr ()', cFromEnum `Type', useMatDescr `MatrixDescriptor', useDevP `DevicePtr ()', cFromEnum `Type', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useDevP `DevicePtr ()', cFromEnum `Type', castPtr `Ptr ()', cFromEnum `Type', useDevP `DevicePtr ()', cFromEnum `Type', cFromEnum `Type', castPtr `Ptr Int64' } -> `()' checkStatus* #}
 
 {-# INLINEABLE scsrmv_mp #-}
-{# fun unsafe cusparseScsrmv_mp as scsrmv_mp { useHandle `Handle', cFromEnum `Operation', `Int', `Int', `Int', castPtr `Ptr Float', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Float', useDevP `DevicePtr Int', useDevP `DevicePtr Int', useDevP `DevicePtr Float', castPtr `Ptr Float', useDevP `DevicePtr Float' } -> `()' checkStatus* #}
+{# fun unsafe cusparseScsrmv_mp as scsrmv_mp { useHandle `Handle', cFromEnum `Operation', `Int', `Int', `Int', castPtr `Ptr Float', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Float', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useDevP `DevicePtr Float', castPtr `Ptr Float', useDevP `DevicePtr Float' } -> `()' checkStatus* #}
 
 {-# INLINEABLE dcsrmv_mp #-}
-{# fun unsafe cusparseDcsrmv_mp as dcsrmv_mp { useHandle `Handle', cFromEnum `Operation', `Int', `Int', `Int', castPtr `Ptr Double', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Double', useDevP `DevicePtr Int', useDevP `DevicePtr Int', useDevP `DevicePtr Double', castPtr `Ptr Double', useDevP `DevicePtr Double' } -> `()' checkStatus* #}
+{# fun unsafe cusparseDcsrmv_mp as dcsrmv_mp { useHandle `Handle', cFromEnum `Operation', `Int', `Int', `Int', castPtr `Ptr Double', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Double', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useDevP `DevicePtr Double', castPtr `Ptr Double', useDevP `DevicePtr Double' } -> `()' checkStatus* #}
 
 {-# INLINEABLE ccsrmv_mp #-}
-{# fun unsafe cusparseCcsrmv_mp as ccsrmv_mp { useHandle `Handle', cFromEnum `Operation', `Int', `Int', `Int', castPtr `Ptr (Complex Float)', useMatDescr `MatrixDescriptor', useDevP `DevicePtr (Complex Float)', useDevP `DevicePtr Int', useDevP `DevicePtr Int', useDevP `DevicePtr (Complex Float)', castPtr `Ptr (Complex Float)', useDevP `DevicePtr (Complex Float)' } -> `()' checkStatus* #}
+{# fun unsafe cusparseCcsrmv_mp as ccsrmv_mp { useHandle `Handle', cFromEnum `Operation', `Int', `Int', `Int', castPtr `Ptr (Complex Float)', useMatDescr `MatrixDescriptor', useDevP `DevicePtr (Complex Float)', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useDevP `DevicePtr (Complex Float)', castPtr `Ptr (Complex Float)', useDevP `DevicePtr (Complex Float)' } -> `()' checkStatus* #}
 
 {-# INLINEABLE zcsrmv_mp #-}
-{# fun unsafe cusparseZcsrmv_mp as zcsrmv_mp { useHandle `Handle', cFromEnum `Operation', `Int', `Int', `Int', castPtr `Ptr (Complex Double)', useMatDescr `MatrixDescriptor', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr Int', useDevP `DevicePtr Int', useDevP `DevicePtr (Complex Double)', castPtr `Ptr (Complex Double)', useDevP `DevicePtr (Complex Double)' } -> `()' checkStatus* #}
+{# fun unsafe cusparseZcsrmv_mp as zcsrmv_mp { useHandle `Handle', cFromEnum `Operation', `Int', `Int', `Int', castPtr `Ptr (Complex Double)', useMatDescr `MatrixDescriptor', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useDevP `DevicePtr (Complex Double)', castPtr `Ptr (Complex Double)', useDevP `DevicePtr (Complex Double)' } -> `()' checkStatus* #}
 
 {-# INLINEABLE csrsv_analysisEx #-}
-{# fun unsafe cusparseCsrsv_analysisEx as csrsv_analysisEx { useHandle `Handle', cFromEnum `Operation', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr ()', cFromEnum `Type', useDevP `DevicePtr Int', useDevP `DevicePtr Int', useInfo `Info', cFromEnum `Type' } -> `()' checkStatus* #}
+{# fun unsafe cusparseCsrsv_analysisEx as csrsv_analysisEx { useHandle `Handle', cFromEnum `Operation', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr ()', cFromEnum `Type', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useInfo `Info', cFromEnum `Type' } -> `()' checkStatus* #}
 
 {-# INLINEABLE csrsv_solveEx #-}
-{# fun unsafe cusparseCsrsv_solveEx as csrsv_solveEx { useHandle `Handle', cFromEnum `Operation', `Int', castPtr `Ptr ()', cFromEnum `Type', useMatDescr `MatrixDescriptor', useDevP `DevicePtr ()', cFromEnum `Type', useDevP `DevicePtr Int', useDevP `DevicePtr Int', useInfo `Info', useDevP `DevicePtr ()', cFromEnum `Type', useDevP `DevicePtr ()', cFromEnum `Type', cFromEnum `Type' } -> `()' checkStatus* #}
+{# fun unsafe cusparseCsrsv_solveEx as csrsv_solveEx { useHandle `Handle', cFromEnum `Operation', `Int', castPtr `Ptr ()', cFromEnum `Type', useMatDescr `MatrixDescriptor', useDevP `DevicePtr ()', cFromEnum `Type', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useInfo `Info', useDevP `DevicePtr ()', cFromEnum `Type', useDevP `DevicePtr ()', cFromEnum `Type', cFromEnum `Type' } -> `()' checkStatus* #}
 #else
 
-csrmvEx :: Handle -> Algorithm -> Operation -> Int -> Int -> Int -> Ptr () -> Type -> MatrixDescriptor -> DevicePtr () -> Type -> DevicePtr Int -> DevicePtr Int -> DevicePtr () -> Type -> Ptr () -> Type -> DevicePtr () -> Type -> Type -> DevicePtr () -> IO ()
+csrmvEx :: Handle -> Algorithm -> Operation -> Int -> Int -> Int -> Ptr () -> Type -> MatrixDescriptor -> DevicePtr () -> Type -> DevicePtr Int32 -> DevicePtr Int32 -> DevicePtr () -> Type -> Ptr () -> Type -> DevicePtr () -> Type -> Type -> DevicePtr () -> IO ()
 csrmvEx _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'csrmvEx' requires at least cuda-8.0"
 
-csrmvEx_bufferSize :: Handle -> Algorithm -> Operation -> Int -> Int -> Int -> Ptr () -> Type -> MatrixDescriptor -> DevicePtr () -> Type -> DevicePtr Int -> DevicePtr Int -> DevicePtr () -> Type -> Ptr () -> Type -> DevicePtr () -> Type -> Type -> Ptr Int64 -> IO ()
+csrmvEx_bufferSize :: Handle -> Algorithm -> Operation -> Int -> Int -> Int -> Ptr () -> Type -> MatrixDescriptor -> DevicePtr () -> Type -> DevicePtr Int32 -> DevicePtr Int32 -> DevicePtr () -> Type -> Ptr () -> Type -> DevicePtr () -> Type -> Type -> Ptr Int64 -> IO ()
 csrmvEx_bufferSize _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'csrmvEx_bufferSize' requires at least cuda-8.0"
 
-scsrmv_mp :: Handle -> Operation -> Int -> Int -> Int -> Ptr Float -> MatrixDescriptor -> DevicePtr Float -> DevicePtr Int -> DevicePtr Int -> DevicePtr Float -> Ptr Float -> DevicePtr Float -> IO ()
+scsrmv_mp :: Handle -> Operation -> Int -> Int -> Int -> Ptr Float -> MatrixDescriptor -> DevicePtr Float -> DevicePtr Int32 -> DevicePtr Int32 -> DevicePtr Float -> Ptr Float -> DevicePtr Float -> IO ()
 scsrmv_mp _ _ _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'scsrmv_mp' requires at least cuda-8.0"
 
-dcsrmv_mp :: Handle -> Operation -> Int -> Int -> Int -> Ptr Double -> MatrixDescriptor -> DevicePtr Double -> DevicePtr Int -> DevicePtr Int -> DevicePtr Double -> Ptr Double -> DevicePtr Double -> IO ()
+dcsrmv_mp :: Handle -> Operation -> Int -> Int -> Int -> Ptr Double -> MatrixDescriptor -> DevicePtr Double -> DevicePtr Int32 -> DevicePtr Int32 -> DevicePtr Double -> Ptr Double -> DevicePtr Double -> IO ()
 dcsrmv_mp _ _ _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'dcsrmv_mp' requires at least cuda-8.0"
 
-ccsrmv_mp :: Handle -> Operation -> Int -> Int -> Int -> Ptr (Complex Float) -> MatrixDescriptor -> DevicePtr (Complex Float) -> DevicePtr Int -> DevicePtr Int -> DevicePtr (Complex Float) -> Ptr (Complex Float) -> DevicePtr (Complex Float) -> IO ()
+ccsrmv_mp :: Handle -> Operation -> Int -> Int -> Int -> Ptr (Complex Float) -> MatrixDescriptor -> DevicePtr (Complex Float) -> DevicePtr Int32 -> DevicePtr Int32 -> DevicePtr (Complex Float) -> Ptr (Complex Float) -> DevicePtr (Complex Float) -> IO ()
 ccsrmv_mp _ _ _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'ccsrmv_mp' requires at least cuda-8.0"
 
-zcsrmv_mp :: Handle -> Operation -> Int -> Int -> Int -> Ptr (Complex Double) -> MatrixDescriptor -> DevicePtr (Complex Double) -> DevicePtr Int -> DevicePtr Int -> DevicePtr (Complex Double) -> Ptr (Complex Double) -> DevicePtr (Complex Double) -> IO ()
+zcsrmv_mp :: Handle -> Operation -> Int -> Int -> Int -> Ptr (Complex Double) -> MatrixDescriptor -> DevicePtr (Complex Double) -> DevicePtr Int32 -> DevicePtr Int32 -> DevicePtr (Complex Double) -> Ptr (Complex Double) -> DevicePtr (Complex Double) -> IO ()
 zcsrmv_mp _ _ _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'zcsrmv_mp' requires at least cuda-8.0"
 
-csrsv_analysisEx :: Handle -> Operation -> Int -> Int -> MatrixDescriptor -> DevicePtr () -> Type -> DevicePtr Int -> DevicePtr Int -> Info -> Type -> IO ()
+csrsv_analysisEx :: Handle -> Operation -> Int -> Int -> MatrixDescriptor -> DevicePtr () -> Type -> DevicePtr Int32 -> DevicePtr Int32 -> Info -> Type -> IO ()
 csrsv_analysisEx _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'csrsv_analysisEx' requires at least cuda-8.0"
 
-csrsv_solveEx :: Handle -> Operation -> Int -> Ptr () -> Type -> MatrixDescriptor -> DevicePtr () -> Type -> DevicePtr Int -> DevicePtr Int -> Info -> DevicePtr () -> Type -> DevicePtr () -> Type -> Type -> IO ()
+csrsv_solveEx :: Handle -> Operation -> Int -> Ptr () -> Type -> MatrixDescriptor -> DevicePtr () -> Type -> DevicePtr Int32 -> DevicePtr Int32 -> Info -> DevicePtr () -> Type -> DevicePtr () -> Type -> Type -> IO ()
 csrsv_solveEx _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'csrsv_solveEx' requires at least cuda-8.0"
 #endif
