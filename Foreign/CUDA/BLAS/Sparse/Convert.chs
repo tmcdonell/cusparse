@@ -84,10 +84,6 @@ module Foreign.CUDA.BLAS.Sparse.Convert (
   dcsr2dense,
   ccsr2dense,
   zcsr2dense,
-  scsr2csr_compress,
-  dcsr2csr_compress,
-  ccsr2csr_compress,
-  zcsr2csr_compress,
   scsr2hyb,
   dcsr2hyb,
   ccsr2hyb,
@@ -141,6 +137,10 @@ module Foreign.CUDA.BLAS.Sparse.Convert (
   ccsr2csru,
   zcsr2csru,
   csr2cscEx,
+  scsr2csr_compress,
+  dcsr2csr_compress,
+  ccsr2csr_compress,
+  zcsr2csr_compress,
 
 ) where
 
@@ -341,18 +341,6 @@ useHostP = useHostPtr . castHostPtr
 {-# INLINEABLE zcsr2dense #-}
 {# fun unsafe cusparseZcsr2dense as zcsr2dense { useHandle `Handle', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useDevP `DevicePtr (Complex Double)', `Int' } -> `()' checkStatus* #}
 
-{-# INLINEABLE scsr2csr_compress #-}
-{# fun unsafe cusparseScsr2csr_compress as scsr2csr_compress { useHandle `Handle', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Float', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', `Int', useDevP `DevicePtr Int32', useDevP `DevicePtr Float', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', CFloat `Float' } -> `()' checkStatus* #}
-
-{-# INLINEABLE dcsr2csr_compress #-}
-{# fun unsafe cusparseDcsr2csr_compress as dcsr2csr_compress { useHandle `Handle', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Double', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', `Int', useDevP `DevicePtr Int32', useDevP `DevicePtr Double', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', CDouble `Double' } -> `()' checkStatus* #}
-
-{-# INLINEABLE ccsr2csr_compress #-}
-{# fun unsafe cusparseCcsr2csr_compress as ccsr2csr_compress { useHandle `Handle', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr (Complex Float)', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', `Int', useDevP `DevicePtr Int32', useDevP `DevicePtr (Complex Float)', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', withComplex* `(Complex Float)' } -> `()' checkStatus* #}
-
-{-# INLINEABLE zcsr2csr_compress #-}
-{# fun unsafe cusparseZcsr2csr_compress as zcsr2csr_compress { useHandle `Handle', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', `Int', useDevP `DevicePtr Int32', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', withComplex* `(Complex Double)' } -> `()' checkStatus* #}
-
 {-# INLINEABLE scsr2hyb #-}
 {# fun unsafe cusparseScsr2hyb as scsr2hyb { useHandle `Handle', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Float', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useHYB `Hybrid', `Int', cFromEnum `HybridPartition' } -> `()' checkStatus* #}
 
@@ -512,8 +500,32 @@ useHostP = useHostPtr . castHostPtr
 
 {-# INLINEABLE csr2cscEx #-}
 {# fun unsafe cusparseCsr2cscEx as csr2cscEx { useHandle `Handle', `Int', `Int', `Int', useDevP `DevicePtr ()', cFromEnum `Type', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useDevP `DevicePtr ()', cFromEnum `Type', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', cFromEnum `Action', cFromEnum `IndexBase', cFromEnum `Type' } -> `()' checkStatus* #}
+
+{-# INLINEABLE scsr2csr_compress #-}
+{# fun unsafe cusparseScsr2csr_compress as scsr2csr_compress { useHandle `Handle', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Float', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', `Int', useDevP `DevicePtr Int32', useDevP `DevicePtr Float', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', CFloat `Float' } -> `()' checkStatus* #}
+
+{-# INLINEABLE dcsr2csr_compress #-}
+{# fun unsafe cusparseDcsr2csr_compress as dcsr2csr_compress { useHandle `Handle', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Double', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', `Int', useDevP `DevicePtr Int32', useDevP `DevicePtr Double', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', CDouble `Double' } -> `()' checkStatus* #}
+
+{-# INLINEABLE ccsr2csr_compress #-}
+{# fun unsafe cusparseCcsr2csr_compress as ccsr2csr_compress { useHandle `Handle', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr (Complex Float)', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', `Int', useDevP `DevicePtr Int32', useDevP `DevicePtr (Complex Float)', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', withComplex* `(Complex Float)' } -> `()' checkStatus* #}
+
+{-# INLINEABLE zcsr2csr_compress #-}
+{# fun unsafe cusparseZcsr2csr_compress as zcsr2csr_compress { useHandle `Handle', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', `Int', useDevP `DevicePtr Int32', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', withComplex* `(Complex Double)' } -> `()' checkStatus* #}
 #else
 
 csr2cscEx :: Handle -> Int -> Int -> Int -> DevicePtr () -> Type -> DevicePtr Int32 -> DevicePtr Int32 -> DevicePtr () -> Type -> DevicePtr Int32 -> DevicePtr Int32 -> Action -> IndexBase -> Type -> IO ()
 csr2cscEx _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'csr2cscEx' requires at least cuda-8.0"
+
+scsr2csr_compress :: Handle -> Int -> Int -> MatrixDescriptor -> DevicePtr Float -> DevicePtr Int32 -> DevicePtr Int32 -> Int -> DevicePtr Int32 -> DevicePtr Float -> DevicePtr Int32 -> DevicePtr Int32 -> Float -> IO ()
+scsr2csr_compress _ _ _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'scsr2csr_compress' requires at least cuda-8.0"
+
+dcsr2csr_compress :: Handle -> Int -> Int -> MatrixDescriptor -> DevicePtr Double -> DevicePtr Int32 -> DevicePtr Int32 -> Int -> DevicePtr Int32 -> DevicePtr Double -> DevicePtr Int32 -> DevicePtr Int32 -> Double -> IO ()
+dcsr2csr_compress _ _ _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'dcsr2csr_compress' requires at least cuda-8.0"
+
+ccsr2csr_compress :: Handle -> Int -> Int -> MatrixDescriptor -> DevicePtr (Complex Float) -> DevicePtr Int32 -> DevicePtr Int32 -> Int -> DevicePtr Int32 -> DevicePtr (Complex Float) -> DevicePtr Int32 -> DevicePtr Int32 -> (Complex Float) -> IO ()
+ccsr2csr_compress _ _ _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'ccsr2csr_compress' requires at least cuda-8.0"
+
+zcsr2csr_compress :: Handle -> Int -> Int -> MatrixDescriptor -> DevicePtr (Complex Double) -> DevicePtr Int32 -> DevicePtr Int32 -> Int -> DevicePtr Int32 -> DevicePtr (Complex Double) -> DevicePtr Int32 -> DevicePtr Int32 -> (Complex Double) -> IO ()
+zcsr2csr_compress _ _ _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'zcsr2csr_compress' requires at least cuda-8.0"
 #endif

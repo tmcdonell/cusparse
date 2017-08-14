@@ -650,7 +650,6 @@ funsConvert =
   , gp  $          fun "xcsr2coo"                   [ dptr int32, int, int, dptr int32, idxBase ]
   , gpA $ \ a   -> fun "?csr2csc"                   [ int, int, int, dptr a, dptr int32, dptr int32, dptr a, dptr int32, dptr int32, action, idxBase ]
   , gpA $ \ a   -> fun "?csr2dense"                 [ int, int, matdescr, dptr a, dptr int32, dptr int32, dptr a, int ]
-  , gpA $ \ a   -> fun "?csr2csr_compress"          [ int, int, matdescr, dptr a, dptr int32, dptr int32, int, dptr int32, dptr a, dptr int32, dptr int32, a ]
   , gpA $ \ a   -> fun "?csr2hyb"                   [ int, int, matdescr, dptr a, dptr int32, dptr int32, hyb, int, partition ]
   , gpA $ \ a   -> fun "?dense2csc"                 [ int, int, matdescr, dptr a, int, dptr int32, dptr a, dptr int32, dptr int32 ]
   , gpA $ \ a   -> fun "?dense2csr"                 [ int, int, matdescr, dptr a, int, dptr int32, dptr a, dptr int32, dptr int32 ]
@@ -675,6 +674,7 @@ funsConvert =
 funsConvert_cuda80 :: [FunGroup]
 funsConvert_cuda80 =
   [ gp  $          fun "csr2cscEx"                [ int, int, int, dptr void, dtype, dptr int32, dptr int32, dptr void, dtype, dptr int32, dptr int32, action, idxBase, dtype ]
+  , gpA $ \ a   -> fun "?csr2csr_compress"          [ int, int, matdescr, dptr a, dptr int32, dptr int32, int, dptr int32, dptr a, dptr int32, dptr int32, a ]
   ]
 
 data FunGroup
