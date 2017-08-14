@@ -22,7 +22,7 @@ module Foreign.CUDA.BLAS.Sparse.Analysis (
   Info_bsric02(..), createInfo_bsric02, destroyInfo_bsric02,
   Info_bsrilu02(..), createInfo_bsrilu02, destroyInfo_bsrilu02,
   Info_csrgemm2(..), createInfo_csrgemm2, destroyInfo_csrgemm2,
-  Info_colour(..), createInfo_colour, destroyInfo_colour,
+  Info_color(..), createInfo_color, destroyInfo_color,
   Info_csru2csr(..), createInfo_csru2csr, destroyInfo_csru2csr,
 
 ) where
@@ -227,20 +227,20 @@ destroyInfo_csrgemm2 _ = cusparseError "'destroyInfo_csrgemm2' requires at least
 
 -- /undocumented/
 --
-newtype Info_colour = Info_colour { useInfo_colour :: {# type cusparseColorInfo_t #}}
+newtype Info_color = Info_color { useInfo_color :: {# type cusparseColorInfo_t #}}
 
-{-# INLINEABLE createInfo_colour #-}
-createInfo_colour :: IO Info_colour
-createInfo_colour = resultIfOk =<< cusparseCreateColorInfo
+{-# INLINEABLE createInfo_color #-}
+createInfo_color :: IO Info_color
+createInfo_color = resultIfOk =<< cusparseCreateColorInfo
   where
     {# fun unsafe cusparseCreateColorInfo
-      { alloca- `Info_colour' peekI* } -> `Status' cToEnum #}
+      { alloca- `Info_color' peekI* } -> `Status' cToEnum #}
       where
-        peekI = liftM Info_colour . peek
+        peekI = liftM Info_color . peek
 
-{-# INLINEABLE destroyInfo_colour #-}
-{# fun unsafe cusparseDestroyColorInfo as destroyInfo_colour
-  { useInfo_colour `Info_colour' } -> `()' checkStatus* #}
+{-# INLINEABLE destroyInfo_color #-}
+{# fun unsafe cusparseDestroyColorInfo as destroyInfo_color
+  { useInfo_color `Info_color' } -> `()' checkStatus* #}
 
 
 -- /undocumented/

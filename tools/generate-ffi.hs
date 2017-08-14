@@ -64,7 +64,7 @@ main = do
                 , "Info_bsric02"
                 , "Info_bsrilu02"
                 ]
-      roexps  = [ "Info_colour"
+      roexps  = [ "Info_color"
                 ]
       cvtexps = [ "Direction(..)"
                 , "Action(..)"
@@ -467,8 +467,8 @@ info_bsrilu02 = mkInfo "bsrilu02"
 info_csrgemm2 :: Type
 info_csrgemm2 = mkInfo "csrgemm2"
 
-info_colour :: Type
-info_colour = mkInfo "colour"
+info_color :: Type
+info_color = mkInfo "color"
 
 info_csru2csr :: Type
 info_csru2csr = mkInfo "csru2csr"
@@ -622,7 +622,7 @@ funsPrecond_cuda80 =
 --
 funsReorder :: [FunGroup]
 funsReorder =
-  [ gpA $ \ a   -> fun "?csrcolor"  [ int, int, matdescr, dptr a, dptr int, dptr int, dptr a, dptr int, dptr int, dptr int, info_colour ]
+  [ gpA $ \ a   -> fun "?csrcolor"  [ int, int, matdescr, dptr a, dptr int, dptr int, dptr a, dptr int, dptr int, dptr int, info_color ]
   ]
 
 
