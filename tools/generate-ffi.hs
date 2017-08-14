@@ -353,8 +353,8 @@ convType = \case
   THalf             -> floating "Half"
   TFloat            -> floating "Float"
   TDouble           -> floating "Double"
-  TComplex TFloat   -> complex "(Complex Float)"
-  TComplex TDouble  -> complex "(Complex Double)"
+  TComplex TFloat   -> fcomplex "(Complex Float)"
+  TComplex TDouble  -> fcomplex "(Complex Double)"
   TPtr as t         -> pointer as
                      $ case convType t of
                          HType _ s _ -> case t of
@@ -368,7 +368,7 @@ convType = \case
     simple s    = HType "" s ""
     enum s      = HType "cFromEnum" s "cToEnum"
     floating s  = HType ("C" <> s) s ("fromC" <> s)
-    complex s   = HType "withComplex*" s ""
+    fcomplex s  = HType "withComplex*" s ""
     --
     pointer Nothing s       = HType "castPtr"  ("Ptr " <> s) ""
     pointer (Just Host) s   = HType "useHostP" ("HostPtr " <> s) ""
