@@ -663,7 +663,11 @@ funsConvert =
   , gpA $ \ a   -> fun "?hyb2csr"                   [ matdescr, hyb, dptr a, dptr int32, dptr int32 ]
   , gpA $ \ a   -> fun "?hyb2dense"                 [ matdescr, hyb, dptr a, int ]
   , gpA $ \ a   -> fun "?nnz"                       [ dir, int, int, matdescr, dptr a, int, dptr int32, ptr int32 ]
-  , gp  $          fun "createIdentityPermutation"  [ int, dptr int32 ]
+  ]
+
+funsConvert_cuda70 :: [FunGroup]
+funsConvert_cuda70 =
+  [ gp  $          fun "createIdentityPermutation"  [ int, dptr int32 ]
   , gp  $          fun "xcoosort_bufferSizeExt"     [ int, int, int, dptr int32, dptr int32, ptr int64 ]
   , gp  $          fun "xcoosortByRow"              [ int, int, int, dptr int32, dptr int32, dptr int32, dptr void ]
   , gp  $          fun "xcoosortByColumn"           [ int, int, int, dptr int32, dptr int32, dptr int32, dptr void ]
@@ -671,11 +675,7 @@ funsConvert =
   , gp  $          fun "xcsrsort"                   [ int, int, int, matdescr, dptr int32, dptr int32, dptr int32, dptr void ]
   , gp  $          fun "xcscsort_bufferSizeExt"     [ int, int, int, dptr int32, dptr int32, ptr int64 ]
   , gp  $          fun "xcscsort"                   [ int, int, int, matdescr, dptr int32, dptr int32, dptr int32, dptr void ]
-  ]
-
-funsConvert_cuda70 :: [FunGroup]
-funsConvert_cuda70 =
-  [ gpA $ \ a   -> fun "?csru2csr_bufferSizeExt"    [ int, int, int, dptr a, dptr int32, dptr int32, info_csru2csr, ptr int64 ]
+  , gpA $ \ a   -> fun "?csru2csr_bufferSizeExt"    [ int, int, int, dptr a, dptr int32, dptr int32, info_csru2csr, ptr int64 ]
   , gpA $ \ a   -> fun "?csru2csr"                  [ int, int, int, matdescr, dptr a, dptr int32, dptr int32, info_csru2csr, dptr void ]
   , gpA $ \ a   -> fun "?csr2csru"                  [ int, int, int, matdescr, dptr a, dptr int32, dptr int32, info_csru2csr, dptr void ]
   ]

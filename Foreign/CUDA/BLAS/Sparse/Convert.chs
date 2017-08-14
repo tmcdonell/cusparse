@@ -436,6 +436,7 @@ useHostP = useHostPtr . castHostPtr
 
 {-# INLINEABLE znnz #-}
 {# fun unsafe cusparseZnnz as znnz { useHandle `Handle', cFromEnum `Direction', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr (Complex Double)', `Int', useDevP `DevicePtr Int32', castPtr `Ptr Int32' } -> `()' checkStatus* #}
+#if CUDA_VERSION >= 7000
 
 {-# INLINEABLE createIdentityPermutation #-}
 {# fun unsafe cusparseCreateIdentityPermutation as createIdentityPermutation { useHandle `Handle', `Int', useDevP `DevicePtr Int32' } -> `()' checkStatus* #}
@@ -460,7 +461,6 @@ useHostP = useHostPtr . castHostPtr
 
 {-# INLINEABLE xcscsort #-}
 {# fun unsafe cusparseXcscsort as xcscsort { useHandle `Handle', `Int', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useDevP `DevicePtr ()' } -> `()' checkStatus* #}
-#if CUDA_VERSION >= 7000
 
 {-# INLINEABLE scsru2csr_bufferSizeExt #-}
 {# fun unsafe cusparseScsru2csr_bufferSizeExt as scsru2csr_bufferSizeExt { useHandle `Handle', `Int', `Int', `Int', useDevP `DevicePtr Float', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useInfo_csru2csr `Info_csru2csr', castPtr `Ptr Int64' } -> `()' checkStatus* #}
@@ -498,6 +498,30 @@ useHostP = useHostPtr . castHostPtr
 {-# INLINEABLE zcsr2csru #-}
 {# fun unsafe cusparseZcsr2csru as zcsr2csru { useHandle `Handle', `Int', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useInfo_csru2csr `Info_csru2csr', useDevP `DevicePtr ()' } -> `()' checkStatus* #}
 #else
+
+createIdentityPermutation :: Handle -> Int -> DevicePtr Int32 -> IO ()
+createIdentityPermutation _ _ _ = cusparseError "'createIdentityPermutation' requires at least cuda-7.0"
+
+xcoosort_bufferSizeExt :: Handle -> Int -> Int -> Int -> DevicePtr Int32 -> DevicePtr Int32 -> Ptr Int64 -> IO ()
+xcoosort_bufferSizeExt _ _ _ _ _ _ _ = cusparseError "'xcoosort_bufferSizeExt' requires at least cuda-7.0"
+
+xcoosortByRow :: Handle -> Int -> Int -> Int -> DevicePtr Int32 -> DevicePtr Int32 -> DevicePtr Int32 -> DevicePtr () -> IO ()
+xcoosortByRow _ _ _ _ _ _ _ _ = cusparseError "'xcoosortByRow' requires at least cuda-7.0"
+
+xcoosortByColumn :: Handle -> Int -> Int -> Int -> DevicePtr Int32 -> DevicePtr Int32 -> DevicePtr Int32 -> DevicePtr () -> IO ()
+xcoosortByColumn _ _ _ _ _ _ _ _ = cusparseError "'xcoosortByColumn' requires at least cuda-7.0"
+
+xcsrsort_bufferSizeExt :: Handle -> Int -> Int -> Int -> DevicePtr Int32 -> DevicePtr Int32 -> Ptr Int64 -> IO ()
+xcsrsort_bufferSizeExt _ _ _ _ _ _ _ = cusparseError "'xcsrsort_bufferSizeExt' requires at least cuda-7.0"
+
+xcsrsort :: Handle -> Int -> Int -> Int -> MatrixDescriptor -> DevicePtr Int32 -> DevicePtr Int32 -> DevicePtr Int32 -> DevicePtr () -> IO ()
+xcsrsort _ _ _ _ _ _ _ _ _ = cusparseError "'xcsrsort' requires at least cuda-7.0"
+
+xcscsort_bufferSizeExt :: Handle -> Int -> Int -> Int -> DevicePtr Int32 -> DevicePtr Int32 -> Ptr Int64 -> IO ()
+xcscsort_bufferSizeExt _ _ _ _ _ _ _ = cusparseError "'xcscsort_bufferSizeExt' requires at least cuda-7.0"
+
+xcscsort :: Handle -> Int -> Int -> Int -> MatrixDescriptor -> DevicePtr Int32 -> DevicePtr Int32 -> DevicePtr Int32 -> DevicePtr () -> IO ()
+xcscsort _ _ _ _ _ _ _ _ _ = cusparseError "'xcscsort' requires at least cuda-7.0"
 
 scsru2csr_bufferSizeExt :: Handle -> Int -> Int -> Int -> DevicePtr Float -> DevicePtr Int32 -> DevicePtr Int32 -> Info_csru2csr -> Ptr Int64 -> IO ()
 scsru2csr_bufferSizeExt _ _ _ _ _ _ _ _ _ = cusparseError "'scsru2csr_bufferSizeExt' requires at least cuda-7.0"
