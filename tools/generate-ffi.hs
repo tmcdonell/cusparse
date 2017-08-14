@@ -94,6 +94,7 @@ main = do
 
   mkC2HS "Reorder" (docs "reorderings") roexps
     [(Nothing,   funsReorder)
+    ,(Just 7000, funsReorder_cuda70)
     ]
 
   mkC2HS "Convert" (docs "format-conversion") cvtexps
@@ -621,7 +622,10 @@ funsPrecond_cuda80 =
 -- <http://docs.nvidia.com/cuda/cusparse/index.html#cusparse-reorderings-reference>
 --
 funsReorder :: [FunGroup]
-funsReorder =
+funsReorder = []
+
+funsReorder_cuda70 :: [FunGroup]
+funsReorder_cuda70 =
   [ gpA $ \ a   -> fun "?csrcolor"  [ int, int, matdescr, dptr a, dptr int32, dptr int32, dptr a, dptr int32, dptr int32, dptr int32, info_color ]
   ]
 

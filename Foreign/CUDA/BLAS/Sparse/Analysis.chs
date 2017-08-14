@@ -227,6 +227,7 @@ destroyInfo_csrgemm2 _ = cusparseError "'destroyInfo_csrgemm2' requires at least
 
 -- /undocumented/
 --
+#if CUDA_VERSION >= 7000
 newtype Info_color = Info_color { useInfo_color :: {# type cusparseColorInfo_t #}}
 
 {-# INLINEABLE createInfo_color #-}
@@ -241,6 +242,17 @@ createInfo_color = resultIfOk =<< cusparseCreateColorInfo
 {-# INLINEABLE destroyInfo_color #-}
 {# fun unsafe cusparseDestroyColorInfo as destroyInfo_color
   { useInfo_color `Info_color' } -> `()' checkStatus* #}
+
+#else
+data Info_color
+
+createInfo_color :: IO Info_color
+createInfo_color = cusparseError "'createInfo_color' requires at least cuda-7.0"
+
+destroyInfo_color :: Info_color -> IO ()
+destroyInfo_color _ = cusparseError "'destroyInfo_color' requires at least cuda-7.0"
+
+#endif
 
 
 -- /undocumented/

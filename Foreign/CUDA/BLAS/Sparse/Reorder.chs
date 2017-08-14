@@ -55,6 +55,7 @@ useDevP = useDevicePtr . castDevPtr
 useHostP :: HostPtr a -> Ptr b
 useHostP = useHostPtr . castHostPtr
 
+#if CUDA_VERSION >= 7000
 
 {-# INLINEABLE scsrcolor #-}
 {# fun unsafe cusparseScsrcolor as scsrcolor { useHandle `Handle', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Float', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useDevP `DevicePtr Float', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useInfo_color `Info_color' } -> `()' checkStatus* #}
@@ -67,3 +68,17 @@ useHostP = useHostPtr . castHostPtr
 
 {-# INLINEABLE zcsrcolor #-}
 {# fun unsafe cusparseZcsrcolor as zcsrcolor { useHandle `Handle', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useInfo_color `Info_color' } -> `()' checkStatus* #}
+#else
+
+scsrcolor :: Handle -> Int -> Int -> MatrixDescriptor -> DevicePtr Float -> DevicePtr Int32 -> DevicePtr Int32 -> DevicePtr Float -> DevicePtr Int32 -> DevicePtr Int32 -> DevicePtr Int32 -> Info_color -> IO ()
+scsrcolor _ _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'scsrcolor' requires at least cuda-7.0"
+
+dcsrcolor :: Handle -> Int -> Int -> MatrixDescriptor -> DevicePtr Double -> DevicePtr Int32 -> DevicePtr Int32 -> DevicePtr Double -> DevicePtr Int32 -> DevicePtr Int32 -> DevicePtr Int32 -> Info_color -> IO ()
+dcsrcolor _ _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'dcsrcolor' requires at least cuda-7.0"
+
+ccsrcolor :: Handle -> Int -> Int -> MatrixDescriptor -> DevicePtr (Complex Float) -> DevicePtr Int32 -> DevicePtr Int32 -> DevicePtr (Complex Float) -> DevicePtr Int32 -> DevicePtr Int32 -> DevicePtr Int32 -> Info_color -> IO ()
+ccsrcolor _ _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'ccsrcolor' requires at least cuda-7.0"
+
+zcsrcolor :: Handle -> Int -> Int -> MatrixDescriptor -> DevicePtr (Complex Double) -> DevicePtr Int32 -> DevicePtr Int32 -> DevicePtr (Complex Double) -> DevicePtr Int32 -> DevicePtr Int32 -> DevicePtr Int32 -> Info_color -> IO ()
+zcsrcolor _ _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'zcsrcolor' requires at least cuda-7.0"
+#endif
