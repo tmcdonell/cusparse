@@ -99,6 +99,7 @@ main = do
 
   mkC2HS "Convert" (docs "format-conversion") cvtexps
     [(Nothing,   funsConvert)
+    ,(Just 7000, funsConvert_cuda70)
     ,(Just 8000, funsConvert_cuda80)
     ]
 
@@ -670,7 +671,11 @@ funsConvert =
   , gp  $          fun "xcsrsort"                   [ int, int, int, matdescr, dptr int32, dptr int32, dptr int32, dptr void ]
   , gp  $          fun "xcscsort_bufferSizeExt"     [ int, int, int, dptr int32, dptr int32, ptr int64 ]
   , gp  $          fun "xcscsort"                   [ int, int, int, matdescr, dptr int32, dptr int32, dptr int32, dptr void ]
-  , gpA $ \ a   -> fun "?csru2csr_bufferSizeExt"    [ int, int, int, dptr a, dptr int32, dptr int32, info_csru2csr, ptr int64 ]
+  ]
+
+funsConvert_cuda70 :: [FunGroup]
+funsConvert_cuda70 =
+  [ gpA $ \ a   -> fun "?csru2csr_bufferSizeExt"    [ int, int, int, dptr a, dptr int32, dptr int32, info_csru2csr, ptr int64 ]
   , gpA $ \ a   -> fun "?csru2csr"                  [ int, int, int, matdescr, dptr a, dptr int32, dptr int32, info_csru2csr, dptr void ]
   , gpA $ \ a   -> fun "?csr2csru"                  [ int, int, int, matdescr, dptr a, dptr int32, dptr int32, info_csru2csr, dptr void ]
   ]

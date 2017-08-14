@@ -460,6 +460,7 @@ useHostP = useHostPtr . castHostPtr
 
 {-# INLINEABLE xcscsort #-}
 {# fun unsafe cusparseXcscsort as xcscsort { useHandle `Handle', `Int', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useDevP `DevicePtr ()' } -> `()' checkStatus* #}
+#if CUDA_VERSION >= 7000
 
 {-# INLINEABLE scsru2csr_bufferSizeExt #-}
 {# fun unsafe cusparseScsru2csr_bufferSizeExt as scsru2csr_bufferSizeExt { useHandle `Handle', `Int', `Int', `Int', useDevP `DevicePtr Float', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useInfo_csru2csr `Info_csru2csr', castPtr `Ptr Int64' } -> `()' checkStatus* #}
@@ -496,6 +497,44 @@ useHostP = useHostPtr . castHostPtr
 
 {-# INLINEABLE zcsr2csru #-}
 {# fun unsafe cusparseZcsr2csru as zcsr2csru { useHandle `Handle', `Int', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useInfo_csru2csr `Info_csru2csr', useDevP `DevicePtr ()' } -> `()' checkStatus* #}
+#else
+
+scsru2csr_bufferSizeExt :: Handle -> Int -> Int -> Int -> DevicePtr Float -> DevicePtr Int32 -> DevicePtr Int32 -> Info_csru2csr -> Ptr Int64 -> IO ()
+scsru2csr_bufferSizeExt _ _ _ _ _ _ _ _ _ = cusparseError "'scsru2csr_bufferSizeExt' requires at least cuda-7.0"
+
+dcsru2csr_bufferSizeExt :: Handle -> Int -> Int -> Int -> DevicePtr Double -> DevicePtr Int32 -> DevicePtr Int32 -> Info_csru2csr -> Ptr Int64 -> IO ()
+dcsru2csr_bufferSizeExt _ _ _ _ _ _ _ _ _ = cusparseError "'dcsru2csr_bufferSizeExt' requires at least cuda-7.0"
+
+ccsru2csr_bufferSizeExt :: Handle -> Int -> Int -> Int -> DevicePtr (Complex Float) -> DevicePtr Int32 -> DevicePtr Int32 -> Info_csru2csr -> Ptr Int64 -> IO ()
+ccsru2csr_bufferSizeExt _ _ _ _ _ _ _ _ _ = cusparseError "'ccsru2csr_bufferSizeExt' requires at least cuda-7.0"
+
+zcsru2csr_bufferSizeExt :: Handle -> Int -> Int -> Int -> DevicePtr (Complex Double) -> DevicePtr Int32 -> DevicePtr Int32 -> Info_csru2csr -> Ptr Int64 -> IO ()
+zcsru2csr_bufferSizeExt _ _ _ _ _ _ _ _ _ = cusparseError "'zcsru2csr_bufferSizeExt' requires at least cuda-7.0"
+
+scsru2csr :: Handle -> Int -> Int -> Int -> MatrixDescriptor -> DevicePtr Float -> DevicePtr Int32 -> DevicePtr Int32 -> Info_csru2csr -> DevicePtr () -> IO ()
+scsru2csr _ _ _ _ _ _ _ _ _ _ = cusparseError "'scsru2csr' requires at least cuda-7.0"
+
+dcsru2csr :: Handle -> Int -> Int -> Int -> MatrixDescriptor -> DevicePtr Double -> DevicePtr Int32 -> DevicePtr Int32 -> Info_csru2csr -> DevicePtr () -> IO ()
+dcsru2csr _ _ _ _ _ _ _ _ _ _ = cusparseError "'dcsru2csr' requires at least cuda-7.0"
+
+ccsru2csr :: Handle -> Int -> Int -> Int -> MatrixDescriptor -> DevicePtr (Complex Float) -> DevicePtr Int32 -> DevicePtr Int32 -> Info_csru2csr -> DevicePtr () -> IO ()
+ccsru2csr _ _ _ _ _ _ _ _ _ _ = cusparseError "'ccsru2csr' requires at least cuda-7.0"
+
+zcsru2csr :: Handle -> Int -> Int -> Int -> MatrixDescriptor -> DevicePtr (Complex Double) -> DevicePtr Int32 -> DevicePtr Int32 -> Info_csru2csr -> DevicePtr () -> IO ()
+zcsru2csr _ _ _ _ _ _ _ _ _ _ = cusparseError "'zcsru2csr' requires at least cuda-7.0"
+
+scsr2csru :: Handle -> Int -> Int -> Int -> MatrixDescriptor -> DevicePtr Float -> DevicePtr Int32 -> DevicePtr Int32 -> Info_csru2csr -> DevicePtr () -> IO ()
+scsr2csru _ _ _ _ _ _ _ _ _ _ = cusparseError "'scsr2csru' requires at least cuda-7.0"
+
+dcsr2csru :: Handle -> Int -> Int -> Int -> MatrixDescriptor -> DevicePtr Double -> DevicePtr Int32 -> DevicePtr Int32 -> Info_csru2csr -> DevicePtr () -> IO ()
+dcsr2csru _ _ _ _ _ _ _ _ _ _ = cusparseError "'dcsr2csru' requires at least cuda-7.0"
+
+ccsr2csru :: Handle -> Int -> Int -> Int -> MatrixDescriptor -> DevicePtr (Complex Float) -> DevicePtr Int32 -> DevicePtr Int32 -> Info_csru2csr -> DevicePtr () -> IO ()
+ccsr2csru _ _ _ _ _ _ _ _ _ _ = cusparseError "'ccsr2csru' requires at least cuda-7.0"
+
+zcsr2csru :: Handle -> Int -> Int -> Int -> MatrixDescriptor -> DevicePtr (Complex Double) -> DevicePtr Int32 -> DevicePtr Int32 -> Info_csru2csr -> DevicePtr () -> IO ()
+zcsr2csru _ _ _ _ _ _ _ _ _ _ = cusparseError "'zcsr2csru' requires at least cuda-7.0"
+#endif
 #if CUDA_VERSION >= 8000
 
 {-# INLINEABLE csr2cscEx #-}
