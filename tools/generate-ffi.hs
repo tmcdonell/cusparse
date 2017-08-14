@@ -19,12 +19,21 @@ import Text.Printf                                                  ( printf )
 main :: IO ()
 main = do
   let
-      docs :: Int -> [String]
-      docs l  = [ printf "For more information see the cuSPARSE Level-%d function reference:" l
+      -- module headers
+      docsL :: Int -> [String]
+      docsL l = [ printf "For more information see the cuSPARSE Level-%d function reference:" l
                 , ""
                 , printf "<http://docs.nvidia.com/cuda/cusparse/index.html#cusparse-level-%d-function-reference>" l
                 , ""
                 ]
+      docs :: String -> [String]
+      docs r  = [ "For more information see the cuSPARSE function reference:"
+                , ""
+                , printf "<http://docs.nvidia.com/cuda/cusparse/index.html#cusparse-%s-reference>" r
+                , ""
+                ]
+
+      -- extra module exports
       l1exps  = [ "IndexBase(..)"
                 ]
       l2exps  = [ "Operation(..)"
@@ -45,15 +54,35 @@ main = do
                 , "Info_bsrsm2"
                 , "Info_csrgemm2"
                 ]
+      pcexps  = [ "Operation(..)"
+                , "Direction(..)"
+                , "Policy(..)"
+                , "MatrixDescriptor"
+                , "Info"
+                , "Info_csric02"
+                , "Info_csrilu02"
+                , "Info_bsric02"
+                , "Info_bsrilu02"
+                ]
   --
-  mkC2HS "Level1" (docs 1) l1exps [(Nothing,   funsL1)]
-  mkC2HS "Level2" (docs 2) l2exps [(Nothing,   funsL2)
-                                  ,(Just 7500, funsL2_cuda75)
-                                  ,(Just 8000, funsL2_cuda80)
-                                  ]
-  mkC2HS "Level3" (docs 3) l3exps [(Nothing,   funsL3)
-                                  ,(Just 7000, funsL3_cuda70)
-                                  ]
+  mkC2HS "Level1" (docsL 1) l1exps
+    [(Nothing,   funsL1)]
+
+  mkC2HS "Level2" (docsL 2) l2exps
+    [(Nothing,   funsL2)
+    ,(Just 7500, funsL2_cuda75)
+    ,(Just 8000, funsL2_cuda80)
+    ]
+
+  mkC2HS "Level3" (docsL 3) l3exps
+    [(Nothing,   funsL3)
+    ,(Just 7000, funsL3_cuda70)
+    ]
+
+  mkC2HS "Precondition" (docs "preconditioners") pcexps
+    [(Nothing,   funsPrecond)
+    ,(Just 8000, funsPrecond_cuda80)
+    ]
 
 
 mkC2HS :: String -> [String] -> [String] -> [(Maybe Int, [FunGroup])] -> IO ()
@@ -393,14 +422,26 @@ info = TData "useInfo" "Info" ""
 mkInfo :: String -> Type
 mkInfo t = TData ("useInfo_" <> t) ("Info_" <> t) ""
 
+info_csrsv2 :: Type
+info_csrsv2 = mkInfo "csrsv2"
+
+info_csric02 :: Type
+info_csric02 = mkInfo "csric02"
+
+info_csrilu02 :: Type
+info_csrilu02 = mkInfo "csrilu02"
+
 info_bsrsv2 :: Type
 info_bsrsv2 = mkInfo "bsrsv2"
 
 info_bsrsm2 :: Type
 info_bsrsm2 = mkInfo "bsrsm2"
 
-info_csrsv2 :: Type
-info_csrsv2 = mkInfo "csrsv2"
+info_bsric02 :: Type
+info_bsric02 = mkInfo "bsric02"
+
+info_bsrilu02 :: Type
+info_bsrilu02 = mkInfo "bsrilu02"
 
 info_csrgemm2 :: Type
 info_csrgemm2 = mkInfo "csrgemm2"
@@ -507,6 +548,42 @@ funsL3_cuda70 =
   , gpA $ \ a   -> fun "?csrgemm2"                [ int, int, int, ptr a, matdescr, int, dptr a, dptr int, dptr int, matdescr, int, dptr a, dptr int, dptr int, ptr a, matdescr, int, dptr a, dptr int, dptr int, matdescr, dptr a, dptr int, dptr int, info_csrgemm2, dptr void ]
   ]
 
+
+-- Matrix preconditioners
+--
+-- <http://docs.nvidia.com/cuda/cusparse/index.html#cusparse-preconditioners-reference>
+--
+funsPrecond :: [FunGroup]
+funsPrecond =
+  [ gpA $ \ a   -> fun "?csric0"                [ transpose, int, matdescr, dptr a, dptr int, dptr int, info ]
+  , gpA $ \ a   -> fun "?csric02_bufferSize"    [ int, int, matdescr, dptr a, dptr int, dptr int, info_csric02, ptr int ]
+  , gpA $ \ a   -> fun "?csric02_analysis"      [ int, int, matdescr, dptr a, dptr int, dptr int, info_csric02, policy, dptr void ]
+  , gpA $ \ a   -> fun "?csric02"               [ int, int, matdescr, dptr a, dptr int, dptr int, info_csric02, policy, dptr void ]
+  , gp  $          fun "xcsric02_zeroPivot"     [ info_csric02, ptr int ]
+  , gpA $ \ a   -> fun "?csrilu0"               [ transpose, int, matdescr, dptr a, dptr int, dptr int, info ]
+  , gpA $ \ a   -> fun "?csrilu02_numericBoost" [ info_csrilu02, int, ptr double, ptr a ]
+  , gpA $ \ a   -> fun "?csrilu02_bufferSize"   [ int, int, matdescr, dptr a, dptr int, dptr int, info_csrilu02, ptr int ]
+  , gpA $ \ a   -> fun "?csrilu02_analysis"     [ int, int, matdescr, dptr a, dptr int, dptr int, info_csrilu02, policy, dptr void ]
+  , gpA $ \ a   -> fun "?csrilu02"              [ int, int, matdescr, dptr a, dptr int, dptr int, info_csrilu02, policy, dptr void ]
+  , gp  $          fun "xcsrilu02_zeroPivot"    [ info_csrilu02, ptr int ]
+  , gpA $ \ a   -> fun "?bsric02_bufferSize"    [ dir, int, int, matdescr, dptr a, dptr int, dptr int, int, info_bsric02, ptr int ]
+  , gpA $ \ a   -> fun "?bsric02_analysis"      [ dir, int, int, matdescr, dptr a, dptr int, dptr int, int, info_bsric02, policy, dptr void ]
+  , gpA $ \ a   -> fun "?bsric02"               [ dir, int, int, matdescr, dptr a, dptr int, dptr int, int, info_bsric02, policy, dptr void ]
+  , gp  $          fun "xbsric02_zeroPivot"     [ info_bsric02, ptr int ]
+  , gpA $ \ a   -> fun "?bsrilu02_numericBoost" [ info_bsrilu02, int, ptr double, ptr a ]
+  , gpA $ \ a   -> fun "?bsrilu02_bufferSize"   [ dir, int, int, matdescr, dptr a, dptr int, dptr int, int, info_bsrilu02, ptr int ]
+  , gpA $ \ a   -> fun "?bsrilu02_analysis"     [ dir, int, int, matdescr, dptr a, dptr int, dptr int, int, info_bsrilu02, policy, dptr void ]
+  , gpA $ \ a   -> fun "?bsrilu02"              [ dir, int, int, matdescr, dptr a, dptr int, dptr int, int, info_bsrilu02, policy, dptr void ]
+  , gp  $          fun "xbsrilu02_zeroPivot"    [ info_bsrilu02, ptr int ]
+  , gpA $ \ a   -> fun "?gtsv"                  [ int, int, dptr a, dptr a, dptr a, dptr a, int ]
+  , gpA $ \ a   -> fun "?gtsv_nopivot"          [ int, int, dptr a, dptr a, dptr a, dptr a, int ]
+  , gpA $ \ a   -> fun "?gtsvStridedBatch"      [ int, dptr a, dptr a, dptr a, dptr a, int, int ]
+  ]
+
+funsPrecond_cuda80 :: [FunGroup]
+funsPrecond_cuda80 =
+  [ gp  $          fun "csrilu0Ex"            [ transpose, int, matdescr, dptr void, dtype, dptr int, dptr int, info, dtype ]
+  ]
 
 data FunGroup
   = FunGroup

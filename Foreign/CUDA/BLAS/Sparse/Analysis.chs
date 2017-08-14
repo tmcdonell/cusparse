@@ -15,8 +15,12 @@ module Foreign.CUDA.BLAS.Sparse.Analysis (
 
   Info(..), createInfo, destroyInfo,
   Info_csrsv2(..), createInfo_csrsv2, destroyInfo_csrsv2,
+  Info_csric02(..), createInfo_csric02, destroyInfo_csric02,
+  Info_csrilu02(..), createInfo_csrilu02, destroyInfo_csrilu02,
   Info_bsrsv2(..), createInfo_bsrsv2, destroyInfo_bsrsv2,
   Info_bsrsm2(..), createInfo_bsrsm2, destroyInfo_bsrsm2,
+  Info_bsric02(..), createInfo_bsric02, destroyInfo_bsric02,
+  Info_bsrilu02(..), createInfo_bsrilu02, destroyInfo_bsrilu02,
   Info_csrgemm2(..), createInfo_csrgemm2, destroyInfo_csrgemm2,
 
 ) where
@@ -83,9 +87,39 @@ createInfo_csrsv2 = resultIfOk =<< cusparseCreateCsrsv2Info
 
 -- | <http://docs.nvidia.com/cuda/cusparse/index.html#csric02infot>
 --
+newtype Info_csric02 = Info_csric02 { useInfo_csric02 :: {# type csric02Info_t #}}
+
+{-# INLINEABLE createInfo_csric02 #-}
+createInfo_csric02 :: IO Info_csric02
+createInfo_csric02 = resultIfOk =<< cusparseCreateCsric02Info
+  where
+    {# fun unsafe cusparseCreateCsric02Info
+      { alloca- `Info_csric02' peekI* } -> `Status' cToEnum #}
+      where
+        peekI = liftM Info_csric02 . peek
+
+{-# INLINEABLE destroyInfo_csric02 #-}
+{# fun unsafe cusparseDestroyCsric02Info as destroyInfo_csric02
+  { useInfo_csric02 `Info_csric02' } -> `()' checkStatus* #}
+
 
 -- | <http://docs.nvidia.com/cuda/cusparse/index.html#csrilu02infot>
 --
+newtype Info_csrilu02 = Info_csrilu02 { useInfo_csrilu02 :: {# type csrilu02Info_t #}}
+
+{-# INLINEABLE createInfo_csrilu02 #-}
+createInfo_csrilu02 :: IO Info_csrilu02
+createInfo_csrilu02 = resultIfOk =<< cusparseCreateCsrilu02Info
+  where
+    {# fun unsafe cusparseCreateCsrilu02Info
+      { alloca- `Info_csrilu02' peekI* } -> `Status' cToEnum #}
+      where
+        peekI = liftM Info_csrilu02 . peek
+
+{-# INLINEABLE destroyInfo_csrilu02 #-}
+{# fun unsafe cusparseDestroyCsrilu02Info as destroyInfo_csrilu02
+  { useInfo_csrilu02 `Info_csrilu02' } -> `()' checkStatus* #}
+
 
 -- | <http://docs.nvidia.com/cuda/cusparse/index.html#bsrsv2infot>
 --
@@ -125,9 +159,39 @@ createInfo_bsrsm2 = resultIfOk =<< cusparseCreateBsrsm2Info
 
 -- | <http://docs.nvidia.com/cuda/cusparse/index.html#bsric02infot>
 --
+newtype Info_bsric02 = Info_bsric02 { useInfo_bsric02 :: {# type bsric02Info_t #}}
+
+{-# INLINEABLE createInfo_bsric02 #-}
+createInfo_bsric02 :: IO Info_bsric02
+createInfo_bsric02 = resultIfOk =<< cusparseCreateBsric02Info
+  where
+    {# fun unsafe cusparseCreateBsric02Info
+      { alloca- `Info_bsric02' peekI* } -> `Status' cToEnum #}
+      where
+        peekI = liftM Info_bsric02 . peek
+
+{-# INLINEABLE destroyInfo_bsric02 #-}
+{# fun unsafe cusparseDestroyBsric02Info as destroyInfo_bsric02
+  { useInfo_bsric02 `Info_bsric02' } -> `()' checkStatus* #}
+
 
 -- | <http://docs.nvidia.com/cuda/cusparse/index.html#bsrilu02infot>
 --
+newtype Info_bsrilu02 = Info_bsrilu02 { useInfo_bsrilu02 :: {# type bsrilu02Info_t #}}
+
+{-# INLINEABLE createInfo_bsrilu02 #-}
+createInfo_bsrilu02 :: IO Info_bsrilu02
+createInfo_bsrilu02 = resultIfOk =<< cusparseCreateBsrilu02Info
+  where
+    {# fun unsafe cusparseCreateBsrilu02Info
+      { alloca- `Info_bsrilu02' peekI* } -> `Status' cToEnum #}
+      where
+        peekI = liftM Info_bsrilu02 . peek
+
+{-# INLINEABLE destroyInfo_bsrilu02 #-}
+{# fun unsafe cusparseDestroyBsrilu02Info as destroyInfo_bsrilu02
+  { useInfo_bsrilu02 `Info_bsrilu02' } -> `()' checkStatus* #}
+
 
 -- | <http://docs.nvidia.com/cuda/cusparse/index.html#csrgemm2infot>
 --
