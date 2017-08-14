@@ -22,6 +22,7 @@ module Foreign.CUDA.BLAS.Sparse.Analysis (
   Info_bsric02(..), createInfo_bsric02, destroyInfo_bsric02,
   Info_bsrilu02(..), createInfo_bsrilu02, destroyInfo_bsrilu02,
   Info_csrgemm2(..), createInfo_csrgemm2, destroyInfo_csrgemm2,
+  Info_colour(..), createInfo_colour, destroyInfo_colour,
 
 ) where
 
@@ -221,4 +222,22 @@ destroyInfo_csrgemm2 :: Info_csrgemm2 -> IO ()
 destroyInfo_csrgemm2 _ = cusparseError "'destroyInfo_csrgemm2' requires at least cuda-7.0"
 
 #endif
+
+
+-- /undocumented/
+--
+newtype Info_colour = Info_colour { useInfo_colour :: {# type cusparseColorInfo_t #}}
+
+{-# INLINEABLE createInfo_colour #-}
+createInfo_colour :: IO Info_colour
+createInfo_colour = resultIfOk =<< cusparseCreateColorInfo
+  where
+    {# fun unsafe cusparseCreateColorInfo
+      { alloca- `Info_colour' peekI* } -> `Status' cToEnum #}
+      where
+        peekI = liftM Info_colour . peek
+
+{-# INLINEABLE destroyInfo_colour #-}
+{# fun unsafe cusparseDestroyColorInfo as destroyInfo_colour
+  { useInfo_colour `Info_colour' } -> `()' checkStatus* #}
 

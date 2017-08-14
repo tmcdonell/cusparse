@@ -64,6 +64,8 @@ main = do
                 , "Info_bsric02"
                 , "Info_bsrilu02"
                 ]
+      roexps  = [ "Info_colour"
+                ]
   --
   mkC2HS "Level1" (docsL 1) l1exps
     [(Nothing,   funsL1)]
@@ -82,6 +84,10 @@ main = do
   mkC2HS "Precondition" (docs "preconditioners") pcexps
     [(Nothing,   funsPrecond)
     ,(Just 8000, funsPrecond_cuda80)
+    ]
+
+  mkC2HS "Reorder" (docs "reorderings") roexps
+    [(Nothing, funsReorder)
     ]
 
 
@@ -446,6 +452,9 @@ info_bsrilu02 = mkInfo "bsrilu02"
 info_csrgemm2 :: Type
 info_csrgemm2 = mkInfo "csrgemm2"
 
+info_colour :: Type
+info_colour = mkInfo "colour"
+
 matdescr :: Type
 matdescr = TData "useMatDescr" "MatrixDescriptor" ""
 
@@ -535,10 +544,10 @@ funsL3 =
   , gp  $          fun "xbsrsm2_zeroPivot"  [ info_bsrsm2, ptr int ]
 
   -- BLAS-like extensions
-  , gp  $          fun "xcsrgeamNnz"              [ int, int, matdescr, int, dptr int, dptr int, matdescr, int, dptr int, dptr int, matdescr, dptr int, ptr int ]
-  , gpA $ \ a   -> fun "?csrgeam"                 [ int, int, ptr a, matdescr, int, dptr a, dptr int, dptr int, ptr a, matdescr, int, dptr a, dptr int, dptr int, matdescr, dptr a, dptr int, dptr int ]
-  , gp  $          fun "xcsrgemmNnz"              [ transpose, transpose, int, int, int, matdescr, int, dptr int, dptr int, matdescr, int, dptr int, dptr int, matdescr, dptr int, ptr int ]
-  , gpA $ \ a   -> fun "?csrgemm"                 [ transpose, transpose, int, int, int, matdescr, int, dptr a, dptr int, dptr int, matdescr, int, dptr a, dptr int, dptr int, matdescr, dptr a, dptr int, dptr int ]
+  , gp  $          fun "xcsrgeamNnz"        [ int, int, matdescr, int, dptr int, dptr int, matdescr, int, dptr int, dptr int, matdescr, dptr int, ptr int ]
+  , gpA $ \ a   -> fun "?csrgeam"           [ int, int, ptr a, matdescr, int, dptr a, dptr int, dptr int, ptr a, matdescr, int, dptr a, dptr int, dptr int, matdescr, dptr a, dptr int, dptr int ]
+  , gp  $          fun "xcsrgemmNnz"        [ transpose, transpose, int, int, int, matdescr, int, dptr int, dptr int, matdescr, int, dptr int, dptr int, matdescr, dptr int, ptr int ]
+  , gpA $ \ a   -> fun "?csrgemm"           [ transpose, transpose, int, int, int, matdescr, int, dptr a, dptr int, dptr int, matdescr, int, dptr a, dptr int, dptr int, matdescr, dptr a, dptr int, dptr int ]
   ]
 
 funsL3_cuda70 :: [FunGroup]
@@ -582,8 +591,14 @@ funsPrecond =
 
 funsPrecond_cuda80 :: [FunGroup]
 funsPrecond_cuda80 =
-  [ gp  $          fun "csrilu0Ex"            [ transpose, int, matdescr, dptr void, dtype, dptr int, dptr int, info, dtype ]
+  [ gp  $          fun "csrilu0Ex"              [ transpose, int, matdescr, dptr void, dtype, dptr int, dptr int, info, dtype ]
   ]
+
+funsReorder :: [FunGroup]
+funsReorder =
+  [ gpA $ \ a   -> fun "?csrcolor"  [ int, int, matdescr, dptr a, dptr int, dptr int, dptr a, dptr int, dptr int, dptr int, info_colour ]
+  ]
+
 
 data FunGroup
   = FunGroup

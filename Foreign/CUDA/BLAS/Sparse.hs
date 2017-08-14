@@ -45,6 +45,7 @@ module Foreign.CUDA.BLAS.Sparse (
   module Foreign.CUDA.BLAS.Sparse.Level2,
   module Foreign.CUDA.BLAS.Sparse.Level3,
   module Foreign.CUDA.BLAS.Sparse.Precondition,
+  module Foreign.CUDA.BLAS.Sparse.Reorder,
 
 ) where
 
@@ -59,4 +60,5 @@ import Foreign.CUDA.BLAS.Sparse.Level1
 import Foreign.CUDA.BLAS.Sparse.Level2
 import Foreign.CUDA.BLAS.Sparse.Level3
 import Foreign.CUDA.BLAS.Sparse.Precondition
+import Foreign.CUDA.BLAS.Sparse.Reorder
 
