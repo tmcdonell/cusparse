@@ -52,13 +52,10 @@ newtype Info = Info { useInfo :: {# type cusparseSolveAnalysisInfo_t #}}
 -- <http://docs.nvidia.com/cuda/cusparse/index.html#cusparsecreatesolveanalysisinfo>
 --
 {-# INLINEABLE createInfo #-}
-createInfo :: IO Info
-createInfo = resultIfOk =<< cusparseCreateSolveAnalysisInfo
+{# fun unsafe cusparseCreateSolveAnalysisInfo as createInfo
+  { alloca- `Info' peekI* } -> `()' checkStatus*- #}
   where
-    {# fun unsafe cusparseCreateSolveAnalysisInfo
-      { alloca- `Info' peekI* } -> `Status' cToEnum #}
-      where
-        peekI = liftM Info . peek
+    peekI = liftM Info . peek
 
 -- | Release memory associated with a matrix solver structure.
 --
@@ -74,13 +71,10 @@ createInfo = resultIfOk =<< cusparseCreateSolveAnalysisInfo
 newtype Info_csrsv2 = Info_csrsv2 { useInfo_csrsv2 :: {# type csrsv2Info_t #}}
 
 {-# INLINEABLE createInfo_csrsv2 #-}
-createInfo_csrsv2 :: IO Info_csrsv2
-createInfo_csrsv2 = resultIfOk =<< cusparseCreateCsrsv2Info
+{# fun unsafe cusparseCreateCsrsv2Info as createInfo_csrsv2
+  { alloca- `Info_csrsv2' peekI* } -> `()' checkStatus*- #}
   where
-    {# fun unsafe cusparseCreateCsrsv2Info
-      { alloca- `Info_csrsv2' peekI* } -> `Status' cToEnum #}
-      where
-        peekI = liftM Info_csrsv2 . peek
+    peekI = liftM Info_csrsv2 . peek
 
 {-# INLINEABLE destroyInfo_csrsv2 #-}
 {# fun unsafe cusparseDestroyCsrsv2Info as destroyInfo_csrsv2
@@ -92,13 +86,10 @@ createInfo_csrsv2 = resultIfOk =<< cusparseCreateCsrsv2Info
 newtype Info_csric02 = Info_csric02 { useInfo_csric02 :: {# type csric02Info_t #}}
 
 {-# INLINEABLE createInfo_csric02 #-}
-createInfo_csric02 :: IO Info_csric02
-createInfo_csric02 = resultIfOk =<< cusparseCreateCsric02Info
+{# fun unsafe cusparseCreateCsric02Info as createInfo_csric02
+  { alloca- `Info_csric02' peekI* } -> `()' checkStatus*- #}
   where
-    {# fun unsafe cusparseCreateCsric02Info
-      { alloca- `Info_csric02' peekI* } -> `Status' cToEnum #}
-      where
-        peekI = liftM Info_csric02 . peek
+    peekI = liftM Info_csric02 . peek
 
 {-# INLINEABLE destroyInfo_csric02 #-}
 {# fun unsafe cusparseDestroyCsric02Info as destroyInfo_csric02
@@ -110,13 +101,10 @@ createInfo_csric02 = resultIfOk =<< cusparseCreateCsric02Info
 newtype Info_csrilu02 = Info_csrilu02 { useInfo_csrilu02 :: {# type csrilu02Info_t #}}
 
 {-# INLINEABLE createInfo_csrilu02 #-}
-createInfo_csrilu02 :: IO Info_csrilu02
-createInfo_csrilu02 = resultIfOk =<< cusparseCreateCsrilu02Info
+{# fun unsafe cusparseCreateCsrilu02Info as createInfo_csrilu02
+  { alloca- `Info_csrilu02' peekI* } -> `()' checkStatus*- #}
   where
-    {# fun unsafe cusparseCreateCsrilu02Info
-      { alloca- `Info_csrilu02' peekI* } -> `Status' cToEnum #}
-      where
-        peekI = liftM Info_csrilu02 . peek
+    peekI = liftM Info_csrilu02 . peek
 
 {-# INLINEABLE destroyInfo_csrilu02 #-}
 {# fun unsafe cusparseDestroyCsrilu02Info as destroyInfo_csrilu02
@@ -128,13 +116,10 @@ createInfo_csrilu02 = resultIfOk =<< cusparseCreateCsrilu02Info
 newtype Info_bsrsv2 = Info_bsrsv2 { useInfo_bsrsv2 :: {# type bsrsv2Info_t #}}
 
 {-# INLINEABLE createInfo_bsrsv2 #-}
-createInfo_bsrsv2 :: IO Info_bsrsv2
-createInfo_bsrsv2 = resultIfOk =<< cusparseCreateBsrsv2Info
+{# fun unsafe cusparseCreateBsrsv2Info as createInfo_bsrsv2
+  { alloca- `Info_bsrsv2' peekI* } -> `()' checkStatus*- #}
   where
-    {# fun unsafe cusparseCreateBsrsv2Info
-      { alloca- `Info_bsrsv2' peekI* } -> `Status' cToEnum #}
-      where
-        peekI = liftM Info_bsrsv2 . peek
+    peekI = liftM Info_bsrsv2 . peek
 
 {-# INLINEABLE destroyInfo_bsrsv2 #-}
 {# fun unsafe cusparseDestroyBsrsv2Info as destroyInfo_bsrsv2
@@ -146,13 +131,10 @@ createInfo_bsrsv2 = resultIfOk =<< cusparseCreateBsrsv2Info
 newtype Info_bsrsm2 = Info_bsrsm2 { useInfo_bsrsm2 :: {# type bsrsm2Info_t #}}
 
 {-# INLINEABLE createInfo_bsrsm2 #-}
-createInfo_bsrsm2 :: IO Info_bsrsm2
-createInfo_bsrsm2 = resultIfOk =<< cusparseCreateBsrsm2Info
+{# fun unsafe cusparseCreateBsrsm2Info as createInfo_bsrsm2
+  { alloca- `Info_bsrsm2' peekI* } -> `()' checkStatus*- #}
   where
-    {# fun unsafe cusparseCreateBsrsm2Info
-      { alloca- `Info_bsrsm2' peekI* } -> `Status' cToEnum #}
-      where
-        peekI = liftM Info_bsrsm2 . peek
+    peekI = liftM Info_bsrsm2 . peek
 
 {-# INLINEABLE destroyInfo_bsrsm2 #-}
 {# fun unsafe cusparseDestroyBsrsm2Info as destroyInfo_bsrsm2
@@ -164,13 +146,10 @@ createInfo_bsrsm2 = resultIfOk =<< cusparseCreateBsrsm2Info
 newtype Info_bsric02 = Info_bsric02 { useInfo_bsric02 :: {# type bsric02Info_t #}}
 
 {-# INLINEABLE createInfo_bsric02 #-}
-createInfo_bsric02 :: IO Info_bsric02
-createInfo_bsric02 = resultIfOk =<< cusparseCreateBsric02Info
+{# fun unsafe cusparseCreateBsric02Info as createInfo_bsric02
+  { alloca- `Info_bsric02' peekI* } -> `()' checkStatus*- #}
   where
-    {# fun unsafe cusparseCreateBsric02Info
-      { alloca- `Info_bsric02' peekI* } -> `Status' cToEnum #}
-      where
-        peekI = liftM Info_bsric02 . peek
+    peekI = liftM Info_bsric02 . peek
 
 {-# INLINEABLE destroyInfo_bsric02 #-}
 {# fun unsafe cusparseDestroyBsric02Info as destroyInfo_bsric02
@@ -182,13 +161,10 @@ createInfo_bsric02 = resultIfOk =<< cusparseCreateBsric02Info
 newtype Info_bsrilu02 = Info_bsrilu02 { useInfo_bsrilu02 :: {# type bsrilu02Info_t #}}
 
 {-# INLINEABLE createInfo_bsrilu02 #-}
-createInfo_bsrilu02 :: IO Info_bsrilu02
-createInfo_bsrilu02 = resultIfOk =<< cusparseCreateBsrilu02Info
+{# fun unsafe cusparseCreateBsrilu02Info as createInfo_bsrilu02
+  { alloca- `Info_bsrilu02' peekI* } -> `()' checkStatus*- #}
   where
-    {# fun unsafe cusparseCreateBsrilu02Info
-      { alloca- `Info_bsrilu02' peekI* } -> `Status' cToEnum #}
-      where
-        peekI = liftM Info_bsrilu02 . peek
+    peekI = liftM Info_bsrilu02 . peek
 
 {-# INLINEABLE destroyInfo_bsrilu02 #-}
 {# fun unsafe cusparseDestroyBsrilu02Info as destroyInfo_bsrilu02
@@ -201,13 +177,10 @@ createInfo_bsrilu02 = resultIfOk =<< cusparseCreateBsrilu02Info
 newtype Info_csrgemm2 = Info_csrgemm2 { useInfo_csrgemm2 :: {# type csrgemm2Info_t #}}
 
 {-# INLINEABLE createInfo_csrgemm2 #-}
-createInfo_csrgemm2 :: IO Info_csrgemm2
-createInfo_csrgemm2 = resultIfOk =<< cusparseCreateCsrgemm2Info
+{# fun unsafe cusparseCreateCsrgemm2Info as createInfo_csrgemm2
+  { alloca- `Info_csrgemm2' peekI* } -> `()' checkStatus*- #}
   where
-    {# fun unsafe cusparseCreateCsrgemm2Info
-      { alloca- `Info_csrgemm2' peekI* } -> `Status' cToEnum #}
-      where
-        peekI = liftM Info_csrgemm2 . peek
+    peekI = liftM Info_csrgemm2 . peek
 
 {-# INLINEABLE destroyInfo_csrgemm2 #-}
 {# fun unsafe cusparseDestroyCsrgemm2Info as destroyInfo_csrgemm2
@@ -231,13 +204,10 @@ destroyInfo_csrgemm2 _ = cusparseError "'destroyInfo_csrgemm2' requires at least
 newtype Info_color = Info_color { useInfo_color :: {# type cusparseColorInfo_t #}}
 
 {-# INLINEABLE createInfo_color #-}
-createInfo_color :: IO Info_color
-createInfo_color = resultIfOk =<< cusparseCreateColorInfo
+{# fun unsafe cusparseCreateColorInfo as createInfo_color
+  { alloca- `Info_color' peekI* } -> `()' checkStatus*- #}
   where
-    {# fun unsafe cusparseCreateColorInfo
-      { alloca- `Info_color' peekI* } -> `Status' cToEnum #}
-      where
-        peekI = liftM Info_color . peek
+    peekI = liftM Info_color . peek
 
 {-# INLINEABLE destroyInfo_color #-}
 {# fun unsafe cusparseDestroyColorInfo as destroyInfo_color
@@ -261,13 +231,10 @@ destroyInfo_color _ = cusparseError "'destroyInfo_color' requires at least cuda-
 newtype Info_csru2csr = Info_csru2csr { useInfo_csru2csr :: {# type csru2csrInfo_t #}}
 
 {-# INLINEABLE createInfo_csru2csr #-}
-createInfo_csru2csr :: IO Info_csru2csr
-createInfo_csru2csr = resultIfOk =<< cusparseCreateCsru2csrInfo
+{# fun unsafe cusparseCreateCsru2csrInfo as createInfo_csru2csr
+  { alloca- `Info_csru2csr' peekI* } -> `()' checkStatus*- #}
   where
-    {# fun unsafe cusparseCreateCsru2csrInfo
-      { alloca- `Info_csru2csr' peekI* } -> `Status' cToEnum #}
-      where
-        peekI = liftM Info_csru2csr . peek
+    peekI = liftM Info_csru2csr . peek
 
 {-# INLINEABLE destroyInfo_csru2csr #-}
 {# fun unsafe cusparseDestroyCsru2csrInfo as destroyInfo_csru2csr

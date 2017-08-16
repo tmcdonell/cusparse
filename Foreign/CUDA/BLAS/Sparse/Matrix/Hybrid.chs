@@ -54,13 +54,10 @@ newtype Hybrid = Hybrid { useHYB :: {# type cusparseHybMat_t #}}
 -- <http://docs.nvidia.com/cuda/cusparse/index.html#cusparsecreatehybmat>
 --
 {-# INLINEABLE createHYB #-}
-createHYB :: IO Hybrid
-createHYB = resultIfOk =<< cusparseCreateHybMat
+{# fun unsafe cusparseCreateHybMat as createHYB
+  { alloca- `Hybrid' peekHYB* } -> `()' checkStatus*- #}
   where
-    {# fun unsafe cusparseCreateHybMat
-      { alloca- `Hybrid' peekHYB* } -> `Status' cToEnum #}
-      where
-        peekHYB = liftM Hybrid . peek
+    peekHYB = liftM Hybrid . peek
 
 
 -- | Destroy and release any memory associated with a hybrid matrix.

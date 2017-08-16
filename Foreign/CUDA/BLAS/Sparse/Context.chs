@@ -50,13 +50,10 @@ newtype Handle = Handle { useHandle :: {# type cusparseHandle_t #}}
 -- <http://docs.nvidia.com/cuda/cusparse/index.html#cusparsecreate>
 --
 {-# INLINEABLE create #-}
-create :: IO Handle
-create = resultIfOk =<< cusparseCreate
+{# fun unsafe cusparseCreate as create
+  { alloca- `Handle' peekHdl* } -> `()' checkStatus*- #}
   where
-    {# fun unsafe cusparseCreate
-      { alloca- `Handle' peekHdl* } -> `Status' cToEnum #}
-      where
-        peekHdl = liftM Handle . peek
+    peekHdl = liftM Handle . peek
 
 
 -- | This function releases CPU-side resources used by the cuSPARSE library. The
@@ -99,14 +96,11 @@ create = resultIfOk =<< cusparseCreate
 -- <http://docs.nvidia.com/cuda/cusparse/index.html#cusparsegetpointermode>
 --
 {-# INLINEABLE getPointerMode #-}
-getPointerMode :: Handle -> IO PointerMode
-getPointerMode h = resultIfOk =<< cusparseGetPointerMode h
+{# fun unsafe cusparseGetPointerMode as getPointerMode
+  { useHandle `Handle'
+  , alloca-   `PointerMode' peekPM*
+  }
+  -> `()' checkStatus*- #}
   where
-    {# fun unsafe cusparseGetPointerMode
-      { useHandle `Handle'
-      , alloca-   `PointerMode' peekPM*
-      }
-      -> `Status' cToEnum #}
-
     peekPM = liftM cToEnum . peek
 

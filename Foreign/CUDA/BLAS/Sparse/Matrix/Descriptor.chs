@@ -96,13 +96,10 @@ newtype MatrixDescriptor = MatrixDescriptor { useMatDescr :: {# type cusparseMat
 -- <http://docs.nvidia.com/cuda/cusparse/index.html#cusparsecreatematdescr>
 --
 {-# INLINEABLE createMatDescr #-}
-createMatDescr :: IO MatrixDescriptor
-createMatDescr = resultIfOk =<< cusparseCreateMatDescr
+{# fun unsafe cusparseCreateMatDescr as createMatDescr
+  { alloca- `MatrixDescriptor' peekMD* } -> `()' checkStatus*- #}
   where
-    {# fun unsafe cusparseCreateMatDescr
-      { alloca- `MatrixDescriptor' peekMD* } -> `Status' cToEnum #}
-      where
-        peekMD = liftM MatrixDescriptor . peek
+    peekMD = liftM MatrixDescriptor . peek
 
 -- | Release memory associated with a matrix descriptor.
 --
