@@ -18,6 +18,7 @@ module Foreign.CUDA.BLAS.Sparse.Stream (
 
 import Foreign.CUDA.Driver.Stream
 import Foreign.CUDA.BLAS.Sparse.Context
+import Foreign.CUDA.BLAS.Sparse.Error
 import Foreign.CUDA.BLAS.Sparse.Internal.C2HS
 import Foreign.CUDA.BLAS.Sparse.Internal.Types
 

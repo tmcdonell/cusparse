@@ -109,7 +109,6 @@
 --
 -- <http://docs.nvidia.com/cuda/cusparse/index.html>
 --
---
 
 module Foreign.CUDA.BLAS.Sparse (
 
