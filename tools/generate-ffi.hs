@@ -231,7 +231,6 @@ data Type
   = TVoid
   | THandle
   | TStatus
-  | TData String String String
   | TPtr (Maybe AddrSpace) Type
   | TInt (Maybe Int)  -- ^ signed integer, with optional precision
   | THalf             -- ^ 16-bit floating-point type
@@ -239,6 +238,7 @@ data Type
   | TDouble           -- ^ 64-bit floating-point
   | TComplex Type
   | TEnum String
+  | TPrim String String String
   | TDummy Int        -- ^ Used for extracting the bound variables
   deriving (Eq, Show)
 
@@ -293,9 +293,11 @@ data HType = HType
              deriving Show
 
 mkParamType :: HType -> String
-mkParamType (HType m s _) =
-  if null m then s' else m <> " " <> s'
-  where s' = "`" <> s <> "'"
+mkParamType (HType m s o) = m' <> s' <> o'
+  where
+    m' = if null m then "" else m <> " "
+    o' = if null o then "" else " " <> o
+    s' = "`" <> s <> "'"
 
 mkRetType :: HType -> String
 mkRetType (HType _ s m) =
@@ -363,13 +365,13 @@ convType = \case
                                           TPtr{} -> printf "(%s)" s
                                           _      -> s
   THandle           -> HType "useHandle" "Handle" ""
-  TStatus           -> HType "" "()" "checkStatus*"
-  TData i b o       -> HType i b o
+  TStatus           -> HType "" "()" "checkStatus*-"
+  TPrim i b o       -> HType i b o
   t                 -> error $ "unmarshallable type: " <> show t
   where
     simple s    = HType "" s ""
-    enum s      = HType "cFromEnum" s "cToEnum"
-    floating s  = HType ("C" <> s) s ("fromC" <> s)
+    enum s      = HType "cFromEnum" s ""
+    floating s  = HType ("C" <> s) s ""
     fcomplex s  = HType "withComplex*" s ""
     --
     pointer Nothing s       = HType "castPtr"  ("Ptr " <> s) ""
@@ -387,6 +389,10 @@ dptr = TPtr (Just Device)
 
 hptr :: Type -> Type
 hptr = TPtr (Just Host)
+
+result :: Type -> Type
+result (TInt ms) = TPrim "alloca-" (maybe "Int" (printf "Int%d") ms) "peekIntConv*"
+result _         = error "unmarshallable output type"
 
 void :: Type
 void = TVoid
@@ -440,10 +446,10 @@ policy :: Type
 policy = TEnum "Policy"
 
 info :: Type
-info = TData "useInfo" "Info" ""
+info = TPrim "useInfo" "Info" ""
 
 mkInfo :: String -> Type
-mkInfo t = TData ("useInfo_" <> t) ("Info_" <> t) ""
+mkInfo t = TPrim ("useInfo_" <> t) ("Info_" <> t) ""
 
 info_csrsv2 :: Type
 info_csrsv2 = mkInfo "csrsv2"
@@ -476,10 +482,10 @@ info_csru2csr :: Type
 info_csru2csr = mkInfo "csru2csr"
 
 matdescr :: Type
-matdescr = TData "useMatDescr" "MatrixDescriptor" ""
+matdescr = TPrim "useMatDescr" "MatrixDescriptor" ""
 
 hyb :: Type
-hyb = TData "useHYB" "Hybrid" ""
+hyb = TPrim "useHYB" "Hybrid" ""
 
 partition :: Type
 partition = TEnum "HybridPartition"
@@ -514,13 +520,13 @@ funsL2 =
   [ gpA $ \ a   -> fun "?bsrmv"             [ dir, transpose, int, int, int, ptr a, matdescr, dptr a, dptr int32, dptr int32, int, dptr a, ptr a, dptr a ]
   , gpA $ \ a   -> fun "?bsrxmv"            [ dir, transpose, int, int, int, int, ptr a, matdescr, dptr a, dptr int32, dptr int32, dptr int32, dptr int32, int, dptr a, ptr a, dptr a ]
   , gpA $ \ a   -> fun "?csrmv"             [ transpose, int, int, int, ptr a, matdescr, dptr a, dptr int32, dptr int32, dptr a, ptr a, dptr a ]
-  , gpA $ \ a   -> fun "?bsrsv2_bufferSize" [ dir, transpose, int, int, matdescr, dptr a, dptr int32, dptr int32, int, info_bsrsv2, ptr int32 ]
+  , gpA $ \ a   -> fun "?bsrsv2_bufferSize" [ dir, transpose, int, int, matdescr, dptr a, dptr int32, dptr int32, int, info_bsrsv2, result int ]
   , gpA $ \ a   -> fun "?bsrsv2_analysis"   [ dir, transpose, int, int, matdescr, dptr a, dptr int32, dptr int32, int, info_bsrsv2, policy, dptr void ]
   , gpA $ \ a   -> fun "?bsrsv2_solve"      [ dir, transpose, int, int, ptr a, matdescr, dptr a, dptr int32, dptr int32, int, info_bsrsv2, dptr a, dptr a, policy, dptr void ]
   , gp  $          fun "xbsrsv2_zeroPivot"  [ info_bsrsv2, ptr int32 ]
   , gpA $ \ a   -> fun "?csrsv_analysis"    [ transpose, int, int, matdescr, dptr a, dptr int32, dptr int32, info ]
   , gpA $ \ a   -> fun "?csrsv_solve"       [ transpose, int, ptr a, matdescr, dptr a, dptr int32, dptr int32, info, dptr a, dptr a ]
-  , gpA $ \ a   -> fun "?csrsv2_bufferSize" [ transpose, int, int, matdescr, dptr a, dptr int32, dptr int32, info_csrsv2, ptr int32 ]
+  , gpA $ \ a   -> fun "?csrsv2_bufferSize" [ transpose, int, int, matdescr, dptr a, dptr int32, dptr int32, info_csrsv2, result int ]
   , gpA $ \ a   -> fun "?csrsv2_analysis"   [ transpose, int, int, matdescr, dptr a, dptr int32, dptr int32, info_csrsv2, policy, dptr void ]
   , gpA $ \ a   -> fun "?csrsv2_solve"      [ transpose, int, int, ptr a, matdescr, dptr a, dptr int32, dptr int32, info_csrsv2, dptr a, dptr a, policy, dptr void ]
   , gp  $          fun "xcsrsv2_zeroPivot"  [ info_csrsv2, ptr int32 ]
@@ -534,7 +540,7 @@ funsL2 =
 funsL2_cuda75 :: [FunGroup]
 funsL2_cuda75 =
   [ gpA $ \ a   -> fun "?gemvi"             [ transpose, int, int, ptr a, dptr a, int, int, dptr a, dptr int32, ptr a, dptr a, idxBase, dptr void ]
-  , gpA $ \ _   -> fun "?gemvi_bufferSize"  [ transpose, int, int, int, ptr int32 ]
+  , gpA $ \ _   -> fun "?gemvi_bufferSize"  [ transpose, int, int, int, result int ]
   ]
 
 -- Level 2 operations introduced in CUDA-8.0
@@ -542,7 +548,7 @@ funsL2_cuda75 =
 funsL2_cuda80 :: [FunGroup]
 funsL2_cuda80 =
   [ gp  $          fun "csrmvEx"            [ alg, transpose, int, int, int, ptr void, dtype, matdescr, dptr void, dtype, dptr int32, dptr int32, dptr void, dtype, ptr void, dtype, dptr void, dtype, dtype, dptr void ]
-  , gp  $          fun "csrmvEx_bufferSize" [ alg, transpose, int, int, int, ptr void, dtype, matdescr, dptr void, dtype, dptr int32, dptr int32, dptr void, dtype, ptr void, dtype, dptr void, dtype, dtype, ptr int64 ]
+  , gp  $          fun "csrmvEx_bufferSize" [ alg, transpose, int, int, int, ptr void, dtype, matdescr, dptr void, dtype, dptr int32, dptr int32, dptr void, dtype, ptr void, dtype, dptr void, dtype, dtype, result int ]
   , gpA $ \ a   -> fun "?csrmv_mp"          [ transpose, int, int, int, ptr a, matdescr, dptr a, dptr int32, dptr int32, dptr a, ptr a, dptr a ]
   , gp  $          fun "csrsv_analysisEx"   [ transpose, int, int, matdescr, dptr void, dtype, dptr int32, dptr int32, info, dtype ]
   , gp  $          fun "csrsv_solveEx"      [ transpose, int, ptr void, dtype, matdescr, dptr void, dtype, dptr int32, dptr int32, info, dptr void, dtype, dptr void, dtype, dtype ]
@@ -561,7 +567,7 @@ funsL3 =
   , gpA $ \ a   -> fun "?csrsm_analysis"    [ transpose, int, int, matdescr, dptr a, dptr int32, dptr int32, info ]
   , gpA $ \ a   -> fun "?csrsm_solve"       [ transpose, int, int, ptr a, matdescr, dptr a, dptr int32, dptr int32, info, dptr a, int, dptr a, int ]
   , gpA $ \ a   -> fun "?bsrmm"             [ dir, transpose, transpose, int, int, int, int, ptr a, matdescr, dptr a, dptr int32, dptr int32, int, dptr a, int, ptr a, dptr a, int ]
-  , gpA $ \ a   -> fun "?bsrsm2_bufferSize" [ dir, transpose, transpose, int, int, int, matdescr, dptr a, dptr int32, dptr int32, int, info_bsrsm2, ptr int32 ]
+  , gpA $ \ a   -> fun "?bsrsm2_bufferSize" [ dir, transpose, transpose, int, int, int, matdescr, dptr a, dptr int32, dptr int32, int, info_bsrsm2, result int ]
   , gpA $ \ a   -> fun "?bsrsm2_analysis"   [ dir, transpose, transpose, int, int, int, matdescr, dptr a, dptr int32, dptr int32, int, info_bsrsm2, policy, ptr void ]
   , gpA $ \ a   -> fun "?bsrsm2_solve"      [ dir, transpose, transpose, int, int, int, ptr a, matdescr, dptr a, dptr int32, dptr int32, int, info_bsrsm2, dptr a, int, dptr a, int, policy, ptr void ]
   , gp  $          fun "xbsrsm2_zeroPivot"  [ info_bsrsm2, ptr int32 ]
@@ -575,7 +581,7 @@ funsL3 =
 
 funsL3_cuda70 :: [FunGroup]
 funsL3_cuda70 =
-  [ gpA $ \ a   -> fun "?csrgemm2_bufferSizeExt"  [ int, int, int, ptr a, matdescr, int, dptr int32, dptr int32, matdescr, int, dptr int32, dptr int32, ptr a, matdescr, int, dptr int32, dptr int32, info_csrgemm2, ptr int64 ]
+  [ gpA $ \ a   -> fun "?csrgemm2_bufferSizeExt"  [ int, int, int, ptr a, matdescr, int, dptr int32, dptr int32, matdescr, int, dptr int32, dptr int32, ptr a, matdescr, int, dptr int32, dptr int32, info_csrgemm2, result int ]
   , gp  $          fun "xcsrgemm2Nnz"             [ int, int, int, matdescr, int, dptr int32, dptr int32, matdescr, int, dptr int32, dptr int32, matdescr, int, dptr int32, dptr int32, matdescr, dptr int32, ptr int32, info_csrgemm2, dptr void ]
   , gpA $ \ a   -> fun "?csrgemm2"                [ int, int, int, ptr a, matdescr, int, dptr a, dptr int32, dptr int32, matdescr, int, dptr a, dptr int32, dptr int32, ptr a, matdescr, int, dptr a, dptr int32, dptr int32, matdescr, dptr a, dptr int32, dptr int32, info_csrgemm2, dptr void ]
   ]
@@ -588,22 +594,22 @@ funsL3_cuda70 =
 funsPrecond :: [FunGroup]
 funsPrecond =
   [ gpA $ \ a   -> fun "?csric0"                [ transpose, int, matdescr, dptr a, dptr int32, dptr int32, info ]
-  , gpA $ \ a   -> fun "?csric02_bufferSize"    [ int, int, matdescr, dptr a, dptr int32, dptr int32, info_csric02, ptr int32 ]
+  , gpA $ \ a   -> fun "?csric02_bufferSize"    [ int, int, matdescr, dptr a, dptr int32, dptr int32, info_csric02, result int ]
   , gpA $ \ a   -> fun "?csric02_analysis"      [ int, int, matdescr, dptr a, dptr int32, dptr int32, info_csric02, policy, dptr void ]
   , gpA $ \ a   -> fun "?csric02"               [ int, int, matdescr, dptr a, dptr int32, dptr int32, info_csric02, policy, dptr void ]
   , gp  $          fun "xcsric02_zeroPivot"     [ info_csric02, ptr int32 ]
   , gpA $ \ a   -> fun "?csrilu0"               [ transpose, int, matdescr, dptr a, dptr int32, dptr int32, info ]
   , gpA $ \ a   -> fun "?csrilu02_numericBoost" [ info_csrilu02, int, ptr double, ptr a ]
-  , gpA $ \ a   -> fun "?csrilu02_bufferSize"   [ int, int, matdescr, dptr a, dptr int32, dptr int32, info_csrilu02, ptr int32 ]
+  , gpA $ \ a   -> fun "?csrilu02_bufferSize"   [ int, int, matdescr, dptr a, dptr int32, dptr int32, info_csrilu02, result int ]
   , gpA $ \ a   -> fun "?csrilu02_analysis"     [ int, int, matdescr, dptr a, dptr int32, dptr int32, info_csrilu02, policy, dptr void ]
   , gpA $ \ a   -> fun "?csrilu02"              [ int, int, matdescr, dptr a, dptr int32, dptr int32, info_csrilu02, policy, dptr void ]
   , gp  $          fun "xcsrilu02_zeroPivot"    [ info_csrilu02, ptr int32 ]
-  , gpA $ \ a   -> fun "?bsric02_bufferSize"    [ dir, int, int, matdescr, dptr a, dptr int32, dptr int32, int, info_bsric02, ptr int32 ]
+  , gpA $ \ a   -> fun "?bsric02_bufferSize"    [ dir, int, int, matdescr, dptr a, dptr int32, dptr int32, int, info_bsric02, result int ]
   , gpA $ \ a   -> fun "?bsric02_analysis"      [ dir, int, int, matdescr, dptr a, dptr int32, dptr int32, int, info_bsric02, policy, dptr void ]
   , gpA $ \ a   -> fun "?bsric02"               [ dir, int, int, matdescr, dptr a, dptr int32, dptr int32, int, info_bsric02, policy, dptr void ]
   , gp  $          fun "xbsric02_zeroPivot"     [ info_bsric02, ptr int32 ]
   , gpA $ \ a   -> fun "?bsrilu02_numericBoost" [ info_bsrilu02, int, ptr double, ptr a ]
-  , gpA $ \ a   -> fun "?bsrilu02_bufferSize"   [ dir, int, int, matdescr, dptr a, dptr int32, dptr int32, int, info_bsrilu02, ptr int32 ]
+  , gpA $ \ a   -> fun "?bsrilu02_bufferSize"   [ dir, int, int, matdescr, dptr a, dptr int32, dptr int32, int, info_bsrilu02, result int ]
   , gpA $ \ a   -> fun "?bsrilu02_analysis"     [ dir, int, int, matdescr, dptr a, dptr int32, dptr int32, int, info_bsrilu02, policy, dptr void ]
   , gpA $ \ a   -> fun "?bsrilu02"              [ dir, int, int, matdescr, dptr a, dptr int32, dptr int32, int, info_bsrilu02, policy, dptr void ]
   , gp  $          fun "xbsrilu02_zeroPivot"    [ info_bsrilu02, ptr int32 ]
@@ -638,13 +644,13 @@ funsReorder_cuda70 =
 funsConvert :: [FunGroup]
 funsConvert =
   [ gpA $ \ a   -> fun "?bsr2csr"                   [ dir, int, int, matdescr, dptr a, dptr int32, dptr int32, int, matdescr, dptr a, dptr int32, dptr int32 ]
-  , gpA $ \ a   -> fun "?gebsr2gebsc_bufferSize"    [ int, int, int, dptr a, dptr int32, dptr int32, int, int, ptr int32 ]
+  , gpA $ \ a   -> fun "?gebsr2gebsc_bufferSize"    [ int, int, int, dptr a, dptr int32, dptr int32, int, int, result int ]
   , gpA $ \ a   -> fun "?gebsr2gebsc"               [ int, int, int, dptr a, dptr int32, dptr int32, int, int, dptr a, dptr int32, dptr int32, action, idxBase, dptr void ]
-  , gpA $ \ a   -> fun "?gebsr2gebsr_bufferSize"    [ dir, int, int, int, matdescr, dptr a, dptr int32, dptr int32, int, int, int, int, ptr int32 ]
+  , gpA $ \ a   -> fun "?gebsr2gebsr_bufferSize"    [ dir, int, int, int, matdescr, dptr a, dptr int32, dptr int32, int, int, int, int, result int ]
   , gpA $ \ a   -> fun "?gebsr2gebsr"               [ dir, int, int, int, matdescr, dptr a, dptr int32, dptr int32, int, int, matdescr, dptr a, dptr int32, dptr int32, int, int, dptr void ]
   , gp  $          fun "xgebsr2gebsrNnz"            [ dir, int, int, int, matdescr, dptr int32, dptr int32, int, int, matdescr, dptr int32, int, int, ptr int32, dptr void ]
   , gpA $ \ a   -> fun "?gebsr2csr"                 [ dir, int, int, matdescr, dptr a, dptr int32, dptr int32, int, int, matdescr, dptr a, dptr int32, dptr int32 ]
-  , gpA $ \ a   -> fun "?csr2gebsr_bufferSize"      [ dir, int, int, matdescr, dptr a, dptr int32, dptr int32, int, int, ptr int32 ]
+  , gpA $ \ a   -> fun "?csr2gebsr_bufferSize"      [ dir, int, int, matdescr, dptr a, dptr int32, dptr int32, int, int, result int ]
   , gpA $ \ a   -> fun "?csr2gebsr"                 [ dir, int, int, matdescr, dptr a, dptr int32, dptr int32, matdescr, dptr a, dptr int32, dptr int32, int, int, dptr void ]
   , gp  $          fun "xcsr2gebsrNnz"              [ dir, int, int, matdescr, dptr int32, dptr int32, matdescr, dptr int32, int, int, ptr int32, dptr void ]
   , gp  $          fun "xcoo2csr"                   [ dptr int32, int, int, dptr int32, idxBase ]
@@ -668,14 +674,14 @@ funsConvert =
 funsConvert_cuda70 :: [FunGroup]
 funsConvert_cuda70 =
   [ gp  $          fun "createIdentityPermutation"  [ int, dptr int32 ]
-  , gp  $          fun "xcoosort_bufferSizeExt"     [ int, int, int, dptr int32, dptr int32, ptr int64 ]
+  , gp  $          fun "xcoosort_bufferSizeExt"     [ int, int, int, dptr int32, dptr int32, result int ]
   , gp  $          fun "xcoosortByRow"              [ int, int, int, dptr int32, dptr int32, dptr int32, dptr void ]
   , gp  $          fun "xcoosortByColumn"           [ int, int, int, dptr int32, dptr int32, dptr int32, dptr void ]
-  , gp  $          fun "xcsrsort_bufferSizeExt"     [ int, int, int, dptr int32, dptr int32, ptr int64 ]
+  , gp  $          fun "xcsrsort_bufferSizeExt"     [ int, int, int, dptr int32, dptr int32, result int ]
   , gp  $          fun "xcsrsort"                   [ int, int, int, matdescr, dptr int32, dptr int32, dptr int32, dptr void ]
-  , gp  $          fun "xcscsort_bufferSizeExt"     [ int, int, int, dptr int32, dptr int32, ptr int64 ]
+  , gp  $          fun "xcscsort_bufferSizeExt"     [ int, int, int, dptr int32, dptr int32, result int ]
   , gp  $          fun "xcscsort"                   [ int, int, int, matdescr, dptr int32, dptr int32, dptr int32, dptr void ]
-  , gpA $ \ a   -> fun "?csru2csr_bufferSizeExt"    [ int, int, int, dptr a, dptr int32, dptr int32, info_csru2csr, ptr int64 ]
+  , gpA $ \ a   -> fun "?csru2csr_bufferSizeExt"    [ int, int, int, dptr a, dptr int32, dptr int32, info_csru2csr, result int ]
   , gpA $ \ a   -> fun "?csru2csr"                  [ int, int, int, matdescr, dptr a, dptr int32, dptr int32, info_csru2csr, dptr void ]
   , gpA $ \ a   -> fun "?csr2csru"                  [ int, int, int, matdescr, dptr a, dptr int32, dptr int32, info_csru2csr, dptr void ]
   ]

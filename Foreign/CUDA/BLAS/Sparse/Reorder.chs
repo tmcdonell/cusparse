@@ -58,16 +58,16 @@ useHostP = useHostPtr . castHostPtr
 #if CUDA_VERSION >= 7000
 
 {-# INLINEABLE scsrcolor #-}
-{# fun unsafe cusparseScsrcolor as scsrcolor { useHandle `Handle', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Float', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useDevP `DevicePtr Float', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useInfo_color `Info_color' } -> `()' checkStatus* #}
+{# fun unsafe cusparseScsrcolor as scsrcolor { useHandle `Handle', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Float', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useDevP `DevicePtr Float', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useInfo_color `Info_color' } -> `()' checkStatus*- #}
 
 {-# INLINEABLE dcsrcolor #-}
-{# fun unsafe cusparseDcsrcolor as dcsrcolor { useHandle `Handle', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Double', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useDevP `DevicePtr Double', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useInfo_color `Info_color' } -> `()' checkStatus* #}
+{# fun unsafe cusparseDcsrcolor as dcsrcolor { useHandle `Handle', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Double', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useDevP `DevicePtr Double', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useInfo_color `Info_color' } -> `()' checkStatus*- #}
 
 {-# INLINEABLE ccsrcolor #-}
-{# fun unsafe cusparseCcsrcolor as ccsrcolor { useHandle `Handle', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr (Complex Float)', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useDevP `DevicePtr (Complex Float)', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useInfo_color `Info_color' } -> `()' checkStatus* #}
+{# fun unsafe cusparseCcsrcolor as ccsrcolor { useHandle `Handle', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr (Complex Float)', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useDevP `DevicePtr (Complex Float)', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useInfo_color `Info_color' } -> `()' checkStatus*- #}
 
 {-# INLINEABLE zcsrcolor #-}
-{# fun unsafe cusparseZcsrcolor as zcsrcolor { useHandle `Handle', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useInfo_color `Info_color' } -> `()' checkStatus* #}
+{# fun unsafe cusparseZcsrcolor as zcsrcolor { useHandle `Handle', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useInfo_color `Info_color' } -> `()' checkStatus*- #}
 #else
 
 scsrcolor :: Handle -> Int -> Int -> MatrixDescriptor -> DevicePtr Float -> DevicePtr Int32 -> DevicePtr Int32 -> DevicePtr Float -> DevicePtr Int32 -> DevicePtr Int32 -> DevicePtr Int32 -> Info_color -> IO ()
