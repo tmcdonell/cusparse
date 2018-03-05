@@ -1,7 +1,10 @@
 Haskell FFI Bindings to cuSPARSE
 ================================
 
-[![Build status](https://travis-ci.org/tmcdonell/cusparse.svg?branch=master)](https://travis-ci.org/tmcdonell/cusparse)
+[![Travis build status](https://img.shields.io/travis/tmcdonell/cusparse/master.svg?label=linux)](https://travis-ci.org/tmcdonell/cusparse)
+[![AppVeyor build status](https://img.shields.io/appveyor/ci/tmcdonell/cusparse/master.svg?label=windows)](https://ci.appveyor.com/project/tmcdonell/cusparse)
+[![Stackage LTS](https://stackage.org/package/cusparse/badge/lts)](https://stackage.org/lts/package/cusparse)
+[![Stackage Nightly](https://stackage.org/package/cusparse/badge/nightly)](https://stackage.org/nightly/package/cusparse)
 [![Hackage](https://img.shields.io/hackage/v/cusparse.svg)](https://hackage.haskell.org/package/cusparse)
 
 The cuSPARSE library contains a set of basic linear algebra subroutines for
