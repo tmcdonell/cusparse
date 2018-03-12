@@ -1,5 +1,5 @@
 name:                   cusparse
-version:                0.1.0.0
+version:                0.1.0.1
 synopsis:               FFI bindings to the CUDA Sparse BLAS library
 description:
     The cuSPARSE library contains a set of basic linear algebra subroutines for
@@ -86,6 +86,6 @@ source-repository head
 source-repository this
     type:               git
     location:           https://github.com/tmcdonell/cusparse
-    tag:                0.1.0.0
+    tag:                0.1.0.1
 
 -- vim: nospell
