@@ -93,6 +93,7 @@ main = do
   mkC2HS "Precondition" (docs "preconditioners") pcexps
     [(Nothing,   funsPrecond)
     ,(Just 8000, funsPrecond_cuda80)
+    ,(Just 9000, funsPrecond_cuda90)
     ]
 
   mkC2HS "Reorder" (docs "reorderings") roexps
@@ -645,6 +646,16 @@ funsPrecond =
 funsPrecond_cuda80 :: [FunGroup]
 funsPrecond_cuda80 =
   [ gp  $          fun "csrilu0Ex"              [ transpose, int, matdescr, dptr void, dtype, dptr int32, dptr int32, info, dtype ]
+  ]
+
+funsPrecond_cuda90 :: [FunGroup]
+funsPrecond_cuda90 =
+  [ gpA $ \ a   -> fun "?gtsv2_bufferSizeExt"             [ int, int, dptr a, dptr a, dptr a, dptr a, int, result int ]
+  , gpA $ \ a   -> fun "?gtsv2"                           [ int, int, dptr a, dptr a, dptr a, dptr a, int, dptr void ]
+  , gpA $ \ a   -> fun "?gtsv2_nopivot_bufferSizeExt"     [ int, int, dptr a, dptr a, dptr a, dptr a, int, result int ]
+  , gpA $ \ a   -> fun "?gtsv2_nopivot"                   [ int, int, dptr a, dptr a, dptr a, dptr a, int, dptr void ]
+  , gpA $ \ a   -> fun "?gtsv2StridedBatch_bufferSizeExt" [ int, dptr a, dptr a, dptr a, dptr a, int, int, result int ]
+  , gpA $ \ a   -> fun "?gtsv2StridedBatch"               [ int, dptr a, dptr a, dptr a, dptr a, int, int, dptr void ]
   ]
 
 
