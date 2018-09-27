@@ -72,6 +72,7 @@ main = do
                 , "Hybrid"
                 , "HybridPartition(..)"
                 , "Info_csru2csr"
+                , "Info_prune"
                 ]
   --
   mkC2HS "Level1" (docsL 1) l1exps
@@ -103,6 +104,7 @@ main = do
     [(Nothing,   funsConvert)
     ,(Just 7000, funsConvert_cuda70)
     ,(Just 8000, funsConvert_cuda80)
+    ,(Just 9010, funsConvert_cuda90)
     ]
 
 
@@ -486,6 +488,9 @@ info_color = mkInfo "color"
 info_csru2csr :: Type
 info_csru2csr = mkInfo "csru2csr"
 
+info_prune :: Type
+info_prune = mkInfo "prune"
+
 matdescr :: Type
 matdescr = TPrim "useMatDescr" "MatrixDescriptor" ""
 
@@ -707,9 +712,27 @@ funsConvert_cuda70 =
 
 funsConvert_cuda80 :: [FunGroup]
 funsConvert_cuda80 =
-  [ gp  $          fun "csr2cscEx"                [ int, int, int, dptr void, dtype, dptr int32, dptr int32, dptr void, dtype, dptr int32, dptr int32, action, idxBase, dtype ]
+  [ gp  $          fun "csr2cscEx"                  [ int, int, int, dptr void, dtype, dptr int32, dptr int32, dptr void, dtype, dptr int32, dptr int32, action, idxBase, dtype ]
   , gpA $ \ a   -> fun "?csr2csr_compress"          [ int, int, matdescr, dptr a, dptr int32, dptr int32, int, dptr int32, dptr a, dptr int32, dptr int32, a ]
   ]
+
+funsConvert_cuda90 :: [FunGroup]
+funsConvert_cuda90 =
+  [ gpS $ \ a   -> fun "?pruneDense2csr_bufferSizeExt"              [ int, int, dptr a, int, ptr a, matdescr, dptr a, dptr int32, dptr int32, result int ]
+  , gpS $ \ a   -> fun "?pruneDense2csrNnz"                         [ int, int, dptr a, int, ptr a, matdescr, dptr int32, ptr int32, dptr void ]
+  , gpS $ \ a   -> fun "?pruneDense2csr"                            [ int, int, dptr a, int, ptr a, matdescr, dptr a, dptr int32, dptr int32, dptr void ]
+  , gpS $ \ a   -> fun "?pruneCsr2csr_bufferSizeExt"                [ int, int, int, matdescr, dptr a, dptr int32, dptr int32, ptr a, matdescr, dptr a, dptr int32, dptr int32, result int ]
+  , gpS $ \ a   -> fun "?pruneCsr2csrNnz"                           [ int, int, int, matdescr, dptr a, dptr int32, dptr int32, ptr a, matdescr, dptr a, ptr int32, dptr void ]
+  , gpS $ \ a   -> fun "?pruneCsr2csr"                              [ int, int, int, matdescr, dptr a, dptr int32, dptr int32, ptr a, matdescr, dptr a, dptr int32, dptr int32, dptr void ]
+  , gpS $ \ a   -> fun "?pruneDense2csrByPercentage_bufferSizeExt"  [ int, int, dptr a, int, float, matdescr, dptr a, dptr int32, dptr int32, info_prune, result int ]
+  , gpS $ \ a   -> fun "?pruneDense2csrNnzByPercentage"             [ int, int, dptr a, int, float, matdescr, dptr int32, ptr int32, info_prune, dptr void ]
+  , gpS $ \ a   -> fun "?pruneDense2csrByPercentage"                [ int, int, dptr a, int, float, matdescr, dptr a, dptr int32, dptr int32, info_prune, dptr void ]
+  , gpS $ \ a   -> fun "?pruneCsr2csrByPercentage_bufferSizeExt"    [ int, int, int, matdescr, dptr a, dptr int32, dptr int32, float, matdescr, dptr a, dptr int32, dptr int32, info_prune, result int ]
+  , gpS $ \ a   -> fun "?pruneCsr2csrNnzByPercentage"               [ int, int, int, matdescr, dptr a, dptr int32, dptr int32, float, matdescr, dptr int32, ptr int, info_prune, dptr void ]
+  , gpS $ \ a   -> fun "?pruneCsr2csrByPercentage"                  [ int, int, int, matdescr, dptr a, dptr int32, dptr int32, float, matdescr, dptr a, dptr int32, dptr int32, info_prune, dptr void ]
+  , gpA $ \ a   -> fun "?nnz_compress"                              [ int, matdescr, dptr a, dptr int32, dptr int32, ptr int32, a ]
+  ]
+
 
 data FunGroup
   = FunGroup
@@ -732,6 +755,10 @@ gpH = makeFunGroup1 decorate (floatingTypes <> return half)
 -- | Function group over @s d@.
 gpR :: (Type -> Fun) -> FunGroup
 gpR = makeFunGroup1 decorate realTypes
+
+-- | Function group over @s d h@
+gpS :: (Type -> Fun) -> FunGroup
+gpS = makeFunGroup1 decorate [ float, double, half ]
 
 -- | Function group over @s d@ but relabel them as @c z@.
 gpQ :: (Type -> Fun) -> FunGroup

@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 ## [next]
 ### Added
   * Level 3 operations from CUDA-9.2
+  * Format conversion operations from CUDA-9.0
 
 ## [0.1.0.1] - 2018-03-12
 ### Fixed

@@ -27,6 +27,7 @@ module Foreign.CUDA.BLAS.Sparse.Convert (
   Hybrid,
   HybridPartition(..),
   Info_csru2csr,
+  Info_prune,
   sbsr2csr,
   dbsr2csr,
   cbsr2csr,
@@ -141,6 +142,46 @@ module Foreign.CUDA.BLAS.Sparse.Convert (
   dcsr2csr_compress,
   ccsr2csr_compress,
   zcsr2csr_compress,
+  spruneDense2csr_bufferSizeExt,
+  dpruneDense2csr_bufferSizeExt,
+  hpruneDense2csr_bufferSizeExt,
+  spruneDense2csrNnz,
+  dpruneDense2csrNnz,
+  hpruneDense2csrNnz,
+  spruneDense2csr,
+  dpruneDense2csr,
+  hpruneDense2csr,
+  spruneCsr2csr_bufferSizeExt,
+  dpruneCsr2csr_bufferSizeExt,
+  hpruneCsr2csr_bufferSizeExt,
+  spruneCsr2csrNnz,
+  dpruneCsr2csrNnz,
+  hpruneCsr2csrNnz,
+  spruneCsr2csr,
+  dpruneCsr2csr,
+  hpruneCsr2csr,
+  spruneDense2csrByPercentage_bufferSizeExt,
+  dpruneDense2csrByPercentage_bufferSizeExt,
+  hpruneDense2csrByPercentage_bufferSizeExt,
+  spruneDense2csrNnzByPercentage,
+  dpruneDense2csrNnzByPercentage,
+  hpruneDense2csrNnzByPercentage,
+  spruneDense2csrByPercentage,
+  dpruneDense2csrByPercentage,
+  hpruneDense2csrByPercentage,
+  spruneCsr2csrByPercentage_bufferSizeExt,
+  dpruneCsr2csrByPercentage_bufferSizeExt,
+  hpruneCsr2csrByPercentage_bufferSizeExt,
+  spruneCsr2csrNnzByPercentage,
+  dpruneCsr2csrNnzByPercentage,
+  hpruneCsr2csrNnzByPercentage,
+  spruneCsr2csrByPercentage,
+  dpruneCsr2csrByPercentage,
+  hpruneCsr2csrByPercentage,
+  snnz_compress,
+  dnnz_compress,
+  cnnz_compress,
+  znnz_compress,
 
 ) where
 
@@ -591,4 +632,247 @@ ccsr2csr_compress _ _ _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'ccsr2csr_compress'
 
 zcsr2csr_compress :: Handle -> Int -> Int -> MatrixDescriptor -> DevicePtr (Complex Double) -> DevicePtr Int32 -> DevicePtr Int32 -> Int -> DevicePtr Int32 -> DevicePtr (Complex Double) -> DevicePtr Int32 -> DevicePtr Int32 -> (Complex Double) -> IO ()
 zcsr2csr_compress _ _ _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'zcsr2csr_compress' requires at least cuda-8.0"
+#endif
+#if CUDA_VERSION >= 9010
+
+{-# INLINEABLE spruneDense2csr_bufferSizeExt #-}
+{# fun unsafe cusparseSpruneDense2csr_bufferSizeExt as spruneDense2csr_bufferSizeExt { useHandle `Handle', `Int', `Int', useDevP `DevicePtr Float', `Int', castPtr `Ptr Float', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Float', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', alloca- `Int' peekIntConv* } -> `()' checkStatus*- #}
+
+{-# INLINEABLE dpruneDense2csr_bufferSizeExt #-}
+{# fun unsafe cusparseDpruneDense2csr_bufferSizeExt as dpruneDense2csr_bufferSizeExt { useHandle `Handle', `Int', `Int', useDevP `DevicePtr Double', `Int', castPtr `Ptr Double', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Double', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', alloca- `Int' peekIntConv* } -> `()' checkStatus*- #}
+
+{-# INLINEABLE hpruneDense2csr_bufferSizeExt #-}
+{# fun unsafe cusparseHpruneDense2csr_bufferSizeExt as hpruneDense2csr_bufferSizeExt { useHandle `Handle', `Int', `Int', useDevP `DevicePtr Half', `Int', castPtr `Ptr Half', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Half', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', alloca- `Int' peekIntConv* } -> `()' checkStatus*- #}
+
+{-# INLINEABLE spruneDense2csrNnz #-}
+{# fun unsafe cusparseSpruneDense2csrNnz as spruneDense2csrNnz { useHandle `Handle', `Int', `Int', useDevP `DevicePtr Float', `Int', castPtr `Ptr Float', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Int32', castPtr `Ptr Int32', useDevP `DevicePtr ()' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE dpruneDense2csrNnz #-}
+{# fun unsafe cusparseDpruneDense2csrNnz as dpruneDense2csrNnz { useHandle `Handle', `Int', `Int', useDevP `DevicePtr Double', `Int', castPtr `Ptr Double', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Int32', castPtr `Ptr Int32', useDevP `DevicePtr ()' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE hpruneDense2csrNnz #-}
+{# fun unsafe cusparseHpruneDense2csrNnz as hpruneDense2csrNnz { useHandle `Handle', `Int', `Int', useDevP `DevicePtr Half', `Int', castPtr `Ptr Half', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Int32', castPtr `Ptr Int32', useDevP `DevicePtr ()' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE spruneDense2csr #-}
+{# fun unsafe cusparseSpruneDense2csr as spruneDense2csr { useHandle `Handle', `Int', `Int', useDevP `DevicePtr Float', `Int', castPtr `Ptr Float', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Float', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useDevP `DevicePtr ()' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE dpruneDense2csr #-}
+{# fun unsafe cusparseDpruneDense2csr as dpruneDense2csr { useHandle `Handle', `Int', `Int', useDevP `DevicePtr Double', `Int', castPtr `Ptr Double', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Double', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useDevP `DevicePtr ()' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE hpruneDense2csr #-}
+{# fun unsafe cusparseHpruneDense2csr as hpruneDense2csr { useHandle `Handle', `Int', `Int', useDevP `DevicePtr Half', `Int', castPtr `Ptr Half', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Half', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useDevP `DevicePtr ()' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE spruneCsr2csr_bufferSizeExt #-}
+{# fun unsafe cusparseSpruneCsr2csr_bufferSizeExt as spruneCsr2csr_bufferSizeExt { useHandle `Handle', `Int', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Float', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', castPtr `Ptr Float', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Float', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', alloca- `Int' peekIntConv* } -> `()' checkStatus*- #}
+
+{-# INLINEABLE dpruneCsr2csr_bufferSizeExt #-}
+{# fun unsafe cusparseDpruneCsr2csr_bufferSizeExt as dpruneCsr2csr_bufferSizeExt { useHandle `Handle', `Int', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Double', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', castPtr `Ptr Double', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Double', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', alloca- `Int' peekIntConv* } -> `()' checkStatus*- #}
+
+{-# INLINEABLE hpruneCsr2csr_bufferSizeExt #-}
+{# fun unsafe cusparseHpruneCsr2csr_bufferSizeExt as hpruneCsr2csr_bufferSizeExt { useHandle `Handle', `Int', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Half', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', castPtr `Ptr Half', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Half', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', alloca- `Int' peekIntConv* } -> `()' checkStatus*- #}
+
+{-# INLINEABLE spruneCsr2csrNnz #-}
+{# fun unsafe cusparseSpruneCsr2csrNnz as spruneCsr2csrNnz { useHandle `Handle', `Int', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Float', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', castPtr `Ptr Float', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Float', castPtr `Ptr Int32', useDevP `DevicePtr ()' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE dpruneCsr2csrNnz #-}
+{# fun unsafe cusparseDpruneCsr2csrNnz as dpruneCsr2csrNnz { useHandle `Handle', `Int', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Double', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', castPtr `Ptr Double', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Double', castPtr `Ptr Int32', useDevP `DevicePtr ()' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE hpruneCsr2csrNnz #-}
+{# fun unsafe cusparseHpruneCsr2csrNnz as hpruneCsr2csrNnz { useHandle `Handle', `Int', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Half', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', castPtr `Ptr Half', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Half', castPtr `Ptr Int32', useDevP `DevicePtr ()' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE spruneCsr2csr #-}
+{# fun unsafe cusparseSpruneCsr2csr as spruneCsr2csr { useHandle `Handle', `Int', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Float', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', castPtr `Ptr Float', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Float', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useDevP `DevicePtr ()' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE dpruneCsr2csr #-}
+{# fun unsafe cusparseDpruneCsr2csr as dpruneCsr2csr { useHandle `Handle', `Int', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Double', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', castPtr `Ptr Double', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Double', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useDevP `DevicePtr ()' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE hpruneCsr2csr #-}
+{# fun unsafe cusparseHpruneCsr2csr as hpruneCsr2csr { useHandle `Handle', `Int', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Half', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', castPtr `Ptr Half', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Half', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useDevP `DevicePtr ()' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE spruneDense2csrByPercentage_bufferSizeExt #-}
+{# fun unsafe cusparseSpruneDense2csrByPercentage_bufferSizeExt as spruneDense2csrByPercentage_bufferSizeExt { useHandle `Handle', `Int', `Int', useDevP `DevicePtr Float', `Int', CFloat `Float', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Float', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useInfo_prune `Info_prune', alloca- `Int' peekIntConv* } -> `()' checkStatus*- #}
+
+{-# INLINEABLE dpruneDense2csrByPercentage_bufferSizeExt #-}
+{# fun unsafe cusparseDpruneDense2csrByPercentage_bufferSizeExt as dpruneDense2csrByPercentage_bufferSizeExt { useHandle `Handle', `Int', `Int', useDevP `DevicePtr Double', `Int', CFloat `Float', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Double', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useInfo_prune `Info_prune', alloca- `Int' peekIntConv* } -> `()' checkStatus*- #}
+
+{-# INLINEABLE hpruneDense2csrByPercentage_bufferSizeExt #-}
+{# fun unsafe cusparseHpruneDense2csrByPercentage_bufferSizeExt as hpruneDense2csrByPercentage_bufferSizeExt { useHandle `Handle', `Int', `Int', useDevP `DevicePtr Half', `Int', CFloat `Float', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Half', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useInfo_prune `Info_prune', alloca- `Int' peekIntConv* } -> `()' checkStatus*- #}
+
+{-# INLINEABLE spruneDense2csrNnzByPercentage #-}
+{# fun unsafe cusparseSpruneDense2csrNnzByPercentage as spruneDense2csrNnzByPercentage { useHandle `Handle', `Int', `Int', useDevP `DevicePtr Float', `Int', CFloat `Float', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Int32', castPtr `Ptr Int32', useInfo_prune `Info_prune', useDevP `DevicePtr ()' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE dpruneDense2csrNnzByPercentage #-}
+{# fun unsafe cusparseDpruneDense2csrNnzByPercentage as dpruneDense2csrNnzByPercentage { useHandle `Handle', `Int', `Int', useDevP `DevicePtr Double', `Int', CFloat `Float', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Int32', castPtr `Ptr Int32', useInfo_prune `Info_prune', useDevP `DevicePtr ()' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE hpruneDense2csrNnzByPercentage #-}
+{# fun unsafe cusparseHpruneDense2csrNnzByPercentage as hpruneDense2csrNnzByPercentage { useHandle `Handle', `Int', `Int', useDevP `DevicePtr Half', `Int', CFloat `Float', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Int32', castPtr `Ptr Int32', useInfo_prune `Info_prune', useDevP `DevicePtr ()' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE spruneDense2csrByPercentage #-}
+{# fun unsafe cusparseSpruneDense2csrByPercentage as spruneDense2csrByPercentage { useHandle `Handle', `Int', `Int', useDevP `DevicePtr Float', `Int', CFloat `Float', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Float', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useInfo_prune `Info_prune', useDevP `DevicePtr ()' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE dpruneDense2csrByPercentage #-}
+{# fun unsafe cusparseDpruneDense2csrByPercentage as dpruneDense2csrByPercentage { useHandle `Handle', `Int', `Int', useDevP `DevicePtr Double', `Int', CFloat `Float', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Double', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useInfo_prune `Info_prune', useDevP `DevicePtr ()' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE hpruneDense2csrByPercentage #-}
+{# fun unsafe cusparseHpruneDense2csrByPercentage as hpruneDense2csrByPercentage { useHandle `Handle', `Int', `Int', useDevP `DevicePtr Half', `Int', CFloat `Float', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Half', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useInfo_prune `Info_prune', useDevP `DevicePtr ()' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE spruneCsr2csrByPercentage_bufferSizeExt #-}
+{# fun unsafe cusparseSpruneCsr2csrByPercentage_bufferSizeExt as spruneCsr2csrByPercentage_bufferSizeExt { useHandle `Handle', `Int', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Float', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', CFloat `Float', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Float', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useInfo_prune `Info_prune', alloca- `Int' peekIntConv* } -> `()' checkStatus*- #}
+
+{-# INLINEABLE dpruneCsr2csrByPercentage_bufferSizeExt #-}
+{# fun unsafe cusparseDpruneCsr2csrByPercentage_bufferSizeExt as dpruneCsr2csrByPercentage_bufferSizeExt { useHandle `Handle', `Int', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Double', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', CFloat `Float', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Double', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useInfo_prune `Info_prune', alloca- `Int' peekIntConv* } -> `()' checkStatus*- #}
+
+{-# INLINEABLE hpruneCsr2csrByPercentage_bufferSizeExt #-}
+{# fun unsafe cusparseHpruneCsr2csrByPercentage_bufferSizeExt as hpruneCsr2csrByPercentage_bufferSizeExt { useHandle `Handle', `Int', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Half', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', CFloat `Float', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Half', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useInfo_prune `Info_prune', alloca- `Int' peekIntConv* } -> `()' checkStatus*- #}
+
+{-# INLINEABLE spruneCsr2csrNnzByPercentage #-}
+{# fun unsafe cusparseSpruneCsr2csrNnzByPercentage as spruneCsr2csrNnzByPercentage { useHandle `Handle', `Int', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Float', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', CFloat `Float', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Int32', castPtr `Ptr Int', useInfo_prune `Info_prune', useDevP `DevicePtr ()' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE dpruneCsr2csrNnzByPercentage #-}
+{# fun unsafe cusparseDpruneCsr2csrNnzByPercentage as dpruneCsr2csrNnzByPercentage { useHandle `Handle', `Int', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Double', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', CFloat `Float', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Int32', castPtr `Ptr Int', useInfo_prune `Info_prune', useDevP `DevicePtr ()' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE hpruneCsr2csrNnzByPercentage #-}
+{# fun unsafe cusparseHpruneCsr2csrNnzByPercentage as hpruneCsr2csrNnzByPercentage { useHandle `Handle', `Int', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Half', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', CFloat `Float', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Int32', castPtr `Ptr Int', useInfo_prune `Info_prune', useDevP `DevicePtr ()' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE spruneCsr2csrByPercentage #-}
+{# fun unsafe cusparseSpruneCsr2csrByPercentage as spruneCsr2csrByPercentage { useHandle `Handle', `Int', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Float', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', CFloat `Float', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Float', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useInfo_prune `Info_prune', useDevP `DevicePtr ()' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE dpruneCsr2csrByPercentage #-}
+{# fun unsafe cusparseDpruneCsr2csrByPercentage as dpruneCsr2csrByPercentage { useHandle `Handle', `Int', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Double', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', CFloat `Float', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Double', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useInfo_prune `Info_prune', useDevP `DevicePtr ()' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE hpruneCsr2csrByPercentage #-}
+{# fun unsafe cusparseHpruneCsr2csrByPercentage as hpruneCsr2csrByPercentage { useHandle `Handle', `Int', `Int', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Half', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', CFloat `Float', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Half', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useInfo_prune `Info_prune', useDevP `DevicePtr ()' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE snnz_compress #-}
+{# fun unsafe cusparseSnnz_compress as snnz_compress { useHandle `Handle', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Float', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', castPtr `Ptr Int32', CFloat `Float' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE dnnz_compress #-}
+{# fun unsafe cusparseDnnz_compress as dnnz_compress { useHandle `Handle', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr Double', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', castPtr `Ptr Int32', CDouble `Double' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE cnnz_compress #-}
+{# fun unsafe cusparseCnnz_compress as cnnz_compress { useHandle `Handle', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr (Complex Float)', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', castPtr `Ptr Int32', withComplex* `(Complex Float)' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE znnz_compress #-}
+{# fun unsafe cusparseZnnz_compress as znnz_compress { useHandle `Handle', `Int', useMatDescr `MatrixDescriptor', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', castPtr `Ptr Int32', withComplex* `(Complex Double)' } -> `()' checkStatus*- #}
+#else
+
+spruneDense2csr_bufferSizeExt :: Handle -> Int -> Int -> DevicePtr Float -> Int -> Ptr Float -> MatrixDescriptor -> DevicePtr Float -> DevicePtr Int32 -> DevicePtr Int32 -> Int -> IO ()
+spruneDense2csr_bufferSizeExt _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'spruneDense2csr_bufferSizeExt' requires at least cuda-9.0"
+
+dpruneDense2csr_bufferSizeExt :: Handle -> Int -> Int -> DevicePtr Double -> Int -> Ptr Double -> MatrixDescriptor -> DevicePtr Double -> DevicePtr Int32 -> DevicePtr Int32 -> Int -> IO ()
+dpruneDense2csr_bufferSizeExt _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'dpruneDense2csr_bufferSizeExt' requires at least cuda-9.0"
+
+hpruneDense2csr_bufferSizeExt :: Handle -> Int -> Int -> DevicePtr Half -> Int -> Ptr Half -> MatrixDescriptor -> DevicePtr Half -> DevicePtr Int32 -> DevicePtr Int32 -> Int -> IO ()
+hpruneDense2csr_bufferSizeExt _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'hpruneDense2csr_bufferSizeExt' requires at least cuda-9.0"
+
+spruneDense2csrNnz :: Handle -> Int -> Int -> DevicePtr Float -> Int -> Ptr Float -> MatrixDescriptor -> DevicePtr Int32 -> Ptr Int32 -> DevicePtr () -> IO ()
+spruneDense2csrNnz _ _ _ _ _ _ _ _ _ _ = cusparseError "'spruneDense2csrNnz' requires at least cuda-9.0"
+
+dpruneDense2csrNnz :: Handle -> Int -> Int -> DevicePtr Double -> Int -> Ptr Double -> MatrixDescriptor -> DevicePtr Int32 -> Ptr Int32 -> DevicePtr () -> IO ()
+dpruneDense2csrNnz _ _ _ _ _ _ _ _ _ _ = cusparseError "'dpruneDense2csrNnz' requires at least cuda-9.0"
+
+hpruneDense2csrNnz :: Handle -> Int -> Int -> DevicePtr Half -> Int -> Ptr Half -> MatrixDescriptor -> DevicePtr Int32 -> Ptr Int32 -> DevicePtr () -> IO ()
+hpruneDense2csrNnz _ _ _ _ _ _ _ _ _ _ = cusparseError "'hpruneDense2csrNnz' requires at least cuda-9.0"
+
+spruneDense2csr :: Handle -> Int -> Int -> DevicePtr Float -> Int -> Ptr Float -> MatrixDescriptor -> DevicePtr Float -> DevicePtr Int32 -> DevicePtr Int32 -> DevicePtr () -> IO ()
+spruneDense2csr _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'spruneDense2csr' requires at least cuda-9.0"
+
+dpruneDense2csr :: Handle -> Int -> Int -> DevicePtr Double -> Int -> Ptr Double -> MatrixDescriptor -> DevicePtr Double -> DevicePtr Int32 -> DevicePtr Int32 -> DevicePtr () -> IO ()
+dpruneDense2csr _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'dpruneDense2csr' requires at least cuda-9.0"
+
+hpruneDense2csr :: Handle -> Int -> Int -> DevicePtr Half -> Int -> Ptr Half -> MatrixDescriptor -> DevicePtr Half -> DevicePtr Int32 -> DevicePtr Int32 -> DevicePtr () -> IO ()
+hpruneDense2csr _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'hpruneDense2csr' requires at least cuda-9.0"
+
+spruneCsr2csr_bufferSizeExt :: Handle -> Int -> Int -> Int -> MatrixDescriptor -> DevicePtr Float -> DevicePtr Int32 -> DevicePtr Int32 -> Ptr Float -> MatrixDescriptor -> DevicePtr Float -> DevicePtr Int32 -> DevicePtr Int32 -> Int -> IO ()
+spruneCsr2csr_bufferSizeExt _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'spruneCsr2csr_bufferSizeExt' requires at least cuda-9.0"
+
+dpruneCsr2csr_bufferSizeExt :: Handle -> Int -> Int -> Int -> MatrixDescriptor -> DevicePtr Double -> DevicePtr Int32 -> DevicePtr Int32 -> Ptr Double -> MatrixDescriptor -> DevicePtr Double -> DevicePtr Int32 -> DevicePtr Int32 -> Int -> IO ()
+dpruneCsr2csr_bufferSizeExt _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'dpruneCsr2csr_bufferSizeExt' requires at least cuda-9.0"
+
+hpruneCsr2csr_bufferSizeExt :: Handle -> Int -> Int -> Int -> MatrixDescriptor -> DevicePtr Half -> DevicePtr Int32 -> DevicePtr Int32 -> Ptr Half -> MatrixDescriptor -> DevicePtr Half -> DevicePtr Int32 -> DevicePtr Int32 -> Int -> IO ()
+hpruneCsr2csr_bufferSizeExt _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'hpruneCsr2csr_bufferSizeExt' requires at least cuda-9.0"
+
+spruneCsr2csrNnz :: Handle -> Int -> Int -> Int -> MatrixDescriptor -> DevicePtr Float -> DevicePtr Int32 -> DevicePtr Int32 -> Ptr Float -> MatrixDescriptor -> DevicePtr Float -> Ptr Int32 -> DevicePtr () -> IO ()
+spruneCsr2csrNnz _ _ _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'spruneCsr2csrNnz' requires at least cuda-9.0"
+
+dpruneCsr2csrNnz :: Handle -> Int -> Int -> Int -> MatrixDescriptor -> DevicePtr Double -> DevicePtr Int32 -> DevicePtr Int32 -> Ptr Double -> MatrixDescriptor -> DevicePtr Double -> Ptr Int32 -> DevicePtr () -> IO ()
+dpruneCsr2csrNnz _ _ _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'dpruneCsr2csrNnz' requires at least cuda-9.0"
+
+hpruneCsr2csrNnz :: Handle -> Int -> Int -> Int -> MatrixDescriptor -> DevicePtr Half -> DevicePtr Int32 -> DevicePtr Int32 -> Ptr Half -> MatrixDescriptor -> DevicePtr Half -> Ptr Int32 -> DevicePtr () -> IO ()
+hpruneCsr2csrNnz _ _ _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'hpruneCsr2csrNnz' requires at least cuda-9.0"
+
+spruneCsr2csr :: Handle -> Int -> Int -> Int -> MatrixDescriptor -> DevicePtr Float -> DevicePtr Int32 -> DevicePtr Int32 -> Ptr Float -> MatrixDescriptor -> DevicePtr Float -> DevicePtr Int32 -> DevicePtr Int32 -> DevicePtr () -> IO ()
+spruneCsr2csr _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'spruneCsr2csr' requires at least cuda-9.0"
+
+dpruneCsr2csr :: Handle -> Int -> Int -> Int -> MatrixDescriptor -> DevicePtr Double -> DevicePtr Int32 -> DevicePtr Int32 -> Ptr Double -> MatrixDescriptor -> DevicePtr Double -> DevicePtr Int32 -> DevicePtr Int32 -> DevicePtr () -> IO ()
+dpruneCsr2csr _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'dpruneCsr2csr' requires at least cuda-9.0"
+
+hpruneCsr2csr :: Handle -> Int -> Int -> Int -> MatrixDescriptor -> DevicePtr Half -> DevicePtr Int32 -> DevicePtr Int32 -> Ptr Half -> MatrixDescriptor -> DevicePtr Half -> DevicePtr Int32 -> DevicePtr Int32 -> DevicePtr () -> IO ()
+hpruneCsr2csr _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'hpruneCsr2csr' requires at least cuda-9.0"
+
+spruneDense2csrByPercentage_bufferSizeExt :: Handle -> Int -> Int -> DevicePtr Float -> Int -> Float -> MatrixDescriptor -> DevicePtr Float -> DevicePtr Int32 -> DevicePtr Int32 -> Info_prune -> Int -> IO ()
+spruneDense2csrByPercentage_bufferSizeExt _ _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'spruneDense2csrByPercentage_bufferSizeExt' requires at least cuda-9.0"
+
+dpruneDense2csrByPercentage_bufferSizeExt :: Handle -> Int -> Int -> DevicePtr Double -> Int -> Float -> MatrixDescriptor -> DevicePtr Double -> DevicePtr Int32 -> DevicePtr Int32 -> Info_prune -> Int -> IO ()
+dpruneDense2csrByPercentage_bufferSizeExt _ _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'dpruneDense2csrByPercentage_bufferSizeExt' requires at least cuda-9.0"
+
+hpruneDense2csrByPercentage_bufferSizeExt :: Handle -> Int -> Int -> DevicePtr Half -> Int -> Float -> MatrixDescriptor -> DevicePtr Half -> DevicePtr Int32 -> DevicePtr Int32 -> Info_prune -> Int -> IO ()
+hpruneDense2csrByPercentage_bufferSizeExt _ _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'hpruneDense2csrByPercentage_bufferSizeExt' requires at least cuda-9.0"
+
+spruneDense2csrNnzByPercentage :: Handle -> Int -> Int -> DevicePtr Float -> Int -> Float -> MatrixDescriptor -> DevicePtr Int32 -> Ptr Int32 -> Info_prune -> DevicePtr () -> IO ()
+spruneDense2csrNnzByPercentage _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'spruneDense2csrNnzByPercentage' requires at least cuda-9.0"
+
+dpruneDense2csrNnzByPercentage :: Handle -> Int -> Int -> DevicePtr Double -> Int -> Float -> MatrixDescriptor -> DevicePtr Int32 -> Ptr Int32 -> Info_prune -> DevicePtr () -> IO ()
+dpruneDense2csrNnzByPercentage _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'dpruneDense2csrNnzByPercentage' requires at least cuda-9.0"
+
+hpruneDense2csrNnzByPercentage :: Handle -> Int -> Int -> DevicePtr Half -> Int -> Float -> MatrixDescriptor -> DevicePtr Int32 -> Ptr Int32 -> Info_prune -> DevicePtr () -> IO ()
+hpruneDense2csrNnzByPercentage _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'hpruneDense2csrNnzByPercentage' requires at least cuda-9.0"
+
+spruneDense2csrByPercentage :: Handle -> Int -> Int -> DevicePtr Float -> Int -> Float -> MatrixDescriptor -> DevicePtr Float -> DevicePtr Int32 -> DevicePtr Int32 -> Info_prune -> DevicePtr () -> IO ()
+spruneDense2csrByPercentage _ _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'spruneDense2csrByPercentage' requires at least cuda-9.0"
+
+dpruneDense2csrByPercentage :: Handle -> Int -> Int -> DevicePtr Double -> Int -> Float -> MatrixDescriptor -> DevicePtr Double -> DevicePtr Int32 -> DevicePtr Int32 -> Info_prune -> DevicePtr () -> IO ()
+dpruneDense2csrByPercentage _ _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'dpruneDense2csrByPercentage' requires at least cuda-9.0"
+
+hpruneDense2csrByPercentage :: Handle -> Int -> Int -> DevicePtr Half -> Int -> Float -> MatrixDescriptor -> DevicePtr Half -> DevicePtr Int32 -> DevicePtr Int32 -> Info_prune -> DevicePtr () -> IO ()
+hpruneDense2csrByPercentage _ _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'hpruneDense2csrByPercentage' requires at least cuda-9.0"
+
+spruneCsr2csrByPercentage_bufferSizeExt :: Handle -> Int -> Int -> Int -> MatrixDescriptor -> DevicePtr Float -> DevicePtr Int32 -> DevicePtr Int32 -> Float -> MatrixDescriptor -> DevicePtr Float -> DevicePtr Int32 -> DevicePtr Int32 -> Info_prune -> Int -> IO ()
+spruneCsr2csrByPercentage_bufferSizeExt _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'spruneCsr2csrByPercentage_bufferSizeExt' requires at least cuda-9.0"
+
+dpruneCsr2csrByPercentage_bufferSizeExt :: Handle -> Int -> Int -> Int -> MatrixDescriptor -> DevicePtr Double -> DevicePtr Int32 -> DevicePtr Int32 -> Float -> MatrixDescriptor -> DevicePtr Double -> DevicePtr Int32 -> DevicePtr Int32 -> Info_prune -> Int -> IO ()
+dpruneCsr2csrByPercentage_bufferSizeExt _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'dpruneCsr2csrByPercentage_bufferSizeExt' requires at least cuda-9.0"
+
+hpruneCsr2csrByPercentage_bufferSizeExt :: Handle -> Int -> Int -> Int -> MatrixDescriptor -> DevicePtr Half -> DevicePtr Int32 -> DevicePtr Int32 -> Float -> MatrixDescriptor -> DevicePtr Half -> DevicePtr Int32 -> DevicePtr Int32 -> Info_prune -> Int -> IO ()
+hpruneCsr2csrByPercentage_bufferSizeExt _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'hpruneCsr2csrByPercentage_bufferSizeExt' requires at least cuda-9.0"
+
+spruneCsr2csrNnzByPercentage :: Handle -> Int -> Int -> Int -> MatrixDescriptor -> DevicePtr Float -> DevicePtr Int32 -> DevicePtr Int32 -> Float -> MatrixDescriptor -> DevicePtr Int32 -> Ptr Int -> Info_prune -> DevicePtr () -> IO ()
+spruneCsr2csrNnzByPercentage _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'spruneCsr2csrNnzByPercentage' requires at least cuda-9.0"
+
+dpruneCsr2csrNnzByPercentage :: Handle -> Int -> Int -> Int -> MatrixDescriptor -> DevicePtr Double -> DevicePtr Int32 -> DevicePtr Int32 -> Float -> MatrixDescriptor -> DevicePtr Int32 -> Ptr Int -> Info_prune -> DevicePtr () -> IO ()
+dpruneCsr2csrNnzByPercentage _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'dpruneCsr2csrNnzByPercentage' requires at least cuda-9.0"
+
+hpruneCsr2csrNnzByPercentage :: Handle -> Int -> Int -> Int -> MatrixDescriptor -> DevicePtr Half -> DevicePtr Int32 -> DevicePtr Int32 -> Float -> MatrixDescriptor -> DevicePtr Int32 -> Ptr Int -> Info_prune -> DevicePtr () -> IO ()
+hpruneCsr2csrNnzByPercentage _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'hpruneCsr2csrNnzByPercentage' requires at least cuda-9.0"
+
+spruneCsr2csrByPercentage :: Handle -> Int -> Int -> Int -> MatrixDescriptor -> DevicePtr Float -> DevicePtr Int32 -> DevicePtr Int32 -> Float -> MatrixDescriptor -> DevicePtr Float -> DevicePtr Int32 -> DevicePtr Int32 -> Info_prune -> DevicePtr () -> IO ()
+spruneCsr2csrByPercentage _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'spruneCsr2csrByPercentage' requires at least cuda-9.0"
+
+dpruneCsr2csrByPercentage :: Handle -> Int -> Int -> Int -> MatrixDescriptor -> DevicePtr Double -> DevicePtr Int32 -> DevicePtr Int32 -> Float -> MatrixDescriptor -> DevicePtr Double -> DevicePtr Int32 -> DevicePtr Int32 -> Info_prune -> DevicePtr () -> IO ()
+dpruneCsr2csrByPercentage _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'dpruneCsr2csrByPercentage' requires at least cuda-9.0"
+
+hpruneCsr2csrByPercentage :: Handle -> Int -> Int -> Int -> MatrixDescriptor -> DevicePtr Half -> DevicePtr Int32 -> DevicePtr Int32 -> Float -> MatrixDescriptor -> DevicePtr Half -> DevicePtr Int32 -> DevicePtr Int32 -> Info_prune -> DevicePtr () -> IO ()
+hpruneCsr2csrByPercentage _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'hpruneCsr2csrByPercentage' requires at least cuda-9.0"
+
+snnz_compress :: Handle -> Int -> MatrixDescriptor -> DevicePtr Float -> DevicePtr Int32 -> DevicePtr Int32 -> Ptr Int32 -> Float -> IO ()
+snnz_compress _ _ _ _ _ _ _ _ = cusparseError "'snnz_compress' requires at least cuda-9.0"
+
+dnnz_compress :: Handle -> Int -> MatrixDescriptor -> DevicePtr Double -> DevicePtr Int32 -> DevicePtr Int32 -> Ptr Int32 -> Double -> IO ()
+dnnz_compress _ _ _ _ _ _ _ _ = cusparseError "'dnnz_compress' requires at least cuda-9.0"
+
+cnnz_compress :: Handle -> Int -> MatrixDescriptor -> DevicePtr (Complex Float) -> DevicePtr Int32 -> DevicePtr Int32 -> Ptr Int32 -> (Complex Float) -> IO ()
+cnnz_compress _ _ _ _ _ _ _ _ = cusparseError "'cnnz_compress' requires at least cuda-9.0"
+
+znnz_compress :: Handle -> Int -> MatrixDescriptor -> DevicePtr (Complex Double) -> DevicePtr Int32 -> DevicePtr Int32 -> Ptr Int32 -> (Complex Double) -> IO ()
+znnz_compress _ _ _ _ _ _ _ _ = cusparseError "'znnz_compress' requires at least cuda-9.0"
 #endif

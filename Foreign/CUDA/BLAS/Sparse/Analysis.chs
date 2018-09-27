@@ -25,6 +25,7 @@ module Foreign.CUDA.BLAS.Sparse.Analysis (
   Info_csrsm2(..), createInfo_csrsm2, destroyInfo_csrsm2,
   Info_color(..), createInfo_color, destroyInfo_color,
   Info_csru2csr(..), createInfo_csru2csr, destroyInfo_csru2csr,
+  Info_prune(..), createInfo_prune, destroyInfo_prune,
 
 ) where
 
@@ -277,6 +278,33 @@ createInfo_csru2csr = cusparseError "'createInfo_csru2csr' requires at least cud
 
 destroyInfo_csru2csr :: Info_csru2csr -> IO ()
 destroyInfo_csru2csr _ = cusparseError "'destroyInfo_csru2csr' requires at least cuda-7.0"
+
+#endif
+
+
+-- /undocumented/
+--
+#if CUDA_VERSION >= 9000
+newtype Info_prune = Info_prune { useInfo_prune :: {# type pruneInfo_t #}}
+
+{-# INLINEABLE createInfo_prune #-}
+{# fun unsafe cusparseCreatePruneInfo as createInfo_prune
+  { alloca- `Info_prune' peekI* } -> `()' checkStatus*- #}
+  where
+    peekI = liftM Info_prune . peek
+
+{-# INLINEABLE destroyInfo_prune #-}
+{# fun unsafe cusparseDestroyPruneInfo as destroyInfo_prune
+  { useInfo_prune `Info_prune' } -> `()' checkStatus* #}
+
+#else
+data Info_prune
+
+createInfo_prune :: IO Info_prune
+createInfo_prune = cusparseError "'createInfo_prune' requires at least cuda-8.0"
+
+destroyInfo_prune :: Info_prune -> IO ()
+destroyInfo_prune _ = cusparseError "'destroyInfo_prune' requires at least cuda-8.0"
 
 #endif
 
