@@ -136,6 +136,22 @@ module Foreign.CUDA.BLAS.Sparse.Precondition (
   dgtsv2StridedBatch,
   cgtsv2StridedBatch,
   zgtsv2StridedBatch,
+  sgtsvInterleavedBatch_bufferSizeExt,
+  dgtsvInterleavedBatch_bufferSizeExt,
+  cgtsvInterleavedBatch_bufferSizeExt,
+  zgtsvInterleavedBatch_bufferSizeExt,
+  sgtsvInterleavedBatch,
+  dgtsvInterleavedBatch,
+  cgtsvInterleavedBatch,
+  zgtsvInterleavedBatch,
+  sgpsvInterleavedBatch_bufferSizeExt,
+  dgpsvInterleavedBatch_bufferSizeExt,
+  cgpsvInterleavedBatch_bufferSizeExt,
+  zgpsvInterleavedBatch_bufferSizeExt,
+  sgpsvInterleavedBatch,
+  dgpsvInterleavedBatch,
+  cgpsvInterleavedBatch,
+  zgpsvInterleavedBatch,
 
 ) where
 
@@ -559,4 +575,103 @@ cgtsv2StridedBatch _ _ _ _ _ _ _ _ _ = cusparseError "'cgtsv2StridedBatch' requi
 
 zgtsv2StridedBatch :: Handle -> Int -> DevicePtr (Complex Double) -> DevicePtr (Complex Double) -> DevicePtr (Complex Double) -> DevicePtr (Complex Double) -> Int -> Int -> DevicePtr () -> IO ()
 zgtsv2StridedBatch _ _ _ _ _ _ _ _ _ = cusparseError "'zgtsv2StridedBatch' requires at least cuda-9.0"
+#endif
+#if CUDA_VERSION >= 9020
+
+{-# INLINEABLE sgtsvInterleavedBatch_bufferSizeExt #-}
+{# fun unsafe cusparseSgtsvInterleavedBatch_bufferSizeExt as sgtsvInterleavedBatch_bufferSizeExt { useHandle `Handle', `Int', `Int', useDevP `DevicePtr Float', useDevP `DevicePtr Float', useDevP `DevicePtr Float', useDevP `DevicePtr Float', `Int', alloca- `Int' peekIntConv* } -> `()' checkStatus*- #}
+
+{-# INLINEABLE dgtsvInterleavedBatch_bufferSizeExt #-}
+{# fun unsafe cusparseDgtsvInterleavedBatch_bufferSizeExt as dgtsvInterleavedBatch_bufferSizeExt { useHandle `Handle', `Int', `Int', useDevP `DevicePtr Double', useDevP `DevicePtr Double', useDevP `DevicePtr Double', useDevP `DevicePtr Double', `Int', alloca- `Int' peekIntConv* } -> `()' checkStatus*- #}
+
+{-# INLINEABLE cgtsvInterleavedBatch_bufferSizeExt #-}
+{# fun unsafe cusparseCgtsvInterleavedBatch_bufferSizeExt as cgtsvInterleavedBatch_bufferSizeExt { useHandle `Handle', `Int', `Int', useDevP `DevicePtr (Complex Float)', useDevP `DevicePtr (Complex Float)', useDevP `DevicePtr (Complex Float)', useDevP `DevicePtr (Complex Float)', `Int', alloca- `Int' peekIntConv* } -> `()' checkStatus*- #}
+
+{-# INLINEABLE zgtsvInterleavedBatch_bufferSizeExt #-}
+{# fun unsafe cusparseZgtsvInterleavedBatch_bufferSizeExt as zgtsvInterleavedBatch_bufferSizeExt { useHandle `Handle', `Int', `Int', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr (Complex Double)', `Int', alloca- `Int' peekIntConv* } -> `()' checkStatus*- #}
+
+{-# INLINEABLE sgtsvInterleavedBatch #-}
+{# fun unsafe cusparseSgtsvInterleavedBatch as sgtsvInterleavedBatch { useHandle `Handle', `Int', `Int', useDevP `DevicePtr Float', useDevP `DevicePtr Float', useDevP `DevicePtr Float', useDevP `DevicePtr Float', `Int', useDevP `DevicePtr ()' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE dgtsvInterleavedBatch #-}
+{# fun unsafe cusparseDgtsvInterleavedBatch as dgtsvInterleavedBatch { useHandle `Handle', `Int', `Int', useDevP `DevicePtr Double', useDevP `DevicePtr Double', useDevP `DevicePtr Double', useDevP `DevicePtr Double', `Int', useDevP `DevicePtr ()' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE cgtsvInterleavedBatch #-}
+{# fun unsafe cusparseCgtsvInterleavedBatch as cgtsvInterleavedBatch { useHandle `Handle', `Int', `Int', useDevP `DevicePtr (Complex Float)', useDevP `DevicePtr (Complex Float)', useDevP `DevicePtr (Complex Float)', useDevP `DevicePtr (Complex Float)', `Int', useDevP `DevicePtr ()' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE zgtsvInterleavedBatch #-}
+{# fun unsafe cusparseZgtsvInterleavedBatch as zgtsvInterleavedBatch { useHandle `Handle', `Int', `Int', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr (Complex Double)', `Int', useDevP `DevicePtr ()' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE sgpsvInterleavedBatch_bufferSizeExt #-}
+{# fun unsafe cusparseSgpsvInterleavedBatch_bufferSizeExt as sgpsvInterleavedBatch_bufferSizeExt { useHandle `Handle', `Int', `Int', useDevP `DevicePtr Float', useDevP `DevicePtr Float', useDevP `DevicePtr Float', useDevP `DevicePtr Float', useDevP `DevicePtr Float', useDevP `DevicePtr Float', `Int', alloca- `Int' peekIntConv* } -> `()' checkStatus*- #}
+
+{-# INLINEABLE dgpsvInterleavedBatch_bufferSizeExt #-}
+{# fun unsafe cusparseDgpsvInterleavedBatch_bufferSizeExt as dgpsvInterleavedBatch_bufferSizeExt { useHandle `Handle', `Int', `Int', useDevP `DevicePtr Double', useDevP `DevicePtr Double', useDevP `DevicePtr Double', useDevP `DevicePtr Double', useDevP `DevicePtr Double', useDevP `DevicePtr Double', `Int', alloca- `Int' peekIntConv* } -> `()' checkStatus*- #}
+
+{-# INLINEABLE cgpsvInterleavedBatch_bufferSizeExt #-}
+{# fun unsafe cusparseCgpsvInterleavedBatch_bufferSizeExt as cgpsvInterleavedBatch_bufferSizeExt { useHandle `Handle', `Int', `Int', useDevP `DevicePtr (Complex Float)', useDevP `DevicePtr (Complex Float)', useDevP `DevicePtr (Complex Float)', useDevP `DevicePtr (Complex Float)', useDevP `DevicePtr (Complex Float)', useDevP `DevicePtr (Complex Float)', `Int', alloca- `Int' peekIntConv* } -> `()' checkStatus*- #}
+
+{-# INLINEABLE zgpsvInterleavedBatch_bufferSizeExt #-}
+{# fun unsafe cusparseZgpsvInterleavedBatch_bufferSizeExt as zgpsvInterleavedBatch_bufferSizeExt { useHandle `Handle', `Int', `Int', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr (Complex Double)', `Int', alloca- `Int' peekIntConv* } -> `()' checkStatus*- #}
+
+{-# INLINEABLE sgpsvInterleavedBatch #-}
+{# fun unsafe cusparseSgpsvInterleavedBatch as sgpsvInterleavedBatch { useHandle `Handle', `Int', `Int', useDevP `DevicePtr Float', useDevP `DevicePtr Float', useDevP `DevicePtr Float', useDevP `DevicePtr Float', useDevP `DevicePtr Float', useDevP `DevicePtr Float', `Int', useDevP `DevicePtr ()' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE dgpsvInterleavedBatch #-}
+{# fun unsafe cusparseDgpsvInterleavedBatch as dgpsvInterleavedBatch { useHandle `Handle', `Int', `Int', useDevP `DevicePtr Double', useDevP `DevicePtr Double', useDevP `DevicePtr Double', useDevP `DevicePtr Double', useDevP `DevicePtr Double', useDevP `DevicePtr Double', `Int', useDevP `DevicePtr ()' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE cgpsvInterleavedBatch #-}
+{# fun unsafe cusparseCgpsvInterleavedBatch as cgpsvInterleavedBatch { useHandle `Handle', `Int', `Int', useDevP `DevicePtr (Complex Float)', useDevP `DevicePtr (Complex Float)', useDevP `DevicePtr (Complex Float)', useDevP `DevicePtr (Complex Float)', useDevP `DevicePtr (Complex Float)', useDevP `DevicePtr (Complex Float)', `Int', useDevP `DevicePtr ()' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE zgpsvInterleavedBatch #-}
+{# fun unsafe cusparseZgpsvInterleavedBatch as zgpsvInterleavedBatch { useHandle `Handle', `Int', `Int', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr (Complex Double)', `Int', useDevP `DevicePtr ()' } -> `()' checkStatus*- #}
+#else
+
+sgtsvInterleavedBatch_bufferSizeExt :: Handle -> Int -> Int -> DevicePtr Float -> DevicePtr Float -> DevicePtr Float -> DevicePtr Float -> Int -> Int -> IO ()
+sgtsvInterleavedBatch_bufferSizeExt _ _ _ _ _ _ _ _ _ = cusparseError "'sgtsvInterleavedBatch_bufferSizeExt' requires at least cuda-9.0"
+
+dgtsvInterleavedBatch_bufferSizeExt :: Handle -> Int -> Int -> DevicePtr Double -> DevicePtr Double -> DevicePtr Double -> DevicePtr Double -> Int -> Int -> IO ()
+dgtsvInterleavedBatch_bufferSizeExt _ _ _ _ _ _ _ _ _ = cusparseError "'dgtsvInterleavedBatch_bufferSizeExt' requires at least cuda-9.0"
+
+cgtsvInterleavedBatch_bufferSizeExt :: Handle -> Int -> Int -> DevicePtr (Complex Float) -> DevicePtr (Complex Float) -> DevicePtr (Complex Float) -> DevicePtr (Complex Float) -> Int -> Int -> IO ()
+cgtsvInterleavedBatch_bufferSizeExt _ _ _ _ _ _ _ _ _ = cusparseError "'cgtsvInterleavedBatch_bufferSizeExt' requires at least cuda-9.0"
+
+zgtsvInterleavedBatch_bufferSizeExt :: Handle -> Int -> Int -> DevicePtr (Complex Double) -> DevicePtr (Complex Double) -> DevicePtr (Complex Double) -> DevicePtr (Complex Double) -> Int -> Int -> IO ()
+zgtsvInterleavedBatch_bufferSizeExt _ _ _ _ _ _ _ _ _ = cusparseError "'zgtsvInterleavedBatch_bufferSizeExt' requires at least cuda-9.0"
+
+sgtsvInterleavedBatch :: Handle -> Int -> Int -> DevicePtr Float -> DevicePtr Float -> DevicePtr Float -> DevicePtr Float -> Int -> DevicePtr () -> IO ()
+sgtsvInterleavedBatch _ _ _ _ _ _ _ _ _ = cusparseError "'sgtsvInterleavedBatch' requires at least cuda-9.0"
+
+dgtsvInterleavedBatch :: Handle -> Int -> Int -> DevicePtr Double -> DevicePtr Double -> DevicePtr Double -> DevicePtr Double -> Int -> DevicePtr () -> IO ()
+dgtsvInterleavedBatch _ _ _ _ _ _ _ _ _ = cusparseError "'dgtsvInterleavedBatch' requires at least cuda-9.0"
+
+cgtsvInterleavedBatch :: Handle -> Int -> Int -> DevicePtr (Complex Float) -> DevicePtr (Complex Float) -> DevicePtr (Complex Float) -> DevicePtr (Complex Float) -> Int -> DevicePtr () -> IO ()
+cgtsvInterleavedBatch _ _ _ _ _ _ _ _ _ = cusparseError "'cgtsvInterleavedBatch' requires at least cuda-9.0"
+
+zgtsvInterleavedBatch :: Handle -> Int -> Int -> DevicePtr (Complex Double) -> DevicePtr (Complex Double) -> DevicePtr (Complex Double) -> DevicePtr (Complex Double) -> Int -> DevicePtr () -> IO ()
+zgtsvInterleavedBatch _ _ _ _ _ _ _ _ _ = cusparseError "'zgtsvInterleavedBatch' requires at least cuda-9.0"
+
+sgpsvInterleavedBatch_bufferSizeExt :: Handle -> Int -> Int -> DevicePtr Float -> DevicePtr Float -> DevicePtr Float -> DevicePtr Float -> DevicePtr Float -> DevicePtr Float -> Int -> Int -> IO ()
+sgpsvInterleavedBatch_bufferSizeExt _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'sgpsvInterleavedBatch_bufferSizeExt' requires at least cuda-9.0"
+
+dgpsvInterleavedBatch_bufferSizeExt :: Handle -> Int -> Int -> DevicePtr Double -> DevicePtr Double -> DevicePtr Double -> DevicePtr Double -> DevicePtr Double -> DevicePtr Double -> Int -> Int -> IO ()
+dgpsvInterleavedBatch_bufferSizeExt _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'dgpsvInterleavedBatch_bufferSizeExt' requires at least cuda-9.0"
+
+cgpsvInterleavedBatch_bufferSizeExt :: Handle -> Int -> Int -> DevicePtr (Complex Float) -> DevicePtr (Complex Float) -> DevicePtr (Complex Float) -> DevicePtr (Complex Float) -> DevicePtr (Complex Float) -> DevicePtr (Complex Float) -> Int -> Int -> IO ()
+cgpsvInterleavedBatch_bufferSizeExt _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'cgpsvInterleavedBatch_bufferSizeExt' requires at least cuda-9.0"
+
+zgpsvInterleavedBatch_bufferSizeExt :: Handle -> Int -> Int -> DevicePtr (Complex Double) -> DevicePtr (Complex Double) -> DevicePtr (Complex Double) -> DevicePtr (Complex Double) -> DevicePtr (Complex Double) -> DevicePtr (Complex Double) -> Int -> Int -> IO ()
+zgpsvInterleavedBatch_bufferSizeExt _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'zgpsvInterleavedBatch_bufferSizeExt' requires at least cuda-9.0"
+
+sgpsvInterleavedBatch :: Handle -> Int -> Int -> DevicePtr Float -> DevicePtr Float -> DevicePtr Float -> DevicePtr Float -> DevicePtr Float -> DevicePtr Float -> Int -> DevicePtr () -> IO ()
+sgpsvInterleavedBatch _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'sgpsvInterleavedBatch' requires at least cuda-9.0"
+
+dgpsvInterleavedBatch :: Handle -> Int -> Int -> DevicePtr Double -> DevicePtr Double -> DevicePtr Double -> DevicePtr Double -> DevicePtr Double -> DevicePtr Double -> Int -> DevicePtr () -> IO ()
+dgpsvInterleavedBatch _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'dgpsvInterleavedBatch' requires at least cuda-9.0"
+
+cgpsvInterleavedBatch :: Handle -> Int -> Int -> DevicePtr (Complex Float) -> DevicePtr (Complex Float) -> DevicePtr (Complex Float) -> DevicePtr (Complex Float) -> DevicePtr (Complex Float) -> DevicePtr (Complex Float) -> Int -> DevicePtr () -> IO ()
+cgpsvInterleavedBatch _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'cgpsvInterleavedBatch' requires at least cuda-9.0"
+
+zgpsvInterleavedBatch :: Handle -> Int -> Int -> DevicePtr (Complex Double) -> DevicePtr (Complex Double) -> DevicePtr (Complex Double) -> DevicePtr (Complex Double) -> DevicePtr (Complex Double) -> DevicePtr (Complex Double) -> Int -> DevicePtr () -> IO ()
+zgpsvInterleavedBatch _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'zgpsvInterleavedBatch' requires at least cuda-9.0"
 #endif

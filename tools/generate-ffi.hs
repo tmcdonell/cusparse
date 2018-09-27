@@ -94,6 +94,7 @@ main = do
     [(Nothing,   funsPrecond)
     ,(Just 8000, funsPrecond_cuda80)
     ,(Just 9000, funsPrecond_cuda90)
+    ,(Just 9020, funsPrecond_cuda92)
     ]
 
   mkC2HS "Reorder" (docs "reorderings") roexps
@@ -656,6 +657,14 @@ funsPrecond_cuda90 =
   , gpA $ \ a   -> fun "?gtsv2_nopivot"                   [ int, int, dptr a, dptr a, dptr a, dptr a, int, dptr void ]
   , gpA $ \ a   -> fun "?gtsv2StridedBatch_bufferSizeExt" [ int, dptr a, dptr a, dptr a, dptr a, int, int, result int ]
   , gpA $ \ a   -> fun "?gtsv2StridedBatch"               [ int, dptr a, dptr a, dptr a, dptr a, int, int, dptr void ]
+  ]
+
+funsPrecond_cuda92 :: [FunGroup]
+funsPrecond_cuda92 =
+  [ gpA $ \ a   -> fun "?gtsvInterleavedBatch_bufferSizeExt"  [ int, int, dptr a, dptr a, dptr a, dptr a, int, result int ]
+  , gpA $ \ a   -> fun "?gtsvInterleavedBatch"                [ int, int, dptr a, dptr a, dptr a, dptr a, int, dptr void ]
+  , gpA $ \ a   -> fun "?gpsvInterleavedBatch_bufferSizeExt"  [ int, int, dptr a, dptr a, dptr a, dptr a, dptr a, dptr a, int, result int ]
+  , gpA $ \ a   -> fun "?gpsvInterleavedBatch"                [ int, int, dptr a, dptr a, dptr a, dptr a, dptr a, dptr a, int, dptr void ]
   ]
 
 
