@@ -53,6 +53,7 @@ main = do
                 , "Info"
                 , "Info_bsrsm2"
                 , "Info_csrgemm2"
+                , "Info_csrsm2"
                 ]
       pcexps  = [ "Operation(..)"
                 , "Direction(..)"
@@ -85,6 +86,7 @@ main = do
   mkC2HS "Level3" (docsL 3) l3exps
     [(Nothing,   funsL3)
     ,(Just 7000, funsL3_cuda70)
+    ,(Just 9020, funsL3_cuda92)
     ]
 
   mkC2HS "Precondition" (docs "preconditioners") pcexps
@@ -475,6 +477,9 @@ info_bsrilu02 = mkInfo "bsrilu02"
 info_csrgemm2 :: Type
 info_csrgemm2 = mkInfo "csrgemm2"
 
+info_csrsm2 :: Type
+info_csrsm2 = mkInfo "csrsm2"
+
 info_color :: Type
 info_color = mkInfo "color"
 
@@ -568,7 +573,7 @@ funsL3 =
   , gpA $ \ a   -> fun "?csrsm_solve"       [ transpose, int, int, ptr a, matdescr, dptr a, dptr int32, dptr int32, info, dptr a, int, dptr a, int ]
   , gpA $ \ a   -> fun "?bsrmm"             [ dir, transpose, transpose, int, int, int, int, ptr a, matdescr, dptr a, dptr int32, dptr int32, int, dptr a, int, ptr a, dptr a, int ]
   , gpA $ \ a   -> fun "?bsrsm2_bufferSize" [ dir, transpose, transpose, int, int, int, matdescr, dptr a, dptr int32, dptr int32, int, info_bsrsm2, result int ]
-  , gpA $ \ a   -> fun "?bsrsm2_analysis"   [ dir, transpose, transpose, int, int, int, matdescr, dptr a, dptr int32, dptr int32, int, info_bsrsm2, policy, ptr void ]
+  , gpA $ \ a   -> fun "?bsrsm2_analysis"   [ dir, transpose, transpose, int, int, int, matdescr, dptr a, dptr int32, dptr int32, int, info_bsrsm2, policy, dptr void ]
   , gpA $ \ a   -> fun "?bsrsm2_solve"      [ dir, transpose, transpose, int, int, int, ptr a, matdescr, dptr a, dptr int32, dptr int32, int, info_bsrsm2, dptr a, int, dptr a, int, policy, ptr void ]
   , gp  $          fun "xbsrsm2_zeroPivot"  [ info_bsrsm2, ptr int32 ]
 
@@ -584,6 +589,20 @@ funsL3_cuda70 =
   [ gpA $ \ a   -> fun "?csrgemm2_bufferSizeExt"  [ int, int, int, ptr a, matdescr, int, dptr int32, dptr int32, matdescr, int, dptr int32, dptr int32, ptr a, matdescr, int, dptr int32, dptr int32, info_csrgemm2, result int ]
   , gp  $          fun "xcsrgemm2Nnz"             [ int, int, int, matdescr, int, dptr int32, dptr int32, matdescr, int, dptr int32, dptr int32, matdescr, int, dptr int32, dptr int32, matdescr, dptr int32, ptr int32, info_csrgemm2, dptr void ]
   , gpA $ \ a   -> fun "?csrgemm2"                [ int, int, int, ptr a, matdescr, int, dptr a, dptr int32, dptr int32, matdescr, int, dptr a, dptr int32, dptr int32, ptr a, matdescr, int, dptr a, dptr int32, dptr int32, matdescr, dptr a, dptr int32, dptr int32, info_csrgemm2, dptr void ]
+  ]
+
+funsL3_cuda92 :: [FunGroup]
+funsL3_cuda92 =
+  [ gpA $ \ a   -> fun "?csrsm2_bufferSizeExt"  [ int, transpose, transpose, int, int, int, ptr a, matdescr, dptr a, dptr int32, dptr int32, dptr a, int, info_csrsm2, policy, result int ]
+  , gpA $ \ a   -> fun "?csrsm2_analysis"       [ int, transpose, transpose, int, int, int, ptr a, matdescr, dptr a, dptr int32, dptr int32, dptr a, int, info_csrsm2, policy, dptr void ]
+  , gpA $ \ a   -> fun "?csrsm2_solve"          [ int, transpose, transpose, int, int, int, ptr a, matdescr, dptr a, dptr int32, dptr int32, dptr a, int, info_csrsm2, policy, dptr void ]
+  , gp  $          fun "xcsrsm2_zeroPivot"      [ info_csrsm2, ptr int32 ]
+  , gpA $ \ a   -> fun "?gemmi"                 [ int, int, int, int, ptr a, dptr a, int, dptr a, dptr int32, dptr int32, ptr a, dptr a, int ]
+
+  -- BLAS-like extensions
+  , gp  $          fun "xcsrgeam2Nnz"             [ int, int, matdescr, int, dptr int32, dptr int32, matdescr, int, dptr int32, dptr int32, matdescr, dptr int32, ptr int32, dptr void ]
+  , gpA $ \ a   -> fun "?csrgeam2_bufferSizeExt"  [ int, int, ptr a, matdescr, int, dptr a, dptr int32, dptr int32, ptr a, matdescr, int, dptr a, dptr int32, dptr int32, matdescr, dptr a, dptr int32, dptr int32, result int ]
+  , gpA $ \ a   -> fun "?csrgeam2"                [ int, int, ptr a, matdescr, int, dptr a, dptr int32, dptr int32, ptr a, matdescr, int, dptr a, dptr int32, dptr int32, matdescr, dptr a, dptr int32, dptr int32, dptr void ]
   ]
 
 

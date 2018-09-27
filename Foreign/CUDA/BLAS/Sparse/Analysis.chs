@@ -22,6 +22,7 @@ module Foreign.CUDA.BLAS.Sparse.Analysis (
   Info_bsric02(..), createInfo_bsric02, destroyInfo_bsric02,
   Info_bsrilu02(..), createInfo_bsrilu02, destroyInfo_bsrilu02,
   Info_csrgemm2(..), createInfo_csrgemm2, destroyInfo_csrgemm2,
+  Info_csrsm2(..), createInfo_csrsm2, destroyInfo_csrsm2,
   Info_color(..), createInfo_color, destroyInfo_color,
   Info_csru2csr(..), createInfo_csru2csr, destroyInfo_csru2csr,
 
@@ -196,6 +197,34 @@ destroyInfo_csrgemm2 :: Info_csrgemm2 -> IO ()
 destroyInfo_csrgemm2 _ = cusparseError "'destroyInfo_csrgemm2' requires at least cuda-7.0"
 
 #endif
+
+
+-- | <https://docs.nvidia.com/cuda/cusparse/index.html#csrsm2infot>
+--
+#if CUDA_VERSION >= 9020
+newtype Info_csrsm2 = Info_csrsm2 { useInfo_csrsm2 :: {# type csrsm2Info_t #}}
+
+{-# INLINEABLE createInfo_csrsm2 #-}
+{# fun unsafe cusparseCreateCsrsm2Info as createInfo_csrsm2
+  { alloca- `Info_csrsm2' peekI* } -> `()' checkStatus*- #}
+  where
+    peekI = liftM Info_csrsm2 . peek
+
+{-# INLINE destroyInfo_csrsm2 #-}
+{# fun unsafe cusparseDestroyCsrsm2Info as destroyInfo_csrsm2
+  { useInfo_csrsm2 `Info_csrsm2' } -> `()' checkStatus*- #}
+
+#else
+data Info_csrsm2
+
+createInfo_csrsm2 :: IO Info_csrsm2
+createInfo_csrsm2 = cusparseError "'createInfo_csrsm2 requires at least cuda-9.2"
+
+destroyInfo_csrsm2 :: Info_csrsm2 -> IO ()
+destroyInfo_csrsm2 _ = cusparseError "'destroyInfo_csrsm2 requires at least cuda-9.2"
+
+#endif
+
 
 
 -- /undocumented/
