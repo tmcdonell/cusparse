@@ -4,7 +4,7 @@ Notable changes to the project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
-## [next]
+## [0.2.0.0] - 2018-10-02
 ### Added
   * Level 3 operations from CUDA-9.2
   * Format conversion operations from CUDA-9.0
@@ -19,6 +19,6 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
   * First version; split off from [bmsherman/cublas](https://github.com/bmsherman/cublas). Released on an unsuspecting world.
 
-[next]:       https://github.com/tmcdonell/cusparse/compare/0.1.0.1...HEAD
+[0.2.0.0]:    https://github.com/tmcdonell/cusparse/compare/0.1.0.1...v0.2.0.0
 [0.1.0.1]:    https://github.com/tmcdonell/cusparse/compare/0.1.0.0...0.1.0.1
 
