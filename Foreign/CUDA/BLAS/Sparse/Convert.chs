@@ -26,6 +26,7 @@ module Foreign.CUDA.BLAS.Sparse.Convert (
   Action(..),
   Hybrid,
   HybridPartition(..),
+  Algorithm_csr2csc(..),
   Info_csru2csr,
   Info_prune,
   sbsr2csr,
@@ -182,6 +183,8 @@ module Foreign.CUDA.BLAS.Sparse.Convert (
   dnnz_compress,
   cnnz_compress,
   znnz_compress,
+  csr2cscEx2,
+  csr2cscEx2_bufferSize,
 
 ) where
 
@@ -875,4 +878,19 @@ cnnz_compress _ _ _ _ _ _ _ _ = cusparseError "'cnnz_compress' requires at least
 
 znnz_compress :: Handle -> Int -> MatrixDescriptor -> DevicePtr (Complex Double) -> DevicePtr Int32 -> DevicePtr Int32 -> Ptr Int32 -> (Complex Double) -> IO ()
 znnz_compress _ _ _ _ _ _ _ _ = cusparseError "'znnz_compress' requires at least cuda-9.0"
+#endif
+#if CUDA_VERSION >= 10010
+
+{-# INLINEABLE csr2cscEx2 #-}
+{# fun unsafe cusparseCsr2cscEx2 as csr2cscEx2 { useHandle `Handle', `Int', `Int', `Int', useDevP `DevicePtr ()', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useDevP `DevicePtr ()', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', cFromEnum `Type', cFromEnum `Action', cFromEnum `IndexBase', cFromEnum `Algorithm_csr2csc', useDevP `DevicePtr ()' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE csr2cscEx2_bufferSize #-}
+{# fun unsafe cusparseCsr2cscEx2_bufferSize as csr2cscEx2_bufferSize { useHandle `Handle', `Int', `Int', `Int', useDevP `DevicePtr ()', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', useDevP `DevicePtr ()', useDevP `DevicePtr Int32', useDevP `DevicePtr Int32', cFromEnum `Type', cFromEnum `Action', cFromEnum `IndexBase', cFromEnum `Algorithm_csr2csc', alloca- `Int' peekIntConv* } -> `()' checkStatus*- #}
+#else
+
+csr2cscEx2 :: Handle -> Int -> Int -> Int -> DevicePtr () -> DevicePtr Int32 -> DevicePtr Int32 -> DevicePtr () -> DevicePtr Int32 -> DevicePtr Int32 -> Type -> Action -> IndexBase -> Algorithm_csr2csc -> DevicePtr () -> IO ()
+csr2cscEx2 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'csr2cscEx2' requires at least cuda-10.0"
+
+csr2cscEx2_bufferSize :: Handle -> Int -> Int -> Int -> DevicePtr () -> DevicePtr Int32 -> DevicePtr Int32 -> DevicePtr () -> DevicePtr Int32 -> DevicePtr Int32 -> Type -> Action -> IndexBase -> Algorithm_csr2csc -> Int -> IO ()
+csr2cscEx2_bufferSize _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusparseError "'csr2cscEx2_bufferSize' requires at least cuda-10.0"
 #endif

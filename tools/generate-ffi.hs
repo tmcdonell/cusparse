@@ -71,6 +71,7 @@ main = do
                 , "Action(..)"
                 , "Hybrid"
                 , "HybridPartition(..)"
+                , "Algorithm_csr2csc(..)"
                 , "Info_csru2csr"
                 , "Info_prune"
                 ]
@@ -80,8 +81,8 @@ main = do
 
   mkC2HS "Level2" (docsL 2) l2exps
     [(Nothing,   funsL2)
-    ,(Just 7500, funsL2_cuda75)
-    ,(Just 8000, funsL2_cuda80)
+    ,(Just 7500,  funsL2_cuda75)
+    ,(Just 8000,  funsL2_cuda80)
     ]
 
   mkC2HS "Level3" (docsL 3) l3exps
@@ -103,10 +104,11 @@ main = do
     ]
 
   mkC2HS "Convert" (docs "format-conversion") cvtexps
-    [(Nothing,   funsConvert)
-    ,(Just 7000, funsConvert_cuda70)
-    ,(Just 8000, funsConvert_cuda80)
-    ,(Just 9010, funsConvert_cuda90)
+    [(Nothing,    funsConvert)
+    ,(Just 7000,  funsConvert_cuda70)
+    ,(Just 8000,  funsConvert_cuda80)
+    ,(Just 9010,  funsConvert_cuda90)
+    ,(Just 10010, funsConvert_cuda101)
     ]
 
 
@@ -451,6 +453,9 @@ idxBase = TEnum "IndexBase"
 policy :: Type
 policy = TEnum "Policy"
 
+csr2csc :: Type
+csr2csc = TEnum "Algorithm_csr2csc"
+
 info :: Type
 info = TPrim "useInfo" "Info" ""
 
@@ -753,6 +758,11 @@ funsConvert_cuda90 =
   , gpA $ \ a   -> fun "?nnz_compress"                              [ int, matdescr, dptr a, dptr int32, dptr int32, ptr int32, a ]
   ]
 
+funsConvert_cuda101 :: [FunGroup]
+funsConvert_cuda101 =
+  [ gp  $          fun "csr2cscEx2"            [ int, int, int, dptr void, dptr int32, dptr int32, dptr void, dptr int32, dptr int32, dtype, action, idxBase, csr2csc, dptr void ]
+  , gp  $          fun "csr2cscEx2_bufferSize" [ int, int, int, dptr void, dptr int32, dptr int32, dptr void, dptr int32, dptr int32, dtype, action, idxBase, csr2csc, result int ]
+  ]
 
 data FunGroup
   = FunGroup

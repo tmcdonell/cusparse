@@ -85,3 +85,22 @@ data Algorithm
   { underscoreToCase }
   with prefix="CUSPARSE_SOLVE_POLICY" deriving (Eq, Show) #}
 
+-- | Indices the algorithm to use for CSR to CSC matrix conversion
+--
+-- Algorithm 1 requires extra storage proportional to the number of nonzero
+-- values @nnz@. It is in general faster than algorithm 2 and the result is
+-- deterministic.
+--
+-- Algorithm 2 requires extra storage proportional to the number of rows @m@.
+-- It is non-deterministic, and does not ensure always the same ordering of
+-- CSC column indices and values. It is faster than algorithm 1 for regular
+-- matrices.
+--
+#if CUDA_VERSION < 10010
+data Algorithm_csr2csc
+#else
+{# enum cusparseCsr2CscAlg_t as Algorithm_csr2csc
+  { underscoreToCase }
+  with prefix="CUSPARSE" deriving (Eq, Show) #}
+#endif
+
