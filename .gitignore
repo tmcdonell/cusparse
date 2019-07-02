@@ -1,3 +1,4 @@
 /stack.yaml
 /cusparse.buildinfo.generated
 /.stack-work
+/stack.yaml.lock
